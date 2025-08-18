@@ -14,12 +14,19 @@ class StaffController extends Controller
         $this->middleware(['auth', 'role:Admin']);
     }
 
+    // Show the create staff form
+    public function showCreateForm()
+    {
+        return view('admin.CreateStaff'); // Updated to match your file path
+    }
+
+    // Handle creating new staff
     public function createStaff(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8|confirmed',
         ]);
 
         User::create([
@@ -29,6 +36,6 @@ class StaffController extends Controller
             'role' => 'Staff',
         ]);
 
-        return redirect()->back()->with('success', 'Staff created!');
+        return redirect()->back()->with('success', 'Staff member created successfully!');
     }
 }

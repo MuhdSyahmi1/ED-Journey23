@@ -26,6 +26,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        $validated['role'] = 'User'; // ADDED THIS - All public registrations are Users
 
         event(new Registered(($user = User::create($validated))));
 

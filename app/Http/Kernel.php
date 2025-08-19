@@ -42,11 +42,11 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * The application's route middleware.
+     * The application's middleware aliases.
      *
      * @var array<string, class-string|string>
      */
-    protected $routeMiddleware = [
+    protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class, // your custom role middleware
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

@@ -55,16 +55,16 @@ class User extends Authenticatable
     // ADDED ROLE METHODS
     public function isAdmin(): bool
     {
-        return $this->role === 'Admin';
+        return $this->role === 'admin';
     }
 
     public function isStaff(): bool
     {
-        return $this->role === 'Staff';
+        return $this->role === 'staff';
     }
 
     public function isUser(): bool
     {
-        return $this->role === 'User';
+        return $this->role === 'user';
     }
 }

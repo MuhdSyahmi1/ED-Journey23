@@ -11,7 +11,7 @@ class StaffController extends Controller
     // Only Admin can access this controller
     public function __construct()
     {
-        $this->middleware(['auth', 'role:Admin']);
+        $this->middleware(['auth', 'role:admin']);
     }
 
     // Show the create staff form
@@ -33,7 +33,7 @@ class StaffController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'Staff',
+            'role' => 'staff',
         ]);
 
         return redirect()->back()->with('success', 'Staff member created successfully!');

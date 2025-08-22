@@ -28,7 +28,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         session(['auth.password_confirmed_at' => time()]);
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        // Role-based redirect after password confirmation
+        $user = Auth::user();
+        if ($user->role === 'admin') {
+            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        } elseif ($user->role === 'staff') {
+            $this->redirectIntended(default: route('staff.dashboard', absolute: false), navigate: true);
+        } else {
+            $this->redirectIntended(default: route('user.dashboard', absolute: false), navigate: true);
+        }
     }
 }; ?>
 

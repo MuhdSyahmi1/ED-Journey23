@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/user/pb_icon.png') }}">
     <head>
         @include('partials.head')
     </head>
@@ -8,26 +9,80 @@
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-                <x-app-logo />
+                <div x-data="{
+                    appearance: $flux.appearance,
+                    isDark() {
+                        if (this.appearance === 'dark') return true;
+                        if (this.appearance === 'light') return false;
+                        // System preference
+                        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    }
+                }" 
+                x-init="$watch('appearance', () => $nextTick(() => {}))">
+                    <!-- Light mode logo -->
+                    <img x-show="!isDark()" 
+                        src="{{ asset('images/PB_LOGO_Light.png') }}" 
+                        alt="EduJourney" 
+                        class="h-15 w-auto"
+                        x-transition>
+                    
+                    <!-- Dark mode logo -->
+                    <img x-show="isDark()" 
+                        src="{{ asset('images/PB_LOGO.png') }}" 
+                        alt="EduJourney" 
+                        class="h-15 w-auto"
+                        x-transition>
+                </div>
             </a>
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                 </flux:navlist.group>
+
+                {{-- Admin Navigation --}}
+                @if(auth()->user()->role === 'admin')
+                    <flux:navlist.item icon="users" :href="route('admin.manage-account')" :current="request()->routeIs('admin.manage-account')" wire:navigate>
+                        {{ __('Manage Account') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('admin.feedback')" :current="request()->routeIs('admin.feedback')" wire:navigate>
+                        {{ __('Feedback') }}
+                    </flux:navlist.item>
+                @endif
+
+                {{-- Staff Navigation --}}
+                @if(auth()->user()->role === 'staff')
+                    <flux:navlist.item icon="book-open" :href="route('staff.course-management')" :current="request()->routeIs('staff.course-management')" wire:navigate>
+                        {{ __('Course Management') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback-center')" :current="request()->routeIs('staff.feedback-center')" wire:navigate>
+                        {{ __('Feedback Center') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="user-circle" :href="route('staff.profile-information')" :current="request()->routeIs('staff.profile-information')" wire:navigate>
+                        {{ __('Profile Information') }}
+                    </flux:navlist.item>
+                @endif
+
+                {{-- User Navigation --}}
+                @if(auth()->user()->role === 'user')
+                    <flux:navlist.item icon="academic-cap" :href="route('user.school')" :current="request()->routeIs('user.school')" wire:navigate>
+                        {{ __('Schools') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('user.feedback')" :current="request()->routeIs('user.feedback')" wire:navigate>
+                        {{ __('Feedback') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="question-mark-circle" :href="route('user.help')" :current="request()->routeIs('user.help')" wire:navigate>
+                        {{ __('Help') }}
+                    </flux:navlist.item>
+                @endif
             </flux:navlist>
 
             <flux:spacer />
-
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
 
             <!-- Desktop User Menu -->
             <flux:dropdown class="hidden lg:block" position="bottom" align="start">
@@ -52,6 +107,10 @@
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                     <span class="truncate text-xs">{{ auth()->user()->email }}</span>
+                                    {{-- Display user role --}}
+                                    <span class="truncate text-xs text-zinc-500 capitalize">
+                                        {{ auth()->user()->role ?? 'User' }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -102,6 +161,9 @@
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                     <span class="truncate text-xs">{{ auth()->user()->email }}</span>
+                                    <span class="truncate text-xs text-zinc-500 capitalize">
+                                        {{ auth()->user()->role ?? 'User' }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -128,5 +190,34 @@
         {{ $slot }}
 
         @fluxScripts
+        <script>
+// Listen for system preference changes and update Flux accordingly
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    // Only update if system mode is selected
+    if (document.querySelector('[x-data]')?.__x?.$data?.appearance === 'system') {
+        // Force a reactivity update
+        document.dispatchEvent(new CustomEvent('appearance-changed'));
+    }
+});
+
+// Debug: Log appearance changes
+document.addEventListener('DOMContentLoaded', function() {
+    // Watch for Flux appearance changes
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && 
+                (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme')) {
+                console.log('Theme changed - HTML classes:', document.documentElement.className);
+                console.log('Data theme:', document.documentElement.getAttribute('data-theme'));
+            }
+        });
+    });
+    
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'data-theme', 'style']
+    });
+});
+</script>   
     </body>
 </html>

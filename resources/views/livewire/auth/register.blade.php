@@ -26,13 +26,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-        $validated['role'] = 'User'; // ADDED THIS - All public registrations are Users
+        $validated['role'] = 'user'; 
 
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);
 
-        $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+        // Role-based redirect after registration
+        $this->redirect(route('user.dashboard', absolute: false), navigate: true);
     }
 }; ?>
 

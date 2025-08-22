@@ -51,16 +51,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
+// Admin-specific routes
 Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+    // Admin Manage Account - connects to your ManageAccount.blade.php
+    Route::get('/admin/manage-account', function () {
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+        return view('admin.ManageAccount');
+    })->name('admin.manage-account');
 
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-});
+    // Admin Feedback
+    Route::get('/admin/feedback', function () {
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+        return view('admin.feedback');
+    })->name('admin.feedback');
 
-// Admin-only routes (manual role check with lowercase)
-Route::middleware(['auth'])->group(function () {
+    // Staff creation routes
     Route::get('/staff/create', function() {
         if (auth()->user()->role !== 'admin') {
             abort(403, 'Unauthorized');
@@ -74,6 +83,69 @@ Route::middleware(['auth'])->group(function () {
         }
         return app(StaffController::class)->createStaff(request());
     })->name('staff.store');
+});
+
+// Staff-specific routes
+Route::middleware(['auth'])->group(function () {
+    // Staff Course Management
+    Route::get('/staff/course-management', function () {
+        if (auth()->user()->role !== 'staff') {
+            abort(403, 'Unauthorized');
+        }
+        return view('staff.CourseManagement');
+    })->name('staff.course-management');
+
+    // Staff Feedback Center
+    Route::get('/staff/feedback-center', function () {
+        if (auth()->user()->role !== 'staff') {
+            abort(403, 'Unauthorized');
+        }
+        return view('staff.FeedbackCenter');
+    })->name('staff.feedback-center');
+
+    // Staff Profile Information
+    Route::get('/staff/profile-information', function () {
+        if (auth()->user()->role !== 'staff') {
+            abort(403, 'Unauthorized');
+        }
+        return view('staff.ProfileInformation');
+    })->name('staff.profile-information');
+});
+
+// User-specific routes
+Route::middleware(['auth'])->group(function () {
+    // User School
+    Route::get('/user/school', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.School');
+    })->name('user.school');
+
+    // User Help
+    Route::get('/user/help', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.Help');
+    })->name('user.help');
+
+    // User Feedback
+    Route::get('/user/feedback', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.Feedback');
+    })->name('user.feedback');
+});
+
+// Settings routes
+Route::middleware(['auth'])->group(function () {
+    Route::redirect('settings', 'settings/profile');
+
+    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
+    Volt::route('settings/password', 'settings.password')->name('settings.password');
+    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
 // Debug route (remove this after testing)

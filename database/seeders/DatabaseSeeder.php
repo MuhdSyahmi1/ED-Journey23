@@ -12,14 +12,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // First run your existing admin seeder
         $this->call([
             AdminUserSeeder::class,
         ]);
 
+        // Create your existing test user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'role' => 'user',
+        ]);
+
+        // Then run the feedback seeder (which builds on the admin and test user)
+        $this->call([
+            FeedbackSeeder::class,
         ]);
     }
 }

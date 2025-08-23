@@ -2,240 +2,225 @@
     <div class="space-y-6">
         <!-- Success/Error Messages -->
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                {{ session('success') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
-                <span class="block sm:inline">{{ session('error') }}</span>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                {{ session('error') }}
             </div>
         @endif
 
         <!-- Page Header -->
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">FEEDBACK MANAGEMENT</h1>
-                <p class="text-gray-600 dark:text-gray-400">Review and respond to user feedback</p>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+            <div class="text-center">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">FEEDBACK CENTER</h1>
+                <p class="text-gray-600 dark:text-gray-400">Manage and respond to user feedback</p>
             </div>
         </div>
 
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Total Feedback -->
-            <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-1">Total Feedback</h3>
-                        <p class="text-3xl font-bold">{{ $stats['total'] }}</p>
-                    </div>
-                    <div class="p-3 bg-blue-400 bg-opacity-50 rounded-lg">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                    </div>
+        <!-- Filters -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+            <div class="flex flex-wrap gap-4 items-center">
+                <div>
+                    <select id="statusFilter" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="solved">Solved</option>
+                    </select>
                 </div>
-            </div>
-
-            <!-- Pending Feedback -->
-            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl shadow-lg p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-1">Pending</h3>
-                        <p class="text-3xl font-bold">{{ $stats['pending'] }}</p>
-                        <p class="text-yellow-100 text-sm">Awaiting Response</p>
-                    </div>
-                    <div class="p-3 bg-yellow-400 bg-opacity-50 rounded-lg">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
+                
+                <div>
+                    <select id="priorityFilter" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                        <option value="all">All Priority</option>
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
                 </div>
-            </div>
-
-            <!-- In Progress -->
-            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-1">In Progress</h3>
-                        <p class="text-3xl font-bold">{{ $stats['in_progress'] }}</p>
-                        <p class="text-blue-100 text-sm">Being Handled</p>
-                    </div>
-                    <div class="p-3 bg-blue-400 bg-opacity-50 rounded-lg">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Solved -->
-            <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-1">Solved</h3>
-                        <p class="text-3xl font-bold">{{ $stats['solved'] }}</p>
-                        <p class="text-green-100 text-sm">Completed</p>
-                    </div>
-                    <div class="p-3 bg-green-400 bg-opacity-50 rounded-lg">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filters and Search -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <div class="flex flex-wrap gap-4 items-center justify-between">
-                <div class="flex flex-wrap gap-4 items-center">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status Filter</label>
-                        <select id="statusFilter" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="all">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="solved">Solved</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority Filter</label>
-                        <select id="priorityFilter" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="all">All Priority</option>
-                            <option value="high">High Priority</option>
-                            <option value="medium">Medium Priority</option>
-                            <option value="low">Low Priority</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="relative">
+                
+                <div class="ml-auto">
                     <input type="text" 
                            id="searchInput"
-                           placeholder="Search feedback..." 
-                           class="w-64 pl-4 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </button>
+                           placeholder="Search by name, email, or subject..." 
+                           class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 w-64">
                 </div>
             </div>
         </div>
 
-        <!-- Feedback List -->
+        <!-- Feedback Cards with Expandable Details -->
         <div class="space-y-4">
             @forelse($allFeedback as $feedback)
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden feedback-item" 
+                <div class="feedback-card bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700" 
                      data-status="{{ $feedback->status }}" 
                      data-priority="{{ $feedback->priority }}"
+                     data-user-name="{{ strtolower($feedback->user->name) }}"
+                     data-user-email="{{ strtolower($feedback->user->email) }}"
                      data-subject="{{ strtolower($feedback->subject) }}"
-                     data-user="{{ strtolower($feedback->user->name) }}">
-                    
-                    <div class="p-6">
-                        <!-- Header -->
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center space-x-3 mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $feedback->subject }}</h3>
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full {{ $feedback->status_color }}">
-                                        {{ $feedback->status_display }}
-                                    </span>
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full {{ $feedback->priority_color }}">
-                                        {{ $feedback->priority_display }} Priority
-                                    </span>
+                     data-message="{{ strtolower($feedback->message) }}">
+                    <!-- Card Header (Always Visible) -->
+                    <div class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onclick="toggleFeedback({{ $feedback->id }})">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4 flex-1">
+                                <!-- User Avatar -->
+                                <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
+                                    {{ substr($feedback->user->name, 0, 2) }}
                                 </div>
                                 
-                                <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 space-x-4 mb-3">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-medium">
-                                            {{ $feedback->user->initials() }}
-                                        </div>
-                                        <span>{{ $feedback->user->name }}</span>
-                                        <span class="text-gray-400">•</span>
-                                        <span>{{ $feedback->user->email }}</span>
-                                    </div>
-                                    <span class="text-gray-400">•</span>
-                                    <span>{{ $feedback->created_at->diffForHumans() }}</span>
-                                    @if($feedback->days_old > 7)
-                                        <span class="px-2 py-1 text-xs bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded-full">
-                                            {{ $feedback->days_old }} days old
+                                <!-- Basic Info -->
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-3 mb-1">
+                                        <h3 class="font-semibold text-gray-900 dark:text-gray-100">
+                                            {{ $feedback->user->name }}
+                                        </h3>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $feedback->user->email }}
                                         </span>
-                                    @endif
+                                        <span class="text-xs text-gray-400">
+                                            {{ $feedback->created_at->diffForHumans() }}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
+                                        {{ $feedback->subject }}
+                                    </p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                        {{ Str::limit($feedback->message, 100) }}
+                                        @if(strlen($feedback->message) > 100)
+                                            <span class="text-blue-600 dark:text-blue-400 font-medium">... Click to read more</span>
+                                        @endif
+                                    </p>
                                 </div>
-                                
-                                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ $feedback->message }}</p>
                             </div>
                             
-                            <div class="flex items-center space-x-2 ml-4">
-                                @if($feedback->status !== 'solved')
-                                    <button onclick="openReplyModal({{ $feedback->id }}, '{{ $feedback->subject }}', '{{ $feedback->status }}')" 
-                                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center space-x-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
-                                        </svg>
-                                        <span>Reply</span>
-                                    </button>
+                            <!-- Status and Priority -->
+                            <div class="flex items-center space-x-3">
+                                <!-- Priority Badge -->
+                                @if($feedback->priority === 'high')
+                                    <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded-full">
+                                        High Priority
+                                    </span>
+                                @elseif($feedback->priority === 'medium')
+                                    <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 rounded-full">
+                                        Medium Priority
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+                                        Low Priority
+                                    </span>
                                 @endif
                                 
-                                <div class="relative">
-                                    <button onclick="toggleDropdown({{ $feedback->id }})" 
-                                            class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                                        </svg>
-                                    </button>
-                                    <div id="dropdown-{{ $feedback->id }}" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-lg shadow-lg z-10 border border-gray-200 dark:border-gray-600">
-                                        <div class="py-1">
-                                            @if($feedback->status !== 'pending')
-                                                <button onclick="updateStatus({{ $feedback->id }}, 'pending')" 
-                                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                    Mark as Pending
-                                                </button>
-                                            @endif
-                                            @if($feedback->status !== 'in-progress')
-                                                <button onclick="updateStatus({{ $feedback->id }}, 'in-progress')" 
-                                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                    Mark as In Progress
-                                                </button>
-                                            @endif
-                                            @if($feedback->status !== 'solved')
-                                                <button onclick="updateStatus({{ $feedback->id }}, 'solved')" 
-                                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                    Mark as Solved
-                                                </button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- Status Badge -->
+                                @if($feedback->status === 'pending')
+                                    <span class="px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 rounded-full">
+                                        Pending
+                                    </span>
+                                @elseif($feedback->status === 'in-progress')
+                                    <span class="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 rounded-full">
+                                        In Progress
+                                    </span>
+                                @else
+                                    <span class="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+                                        Solved ✓
+                                    </span>
+                                @endif
+                                
+                                <!-- Expand Arrow -->
+                                <svg id="arrow-{{ $feedback->id }}" class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
                             </div>
                         </div>
-
-                        <!-- Admin Reply (if exists) -->
-                        @if($feedback->hasReply())
-                            <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                                    <div class="flex items-center space-x-2 mb-2">
-                                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
-                                        </svg>
-                                        <span class="font-medium text-blue-900 dark:text-blue-100">Admin Reply</span>
-                                        <span class="text-sm text-blue-600 dark:text-blue-400">
-                                            by {{ $feedback->repliedByUser->name ?? 'Unknown' }} • {{ $feedback->replied_at->diffForHumans() }}
-                                        </span>
-                                    </div>
-                                    <p class="text-blue-800 dark:text-blue-200">{{ $feedback->admin_reply }}</p>
+                    </div>
+                    
+                    <!-- Expanded Details (Hidden by default) -->
+                    <div id="details-{{ $feedback->id }}" class="hidden border-t border-gray-200 dark:border-gray-700">
+                        <div class="p-4 space-y-4">
+                            <!-- Full Message -->
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Full Message:</h4>
+                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ $feedback->message }}</p>
                                 </div>
                             </div>
-                        @endif
+                            
+                            <!-- Admin Reply (if exists) -->
+                            @if($feedback->admin_reply)
+                                <div>
+                                    <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Admin Reply:</h4>
+                                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                                        <p class="text-blue-800 dark:text-blue-200">{{ $feedback->admin_reply }}</p>
+                                        <p class="text-xs text-blue-600 dark:text-blue-400 mt-2">
+                                            Replied {{ $feedback->replied_at->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <!-- Status Change -->
+                                <div class="flex items-center space-x-2">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Change Status:</label>
+                                    <select onchange="changeStatus({{ $feedback->id }}, this.value)" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm dark:bg-gray-600 dark:text-gray-100">
+                                        <option value="pending" {{ $feedback->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="in-progress" {{ $feedback->status === 'in-progress' ? 'selected' : '' }}>In Progress</option>
+                                        <option value="solved" {{ $feedback->status === 'solved' ? 'selected' : '' }}>Solved</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Reply Button -->
+                                @if($feedback->status !== 'solved')
+                                    <button onclick="toggleReplyForm({{ $feedback->id }})" 
+                                            class="px-3 py-2 text-gray-600 dark:text-gray-400 text-sm hover:text-gray-800 dark:hover:text-gray-200">
+                                        Add Reply
+                                    </button>
+                                @else
+                                    <span class="px-4 py-2 bg-green-100 text-green-700 text-sm rounded-md">
+                                        Completed
+                                    </span>
+                                @endif
+                            </div>
+                            
+                            <!-- Reply Form (Hidden by default) -->
+                            <div id="reply-form-{{ $feedback->id }}" class="hidden pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <form action="{{ route('admin.reply-feedback', $feedback->id) }}" method="POST" class="space-y-3">
+                                    @csrf
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Reply:</label>
+                                        <textarea name="admin_reply" rows="4" required 
+                                                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-600 dark:text-gray-100"
+                                                  placeholder="Type your detailed response..."></textarea>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2">
+                                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Update Status:</label>
+                                            <select name="status" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-600 dark:text-gray-100">
+                                                <option value="pending">Pending</option>
+                                                <option value="in-progress" selected>In Progress</option>
+                                                <option value="solved">Solved</option>
+                                            </select>
+                                        </div>
+                                        <div class="space-x-2">
+                                            <button type="button" onclick="toggleReplyForm({{ $feedback->id }})" 
+                                                    class="px-3 py-2 text-gray-600 dark:text-gray-400 text-sm hover:text-gray-800 dark:hover:text-gray-200">
+                                                Cancel
+                                            </button>
+                                            <button type="submit" class="px-3 py-2 text-gray-600 dark:text-gray-400 text-sm hover:text-gray-800 dark:hover:text-gray-200">
+                                                Send Reply
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @empty
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center">
-                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-12 text-center">
+                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                     </svg>
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Feedback Found</h3>
@@ -245,86 +230,23 @@
         </div>
     </div>
 
-    <!-- Reply Modal -->
-    <div id="replyModal" class="fixed inset-0 overflow-y-auto h-full w-full hidden z-50" style="background-color: rgba(0,0,0,0.6);">
-        <div class="flex items-center justify-center min-h-screen px-4">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl">
-                <!-- Header -->
-                <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Reply to Feedback</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1" id="replySubject"></p>
-                </div>
-                
-                <!-- Form -->
-                <form id="replyForm" method="POST" class="p-6">
-                    @csrf
-                    
-                    <!-- Admin Reply -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Reply</label>
-                        <textarea name="admin_reply" required rows="6"
-                                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100 resize-none"
-                                  placeholder="Type your response to the user..."></textarea>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Minimum 10 characters required</p>
-                    </div>
-                    
-                    <!-- Status Update -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Update Status</label>
-                        <select name="status" id="replyStatus" required
-                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
-                            <option value="pending">Pending</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="solved">Solved</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Buttons -->
-                    <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeReplyModal()" 
-                                class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium">
-                            Cancel
-                        </button>
-                        <button type="submit" 
-                                class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-                            Send Reply
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript for Feedback Management -->
+    <!-- JavaScript -->
     <script>
-        // Modal Management
-        function openReplyModal(id, subject, currentStatus) {
-            document.getElementById('replyModal').classList.remove('hidden');
-            document.getElementById('replySubject').textContent = `Subject: ${subject}`;
-            document.getElementById('replyStatus').value = currentStatus;
-            document.getElementById('replyForm').action = `/admin/reply-feedback/${id}`;
+        function toggleFeedback(id) {
+            const details = document.getElementById('details-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                details.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
         }
 
-        function closeReplyModal() {
-            document.getElementById('replyModal').classList.add('hidden');
-            document.querySelector('#replyModal form').reset();
-        }
-
-        // Dropdown Management
-        function toggleDropdown(id) {
-            const dropdown = document.getElementById(`dropdown-${id}`);
-            // Close all other dropdowns first
-            document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
-                if (d.id !== `dropdown-${id}`) {
-                    d.classList.add('hidden');
-                }
-            });
-            dropdown.classList.toggle('hidden');
-        }
-
-        // Quick Status Update
-        function updateStatus(id, status) {
-            fetch(`/admin/update-feedback-status/${id}`, {
+        function changeStatus(id, status) {
+            fetch('/admin/update-feedback-status/' + id, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -335,87 +257,141 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    location.reload(); // Simple reload for now
+                    // Show success message
+                    const successDiv = document.createElement('div');
+                    successDiv.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4';
+                    successDiv.innerHTML = 'Status updated successfully!';
+                    document.querySelector('.space-y-6').insertBefore(successDiv, document.querySelector('.space-y-6').children[0]);
+                    
+                    // Reload after 1 second to show updated status
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    alert('Error updating status. Please try again.');
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating status. Please try again.');
+            });
         }
 
-        // Search and Filter
+        function toggleReplyForm(id) {
+            const form = document.getElementById('reply-form-' + id);
+            form.classList.toggle('hidden');
+            
+            if (!form.classList.contains('hidden')) {
+                const textarea = form.querySelector('textarea');
+                textarea.focus();
+            }
+        }
+
+        // Enhanced Search and Filter functionality
         function filterFeedback() {
-            const searchFilter = document.getElementById('searchInput').value.toLowerCase();
+            const searchFilter = document.getElementById('searchInput').value.toLowerCase().trim();
             const statusFilter = document.getElementById('statusFilter').value;
             const priorityFilter = document.getElementById('priorityFilter').value;
-            const items = document.querySelectorAll('.feedback-item');
+            const cards = document.querySelectorAll('.feedback-card');
             
-            items.forEach(item => {
-                const status = item.getAttribute('data-status');
-                const priority = item.getAttribute('data-priority');
-                const subject = item.getAttribute('data-subject');
-                const user = item.getAttribute('data-user');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                const priority = card.getAttribute('data-priority');
+                const userName = card.getAttribute('data-user-name');
+                const userEmail = card.getAttribute('data-user-email');
+                const subject = card.getAttribute('data-subject');
+                const message = card.getAttribute('data-message');
                 
-                let showItem = true;
+                let showCard = true;
                 
-                // Search filter
-                if (searchFilter && !(subject.includes(searchFilter) || user.includes(searchFilter))) {
-                    showItem = false;
+                // Search filter - check name, email, subject, and message
+                if (searchFilter && !(
+                    userName.includes(searchFilter) || 
+                    userEmail.includes(searchFilter) || 
+                    subject.includes(searchFilter) || 
+                    message.includes(searchFilter)
+                )) {
+                    showCard = false;
                 }
                 
                 // Status filter
                 if (statusFilter !== 'all' && status !== statusFilter) {
-                    showItem = false;
+                    showCard = false;
                 }
                 
                 // Priority filter
                 if (priorityFilter !== 'all' && priority !== priorityFilter) {
-                    showItem = false;
+                    showCard = false;
                 }
                 
-                item.style.display = showItem ? 'block' : 'none';
+                // Show or hide the card
+                if (showCard) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
             });
+            
+            // Show "no results" message if no cards are visible
+            updateNoResultsMessage(visibleCount);
         }
 
-        // Event listeners
-        document.getElementById('searchInput').addEventListener('keyup', filterFeedback);
+        function updateNoResultsMessage(visibleCount) {
+            // Remove existing no-results message
+            const existingMessage = document.querySelector('.no-results-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Add no-results message if needed
+            if (visibleCount === 0) {
+                const noResultsDiv = document.createElement('div');
+                noResultsDiv.className = 'no-results-message bg-white dark:bg-gray-800 rounded-xl shadow-sm p-12 text-center';
+                noResultsDiv.innerHTML = `
+                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Feedback Found</h3>
+                    <p class="text-gray-600 dark:text-gray-400">No feedback matches your current search and filter criteria.</p>
+                    <button onclick="clearFilters()" class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md">
+                        Clear Filters
+                    </button>
+                `;
+                
+                // Insert after the filters
+                const feedbackContainer = document.querySelector('.space-y-4');
+                feedbackContainer.appendChild(noResultsDiv);
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('priorityFilter').value = 'all';
+            filterFeedback();
+        }
+
+        // Event listeners for real-time filtering
+        document.getElementById('searchInput').addEventListener('input', filterFeedback);
         document.getElementById('statusFilter').addEventListener('change', filterFeedback);
         document.getElementById('priorityFilter').addEventListener('change', filterFeedback);
 
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('[onclick*="toggleDropdown"]') && !event.target.closest('[id^="dropdown-"]')) {
-                document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
-                    dropdown.classList.add('hidden');
-                });
-            }
+        // Add some visual feedback for search
+        document.getElementById('searchInput').addEventListener('focus', function() {
+            this.classList.add('ring-2', 'ring-blue-500');
+        });
+        
+        document.getElementById('searchInput').addEventListener('blur', function() {
+            this.classList.remove('ring-2', 'ring-blue-500');
         });
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('replyModal');
-            if (event.target === modal) {
-                closeReplyModal();
-            }
-        }
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeReplyModal();
-            }
-        });
-
-        // Form validation
-        document.getElementById('replyForm').addEventListener('submit', function(e) {
-            const reply = this.querySelector('textarea[name="admin_reply"]').value.trim();
-            
-            if (reply.length < 10) {
-                e.preventDefault();
-                alert('Reply must be at least 10 characters long.');
-                return false;
-            }
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial state
+            filterFeedback();
         });
     </script>
 
-    <!-- Add CSRF token meta tag for AJAX requests -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </x-layouts.app>

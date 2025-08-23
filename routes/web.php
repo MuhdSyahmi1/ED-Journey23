@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\StaffController;
+use App\Http\Controllers\AdminController; // Add this import
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -10,33 +10,6 @@ Route::get('/', function () {
 
 // Role-based Dashboards (with lowercase role checks)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Admin Dashboard
-    Route::get('/admin/dashboard', function () {
-        // Check role manually in the route (lowercase)
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized');
-        }
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-
-    // Staff Dashboard
-    Route::get('/staff/dashboard', function () {
-        // Check role manually in the route (lowercase)
-        if (auth()->user()->role !== 'staff') {
-            abort(403, 'Unauthorized');
-        }
-        return view('staff.dashboard');
-    })->name('staff.dashboard');
-
-    // User Dashboard
-    Route::get('/user/dashboard', function () {
-        // Check role manually in the route (lowercase)
-        if (auth()->user()->role !== 'user') {
-            abort(403, 'Unauthorized');
-        }
-        return view('user.dashboard');
-    })->name('user.dashboard');
-
     // Legacy dashboard route (redirect based on role)
     Route::get('/dashboard', function () {
         $user = auth()->user();
@@ -51,42 +24,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-// Admin-specific routes
-Route::middleware(['auth'])->group(function () {
-    // Admin Manage Account - connects to your ManageAccount.blade.php
-    Route::get('/admin/manage-account', function () {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized');
-        }
-        return view('admin.ManageAccount');
-    })->name('admin.manage-account');
-
-    // Admin Feedback
-    Route::get('/admin/feedback', function () {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized');
-        }
-        return view('admin.feedback');
-    })->name('admin.feedback');
-
-    // Staff creation routes
-    Route::get('/staff/create', function() {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized');
-        }
-        return app(StaffController::class)->showCreateForm();
-    })->name('staff.create');
-    
-    Route::post('/staff/create', function() {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized');
-        }
-        return app(StaffController::class)->createStaff(request());
-    })->name('staff.store');
+// Admin routes using controller (REPLACE your current admin routes with these)
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/manage-account', [AdminController::class, 'manageAccount'])->name('manage-account');
+    Route::post('/create-manager', [AdminController::class, 'createManager'])->name('create-manager');
+    Route::put('/update-manager/{id}', [AdminController::class, 'updateManager'])->name('update-manager');
+    Route::delete('/delete-manager/{id}', [AdminController::class, 'deleteManager'])->name('delete-manager');
+    Route::patch('/toggle-manager-status/{id}', [AdminController::class, 'toggleManagerStatus'])->name('toggle-manager-status');
+    Route::get('/feedback', [AdminController::class, 'feedback'])->name('feedback');
+    Route::post('/reply-feedback/{id}', [AdminController::class, 'replyFeedback'])->name('reply-feedback');
+    Route::patch('/update-feedback-status/{id}', [AdminController::class, 'updateFeedbackStatus'])->name('update-feedback-status');
+    Route::get('/dashboard-data', [AdminController::class, 'getDashboardData'])->name('dashboard-data'); 
 });
 
 // Staff-specific routes
 Route::middleware(['auth'])->group(function () {
+    // Staff Dashboard
+    Route::get('/staff/dashboard', function () {
+        if (auth()->user()->role !== 'staff') {
+            abort(403, 'Unauthorized');
+        }
+        return view('staff.dashboard');
+    })->name('staff.dashboard');
+
     // Staff Course Management
     Route::get('/staff/course-management', function () {
         if (auth()->user()->role !== 'staff') {
@@ -114,6 +75,14 @@ Route::middleware(['auth'])->group(function () {
 
 // User-specific routes
 Route::middleware(['auth'])->group(function () {
+    // User Dashboard
+    Route::get('/user/dashboard', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.dashboard');
+    })->name('user.dashboard');
+
     // User School
     Route::get('/user/school', function () {
         if (auth()->user()->role !== 'user') {

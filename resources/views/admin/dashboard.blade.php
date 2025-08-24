@@ -1,5 +1,5 @@
 <x-layouts.app title="Admin Dashboard">
-    <div class="space-y-4">
+    <div class="space-y-4" x-data="adminDashboard()">
         <!-- Welcome Header -->
         <div>
             <h1 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">Welcome back, Admin!</h1>
@@ -54,20 +54,14 @@
             </div>
         </div>
 
-        <!-- Second Row: Charts (Livewire-Compatible) -->
+        <!-- Second Row: Charts -->
         <div class="flex flex-wrap -mx-2">
             <!-- Manager Status Chart -->
-            <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4" wire:ignore>
+            <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
                     <h3 class="text-md font-medium text-gray-900 dark:text-white mb-2">Manager Status</h3>
                     <div class="relative h-24 mb-2">
-                        <canvas id="managerStatusChart" x-data x-init="
-                            new Chart($el, {
-                                type: 'doughnut',
-                                data: { labels:['Active','Inactive'], datasets:[{ data:[{{ $activeManagers }}, {{ $inactiveManagers }}], backgroundColor:['#10B981','#EF4444'], borderWidth:0 }] },
-                                options:{ plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false, cutout:'70%' }
-                            });
-                        "></canvas>
+                        <canvas x-ref="managerStatusChart"></canvas>
                     </div>
                     <div class="space-y-1 text-xs">
                         <div class="flex items-center justify-between">
@@ -83,17 +77,11 @@
             </div>
 
             <!-- Manager Roles Chart -->
-            <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4" wire:ignore>
+            <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
                     <h3 class="text-md font-medium text-gray-900 dark:text-white mb-2">Manager Roles</h3>
                     <div class="relative h-24 mb-2">
-                        <canvas id="managerRolesChart" x-data x-init="
-                            new Chart($el, {
-                                type:'doughnut',
-                                data:{ labels:['Program','Admission','Both'], datasets:[{ data:[{{ $programManagers }},{{ $admissionManagers }},{{ $bothRoleManagers }}], backgroundColor:['#3B82F6','#F59E0B','#10B981'], borderWidth:0 }] },
-                                options:{ plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false, cutout:'70%' }
-                            });
-                        "></canvas>
+                        <canvas x-ref="managerRolesChart"></canvas>
                     </div>
                     <div class="space-y-1 text-xs">
                         <div class="flex items-center justify-between">
@@ -113,17 +101,11 @@
             </div>
 
             <!-- Upload Result Case Type Chart -->
-            <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4" wire:ignore>
+            <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
                     <h3 class="text-md font-medium text-gray-900 dark:text-white mb-2">Upload Result Case Type</h3>
                     <div class="relative h-24 mb-2">
-                        <canvas id="uploadCaseChart" x-data x-init="
-                            new Chart($el, {
-                                type:'doughnut',
-                                data:{ labels:['No Data'], datasets:[{ data:[1], backgroundColor:['#9CA3AF'], borderWidth:0 }] },
-                                options:{ plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false, cutout:'70%' }
-                            });
-                        "></canvas>
+                        <canvas x-ref="uploadCaseChart"></canvas>
                     </div>
                     <div class="flex items-center justify-center text-xs">
                         <div class="flex items-center"><div class="w-2 h-2 bg-gray-400 rounded-full mr-1"></div>No Data Available</div>
@@ -185,4 +167,110 @@
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        function adminDashboard() {
+            return {
+                charts: {},
+                
+                init() {
+                    // Use setTimeout to ensure DOM is ready and Chart.js is loaded
+                    setTimeout(() => {
+                        this.initializeCharts();
+                    }, 100);
+                    
+                    // Listen for Livewire navigation events to reinitialize charts
+                    document.addEventListener('livewire:navigated', () => {
+                        setTimeout(() => {
+                            this.initializeCharts();
+                        }, 100);
+                    });
+                },
+                
+                initializeCharts() {
+                    try {
+                        // Destroy existing charts if they exist
+                        Object.values(this.charts).forEach(chart => {
+                            if (chart) chart.destroy();
+                        });
+                        this.charts = {};
+                        
+                        // Manager Status Chart
+                        if (this.$refs.managerStatusChart) {
+                            this.charts.managerStatus = new Chart(this.$refs.managerStatusChart, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Active', 'Inactive'],
+                                    datasets: [{
+                                        data: [{{ $activeManagers }}, {{ $inactiveManagers }}],
+                                        backgroundColor: ['#10B981', '#EF4444'],
+                                        borderWidth: 0
+                                    }]
+                                },
+                                options: {
+                                    plugins: { legend: { display: false } },
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '70%'
+                                }
+                            });
+                        }
+                        
+                        // Manager Roles Chart
+                        if (this.$refs.managerRolesChart) {
+                            this.charts.managerRoles = new Chart(this.$refs.managerRolesChart, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Program', 'Admission', 'Both'],
+                                    datasets: [{
+                                        data: [{{ $programManagers }}, {{ $admissionManagers }}, {{ $bothRoleManagers }}],
+                                        backgroundColor: ['#3B82F6', '#F59E0B', '#10B981'],
+                                        borderWidth: 0
+                                    }]
+                                },
+                                options: {
+                                    plugins: { legend: { display: false } },
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '70%'
+                                }
+                            });
+                        }
+                        
+                        // Upload Case Chart
+                        if (this.$refs.uploadCaseChart) {
+                            this.charts.uploadCase = new Chart(this.$refs.uploadCaseChart, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['No Data'],
+                                    datasets: [{
+                                        data: [1],
+                                        backgroundColor: ['#9CA3AF'],
+                                        borderWidth: 0
+                                    }]
+                                },
+                                options: {
+                                    plugins: { legend: { display: false } },
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '70%'
+                                }
+                            });
+                        }
+                        
+                        console.log('Charts initialized successfully');
+                    } catch (error) {
+                        console.error('Error initializing charts:', error);
+                    }
+                },
+                
+                // Cleanup method
+                destroy() {
+                    Object.values(this.charts).forEach(chart => {
+                        if (chart) chart.destroy();
+                    });
+                }
+            }
+        }
+    </script>
 </x-layouts.app>

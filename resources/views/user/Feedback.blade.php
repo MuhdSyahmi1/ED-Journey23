@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 transition-colors duration-300">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 transition-colors duration-300" x-data="feedbackForm()">
         <div class="p-6">
             <div class="max-w-5xl mx-auto">
                 
@@ -44,20 +44,31 @@
                     </div>
                     
                     <button 
-                        id="toggle-form-btn"
+                        @click="showForm = !showForm"
                         class="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm 
                                bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl dark:shadow-blue-500/25
                                transform hover:scale-105 transition-all duration-200 ease-out"
                     >
-                        <svg class="w-5 h-5 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 transition-transform group-hover:rotate-12" 
+                             :class="showForm ? 'rotate-45' : ''" 
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
-                        Submit Feedback
+                        <span x-text="showForm ? 'Cancel' : 'Submit Feedback'"></span>
                     </button>
                 </div>
 
-                <!-- Feedback Form (Initially Hidden) -->
-                <div id="feedback-form" class="hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 mb-10 overflow-hidden">
+                <!-- Feedback Form -->
+                <div x-show="showForm" 
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 transform scale-95"
+                     x-transition:enter-end="opacity-100 transform scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 transform scale-100"
+                     x-transition:leave-end="opacity-0 transform scale-95"
+                     class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 mb-10 overflow-hidden"
+                     style="display: none;">
+                     
                     <!-- Form Header -->
                     <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-400/10 dark:to-purple-400/10 px-8 py-6 border-b border-slate-200/60 dark:border-slate-700/60">
                         <div class="flex items-center justify-between">
@@ -67,7 +78,7 @@
                                 </svg>
                                 Submit New Feedback
                             </h2>
-                            <button id="close-form-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                            <button @click="showForm = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -144,6 +155,7 @@
                                 id="message"
                                 name="message" 
                                 rows="6"
+                                x-model="messageContent"
                                 placeholder="Please provide detailed information about your feedback..."
                                 class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 
                                        bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100
@@ -159,8 +171,9 @@
                                 <p class="text-sm text-slate-500 dark:text-slate-400">
                                     Minimum 10 characters required
                                 </p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400" id="char-count">
-                                    0/1000
+                                <p class="text-sm font-medium" 
+                                   :class="messageLength > 950 ? 'text-orange-600 dark:text-orange-400' : 'text-slate-500 dark:text-slate-400'"
+                                   x-text="`${messageLength}/1000`">
                                 </p>
                             </div>
                             @error('message')
@@ -315,108 +328,22 @@
     </div>
 
     <script>
-        // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing feedback form...');
-            
-            const toggleBtn = document.getElementById('toggle-form-btn');
-            const closeBtn = document.getElementById('close-form-btn');
-            const form = document.getElementById('feedback-form');
-            const messageTextarea = document.getElementById('message');
-            const charCount = document.getElementById('char-count');
-
-            console.log('Elements found:', {
-                toggleBtn: !!toggleBtn,
-                closeBtn: !!closeBtn,
-                form: !!form,
-                messageTextarea: !!messageTextarea,
-                charCount: !!charCount
-            });
-
-            // Toggle form visibility
-            function toggleForm(e) {
-                e.preventDefault();
-                console.log('Toggle form clicked');
+        function feedbackForm() {
+            return {
+                showForm: false,
+                messageContent: '{{ old('message') }}',
                 
-                if (form) {
-                    if (form.classList.contains('hidden')) {
-                        form.classList.remove('hidden');
-                        form.style.display = 'block';
-                        console.log('Form shown');
-                        // Scroll to form
-                        setTimeout(() => {
-                            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                    } else {
-                        form.classList.add('hidden');
-                        form.style.display = 'none';
-                        console.log('Form hidden');
-                    }
-                }
-            }
-
-            function closeForm(e) {
-                e.preventDefault();
-                console.log('Close form clicked');
-                if (form) {
-                    form.classList.add('hidden');
-                    form.style.display = 'none';
-                }
-            }
-
-            // Bind events
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', toggleForm);
-                console.log('Toggle button event bound');
-            } else {
-                console.error('Toggle button not found!');
-            }
-            
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeForm);
-                console.log('Close button event bound');
-            }
-
-            // Character count for message textarea
-            if (messageTextarea && charCount) {
-                function updateCharCount() {
-                    const count = messageTextarea.value.length;
-                    charCount.textContent = `${count}/1000`;
-                    
-                    if (count > 950) {
-                        charCount.classList.add('text-orange-600', 'dark:text-orange-400');
-                        charCount.classList.remove('text-slate-500', 'dark:text-slate-400');
-                    } else {
-                        charCount.classList.remove('text-orange-600', 'dark:text-orange-400');
-                        charCount.classList.add('text-slate-500', 'dark:text-slate-400');
-                    }
-                }
-
-                messageTextarea.addEventListener('input', updateCharCount);
+                get messageLength() {
+                    return this.messageContent.length;
+                },
                 
-                // Initialize character count
-                updateCharCount();
-                console.log('Character count initialized');
-            }
-        });
-        
-        // Alternative method in case DOMContentLoaded doesn't work
-        window.addEventListener('load', function() {
-            console.log('Window loaded - backup initialization');
-            
-            // Backup toggle function
-            window.toggleFeedbackForm = function() {
-                const form = document.getElementById('feedback-form');
-                if (form) {
-                    if (form.classList.contains('hidden')) {
-                        form.classList.remove('hidden');
-                        form.style.display = 'block';
-                    } else {
-                        form.classList.add('hidden');
-                        form.style.display = 'none';
-                    }
+                init() {
+                    // Auto-show form if there are validation errors
+                    @if($errors->any())
+                        this.showForm = true;
+                    @endif
                 }
-            };
-        });
+            }
+        }
     </script>
 </x-layouts.app>

@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\UserQuestionnaireController;
 use App\Http\Controllers\UserFeedbackController;
 use App\Http\Controllers\AdminController; // Add this import
 use Illuminate\Support\Facades\Route;
@@ -193,6 +194,13 @@ Route::middleware(['auth'])->group(function () {
         }
         return view('user.school.spc');
     })->name('spc');
+
+     // Questionnaire routes
+    Route::get('/user/questionnaire', [UserQuestionnaireController::class, 'index'])->name('user.questionnaire');
+    Route::get('/user/questionnaire/retake', [UserQuestionnaireController::class, 'retake'])->name('user.questionnaire.retake');
+    Route::post('/user/questionnaire', [UserQuestionnaireController::class, 'store'])->name('user.questionnaire.store');
+    Route::get('/user/questionnaire/results', [UserQuestionnaireController::class, 'results'])->name('user.questionnaire.results');
+    Route::get('/user/questionnaire/progress', [UserQuestionnaireController::class, 'getProgress'])->name('user.questionnaire.progress');
 });
 
 // Settings routes

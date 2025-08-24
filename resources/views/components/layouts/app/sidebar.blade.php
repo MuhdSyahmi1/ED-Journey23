@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <link rel="icon" type="image/png" href="{{ asset('images/user/pb_icon.png') }}">
     <head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
@@ -74,9 +75,16 @@
                             <flux:badge size="sm" color="orange">{{ __('My Complete') }}</flux:badge>
                         </flux:navlist.item>
 
-                        <flux:navlist.item icon="document-text" :href="route('user.questionnaire')" :current="request()->routeIs('user.questionnaire')" wire:navigate>
+                        <flux:navlist.item icon="document-text" :href="route('user.questionnaire')" :current="request()->routeIs('user.questionnaire*')" wire:navigate>
                             {{ __('Complete Questionnaire') }}
-                            <flux:badge size="sm" color="red">{{ __('0% Complete') }}</flux:badge>
+                                @php
+                                $hasCompleted = \DB::table('user_questionnaire_responses')
+                                ->where('user_id', auth()->id())
+                                ->exists();
+                                $progress = $hasCompleted ? 100 : 0;
+                                $badgeColor = $hasCompleted ? 'green' : 'red';
+                                @endphp
+                                <flux:badge size="sm" color="{{ $badgeColor }}">{{ $progress }}% Complete</flux:badge>
                         </flux:navlist.item>
 
                         <flux:navlist.item icon="cloud-arrow-up" :href="route('user.upload-result')" :current="request()->routeIs('user.upload-result')" wire:navigate>

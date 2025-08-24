@@ -142,52 +142,56 @@ Route::middleware(['auth'])->group(function () {
         return view('user.Help');
     })->name('user.help');
 
-    // Remove or comment out the old school route since it's not in the new navigation
+    // School routes - REPLACE your existing school routes with these
     Route::get('/user/school', function () {
-      if (auth()->user()->role !== 'user') {
-          abort(403, 'Unauthorized');
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
         }
-         return view('user.School');
+        return view('user.School');
     })->name('user.school');
 
-    // sict page
-    Route::get('/user/school/sict', function () {
+    // Add this route alias so route('school') works
+    Route::get('/school', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.school.sict'); // create this Blade view
-    })->name('sict');
+        return view('user.School');
+    })->name('school');
 
-    // sse page
-    Route::get('school/sse', function () {
+    // Individual School Pages - Fixed with consistent naming
+    Route::get('/user/school/sse', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.school.sse'); // create this Blade view
+        return view('user.school.sse');
     })->name('sse');
 
-     // sbs page
-    Route::get('school/sbs', function () {
+    Route::get('/user/school/sbs', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.school.sbs'); // create this Blade view
+        return view('user.school.sbs');
     })->name('sbs');
 
-    // shs page
     Route::get('/user/school/shs', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.school.shs'); // create this Blade view
+        return view('user.school.shs');
     })->name('shs');
 
-    // spc page
+    Route::get('/user/school/sict', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.school.sict');
+    })->name('sict');
+
     Route::get('/user/school/spc', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.school.spc'); // create this Blade view
+        return view('user.school.spc');
     })->name('spc');
 });
 

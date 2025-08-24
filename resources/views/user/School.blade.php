@@ -73,8 +73,8 @@
 
                         <!-- School of Health Sciences -->
                         <a href="{{ route('shs') }}" class="group">
-                            <div class="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 border-2 border-red-200/60 dark:border-red-700/60 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                <div class="w-14 h-14 mb-4 bg-red-100 dark:bg-red-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <div class="bg-gradient-to-br from-red-200 to-rose-200 dark:from-red-900/20 dark:to-rose-900/20 border-2 border-red-200/60 dark:border-red-700/60 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                <div class="w-14 h-14 mb-4 bg-red-200 dark:bg-red-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                                     <svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
@@ -83,10 +83,10 @@
                                     School of Health Sciences
                                 </h3>
                                 <p class="text-red-700 dark:text-red-300 text-sm leading-relaxed mb-4">
-                                    Midwifery, Cardiovascular Technology, Paramedic, Nursing, Public Health, Dental Hygiene & Therapy
+                                    Midwifery, Cardiovascular Technology, Paramedic, Nursing, Public Health.
                                 </p>
                                 <div class="flex items-center text-red-600 dark:text-red-400 text-sm font-medium">
-                                    <span>6 Programmes Available</span>
+                                    <span>5 Programmes Available</span>
                                     <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                     </svg>
@@ -117,7 +117,7 @@
                             </div>
                         </a>
 
-                        <!-- School of Process and Chemical -->
+                        <!-- School of PETROCHEMICAL -->
                         <a href="{{ route('spc') }}" class="group">
                             <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-200/60 dark:border-amber-700/60 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                                 <div class="w-14 h-14 mb-4 bg-amber-100 dark:bg-amber-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -126,7 +126,7 @@
                                     </svg>
                                 </div>
                                 <h3 class="text-xl font-bold text-amber-900 dark:text-amber-100 mb-3 group-hover:text-amber-700 dark:group-hover:text-amber-200 transition-colors">
-                                    School of Process & Chemical
+                                    School of Pertrochemical
                                 </h3>
                                 <p class="text-amber-700 dark:text-amber-300 text-sm leading-relaxed mb-4">
                                     Applied Science Technology - Comprehensive programme covering chemical processes and applied scientific principles

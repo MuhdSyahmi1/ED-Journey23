@@ -66,19 +66,52 @@
                     </flux:navlist.item>
                 @endif
 
-                {{-- User Navigation --}}
+                {{-- User Navigation - Updated with new menu items --}}
                 @if(auth()->user()->role === 'user')
-                    <flux:navlist.item icon="academic-cap" :href="route('user.school')" :current="request()->routeIs('user.school')" wire:navigate>
-                        {{ __('Schools') }}
-                    </flux:navlist.item>
+                    <flux:navlist.group :heading="__('My Profile')" class="grid">
+                        <flux:navlist.item icon="pencil-square" :href="route('user.profile')" :current="request()->routeIs('user.profile.*')" wire:navigate>
+                            {{ __('Update Profile') }}
+                            <flux:badge size="sm" color="orange">{{ __('My Complete') }}</flux:badge>
+                        </flux:navlist.item>
 
-                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('user.feedback')" :current="request()->routeIs('user.feedback')" wire:navigate>
-                        {{ __('Feedback') }}
-                    </flux:navlist.item>
+                        <flux:navlist.item icon="document-text" :href="route('user.questionnaire')" :current="request()->routeIs('user.questionnaire')" wire:navigate>
+                            {{ __('Complete Questionnaire') }}
+                            <flux:badge size="sm" color="red">{{ __('0% Complete') }}</flux:badge>
+                        </flux:navlist.item>
 
-                    <flux:navlist.item icon="question-mark-circle" :href="route('user.help')" :current="request()->routeIs('user.help')" wire:navigate>
-                        {{ __('Help') }}
-                    </flux:navlist.item>
+                        <flux:navlist.item icon="cloud-arrow-up" :href="route('user.upload-result')" :current="request()->routeIs('user.upload-result')" wire:navigate>
+                            {{ __('Upload Result') }}
+                            <flux:badge size="sm" color="red">{{ __('0% Complete') }}</flux:badge>
+                        </flux:navlist.item>
+                    </flux:navlist.group>
+
+                    <flux:navlist.group :heading="__('Services')" class="grid">
+                        <flux:navlist.item icon="academic-cap" :href="route('user.school')" :current="request()->routeIs('user.school')" wire:navigate>
+                            {{ __('Schools') }}
+                        </flux:navlist.item>
+
+                        <flux:navlist.item icon="light-bulb" :href="route('user.recommendations')" :current="request()->routeIs('user.recommendations')" wire:navigate>
+                            {{ __('Get Recommendations') }}
+                        </flux:navlist.item>
+
+                        <flux:navlist.item icon="building-library" :href="route('user.hecas-info')" :current="request()->routeIs('user.hecas-info')" wire:navigate>
+                            {{ __('HECAS Information') }}
+                        </flux:navlist.item>
+
+                        <flux:navlist.item icon="heart" :href="route('user.favourites')" :current="request()->routeIs('user.favourites')" wire:navigate>
+                            {{ __('My Favourite') }}
+                        </flux:navlist.item>
+                    </flux:navlist.group>
+
+                    <flux:navlist.group :heading="__('Support')" class="grid">
+                        <flux:navlist.item icon="chat-bubble-left-right" :href="route('user.feedback')" :current="request()->routeIs('user.feedback')" wire:navigate>
+                            {{ __('Feedback') }}
+                        </flux:navlist.item>
+
+                        <flux:navlist.item icon="question-mark-circle" :href="route('user.help')" :current="request()->routeIs('user.help')" wire:navigate>
+                            {{ __('Help') }}
+                        </flux:navlist.item>
+                    </flux:navlist.group>
                 @endif
             </flux:navlist>
 

@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\UserFeedbackController;
 use App\Http\Controllers\AdminController; // Add this import
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -73,9 +73,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('staff.profile-information');
 });
 
-// User-specific routes
 Route::middleware(['auth'])->group(function () {
-    // User Dashboard
+    // Existing user routes...
     Route::get('/user/dashboard', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
@@ -83,15 +82,59 @@ Route::middleware(['auth'])->group(function () {
         return view('user.dashboard');
     })->name('user.dashboard');
 
-    // User School
-    Route::get('/user/school', function () {
+    // NEW: Profile Management Routes
+    Route::get('/user/profile', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.School');
-    })->name('user.school');
+        return view('user.profile');
+    })->name('user.profile');
 
-    // User Help
+    // NEW: Questionnaire Route
+    Route::get('/user/questionnaire', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.questionnaire');
+    })->name('user.questionnaire');
+
+    // NEW: Upload Result Route
+    Route::get('/user/upload-result', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.upload-result');
+    })->name('user.upload-result');
+
+    // NEW: Recommendations Route
+    Route::get('/user/recommendations', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.recommendations');
+    })->name('user.recommendations');
+
+    // NEW: HECAS Information Route
+    Route::get('/user/hecas-info', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.hecas-info');
+    })->name('user.hecas-info');
+
+    // NEW: Favourites Route
+    Route::get('/user/favourites', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.favourites');
+    })->name('user.favourites');
+
+// User feedback routes
+    Route::get('/user/feedback', [UserFeedbackController::class, 'index'])->name('user.feedback');
+    Route::post('/user/feedback', [UserFeedbackController::class, 'store'])->name('user.feedback.store');
+    Route::get('/user/feedback/{id}', [UserFeedbackController::class, 'show'])->name('user.feedback.show');
+
     Route::get('/user/help', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
@@ -99,13 +142,53 @@ Route::middleware(['auth'])->group(function () {
         return view('user.Help');
     })->name('user.help');
 
-    // User Feedback
-    Route::get('/user/feedback', function () {
+    // Remove or comment out the old school route since it's not in the new navigation
+    Route::get('/user/school', function () {
+      if (auth()->user()->role !== 'user') {
+          abort(403, 'Unauthorized');
+        }
+         return view('user.School');
+    })->name('user.school');
+
+    // sict page
+    Route::get('/user/school/sict', function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.Feedback');
-    })->name('user.feedback');
+        return view('user.school.sict'); // create this Blade view
+    })->name('sict');
+
+    // sse page
+    Route::get('school/sse', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.school.sse'); // create this Blade view
+    })->name('sse');
+
+     // sbs page
+    Route::get('school/sbs', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.school.sbs'); // create this Blade view
+    })->name('sbs');
+
+    // shs page
+    Route::get('/user/school/shs', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.school.shs'); // create this Blade view
+    })->name('shs');
+
+    // spc page
+    Route::get('/user/school/spc', function () {
+        if (auth()->user()->role !== 'user') {
+            abort(403, 'Unauthorized');
+        }
+        return view('user.school.spc'); // create this Blade view
+    })->name('spc');
 });
 
 // Settings routes

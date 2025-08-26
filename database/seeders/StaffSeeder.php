@@ -14,7 +14,7 @@ class StaffSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create 5 staff/managers with different roles and specializations
+        // Create 16 staff/managers with different roles and specializations
         $staff = [
             [
                 'name' => 'Sarah Johnson',
@@ -34,7 +34,7 @@ class StaffSeeder extends Seeder
                 'name' => 'Emily Chen',
                 'email' => 'emily.chen@politeknikbrunei.edu.bn',
                 'role' => 'staff',
-                'manager_type' => 'both',
+                'manager_type' => 'news_events',
                 'status' => 'active',
             ],
             [
@@ -48,7 +48,84 @@ class StaffSeeder extends Seeder
                 'name' => 'Dr. Lisa Wong',
                 'email' => 'lisa.wong@politeknikbrunei.edu.bn',
                 'role' => 'staff',
-                'manager_type' => 'both',
+                'manager_type' => 'data_analytics',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Alex Martinez',
+                'email' => 'alex.martinez@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'moderators',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Siti Nurhaliza',
+                'email' => 'siti.nurhaliza@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'news_events',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'David Thompson',
+                'email' => 'david.thompson@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'data_analytics',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Farah Abdullah',
+                'email' => 'farah.abdullah@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'admission',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Marcus Lee',
+                'email' => 'marcus.lee@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'moderators',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Dr. Aminah Hassan',
+                'email' => 'aminah.hassan@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'program',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'James Wilson',
+                'email' => 'james.wilson@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'data_analytics',
+                'status' => 'inactive',
+            ],
+            [
+                'name' => 'Rina Suzuki',
+                'email' => 'rina.suzuki@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'news_events',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Hassan Ali',
+                'email' => 'hassan.ali@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'admission',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Sophie Brown',
+                'email' => 'sophie.brown@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'moderators',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Dr. Razak Ibrahim',
+                'email' => 'razak.ibrahim@politeknikbrunei.edu.bn',
+                'role' => 'staff',
+                'manager_type' => 'program',
                 'status' => 'active',
             ]
         ];
@@ -84,7 +161,7 @@ class StaffSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('5 staff members created successfully!');
+        $this->command->info('16 staff members created successfully!');
         $this->command->info('Default password for all staff: 12345678');
     }
 }

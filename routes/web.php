@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserQuestionnaireController;
 use App\Http\Controllers\UserFeedbackController;
 use App\Http\Controllers\AdminController; // Add this import
@@ -41,12 +42,30 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 // Staff-specific routes
 Route::middleware(['auth'])->group(function () {
-    // Staff Dashboard
+    // Staff Dashboard - Role-based routing
     Route::get('/staff/dashboard', function () {
         if (auth()->user()->role !== 'staff') {
             abort(403, 'Unauthorized');
         }
-        return view('staff.dashboard');
+        
+        $user = auth()->user();
+        
+        // Route to role-specific dashboard based on manager_type
+        switch ($user->manager_type) {
+            case 'program':
+                return view('staff.program.dashboard');
+            case 'admission':
+                return view('staff.admission.dashboard');
+            case 'news_events':
+                return view('staff.news-events.dashboard');
+            case 'moderators':
+                return view('staff.moderators.dashboard');
+            case 'data_analytics':
+                return view('staff.data-analytics.dashboard');
+            default:
+                // Fallback to generic staff dashboard
+                return view('staff.dashboard');
+        }
     })->name('staff.dashboard');
 
     // Staff Course Management
@@ -194,6 +213,12 @@ Route::middleware(['auth'])->group(function () {
         }
         return view('user.school.spc');
     })->name('spc');
+
+    // Profile routes
+    Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
+    Route::post('/user/profile', [UserProfileController::class, 'store'])->name('user.profile.store');
+    Route::get('/user/profile/progress', [UserProfileController::class, 'getProgress'])->name('user.profile.progress');
+    Route::get('/user/profile/download-ic', [UserProfileController::class, 'downloadIC'])->name('user.profile.download-ic');
 
      // Questionnaire routes
     Route::get('/user/questionnaire', [UserQuestionnaireController::class, 'index'])->name('user.questionnaire');

@@ -52,28 +52,123 @@
                     </flux:navlist.item>
                 @endif
 
-                {{-- Staff Navigation --}}
+                {{-- Staff Navigation - Role Based --}}
                 @if(auth()->user()->role === 'staff')
-                    <flux:navlist.item icon="book-open" :href="route('staff.course-management')" :current="request()->routeIs('staff.course-management')" wire:navigate>
-                        {{ __('Course Management') }}
-                    </flux:navlist.item>
+                    {{-- Program Manager Navigation --}}
+                    @if(auth()->user()->isProgramManager())
+                        <flux:navlist.group :heading="__('Program Management')" class="grid">
+                            <flux:navlist.item icon="academic-cap" href="#" wire:navigate>
+                                {{ __('Program Management') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="document-text" href="#" wire:navigate>
+                                {{ __('Curriculum Planning') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="chart-bar" href="#" wire:navigate>
+                                {{ __('Program Reports') }}
+                            </flux:navlist.item>
+                        </flux:navlist.group>
+                    @endif
 
-                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback-center')" :current="request()->routeIs('staff.feedback-center')" wire:navigate>
-                        {{ __('Feedback Center') }}
-                    </flux:navlist.item>
+                    {{-- Admission Manager Navigation --}}
+                    @if(auth()->user()->isAdmissionManager())
+                        <flux:navlist.group :heading="__('Admission Management')" class="grid">
+                            <flux:navlist.item icon="clipboard-document-list" href="#" wire:navigate>
+                                {{ __('Application Management') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="adjustments-horizontal" href="#" wire:navigate>
+                                {{ __('Admission Criteria') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="chart-pie" href="#" wire:navigate>
+                                {{ __('Admission Reports') }}
+                            </flux:navlist.item>
+                        </flux:navlist.group>
+                    @endif
 
-                    <flux:navlist.item icon="user-circle" :href="route('staff.profile-information')" :current="request()->routeIs('staff.profile-information')" wire:navigate>
-                        {{ __('Profile Information') }}
-                    </flux:navlist.item>
+                    {{-- News & Events Manager Navigation --}}
+                    @if(auth()->user()->isNewsEventsManager())
+                        <flux:navlist.group :heading="__('News & Events')" class="grid">
+                            <flux:navlist.item icon="newspaper" href="#" wire:navigate>
+                                {{ __('News Management') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="calendar-days" href="#" wire:navigate>
+                                {{ __('Event Planning') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="calendar" href="#" wire:navigate>
+                                {{ __('Content Calendar') }}
+                            </flux:navlist.item>
+                        </flux:navlist.group>
+                    @endif
+
+                    {{-- Moderator Navigation --}}
+                    @if(auth()->user()->isModerator())
+                        <flux:navlist.group :heading="__('Moderation')" class="grid">
+                            <flux:navlist.item icon="shield-check" href="#" wire:navigate>
+                                {{ __('Content Moderation') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="users" href="#" wire:navigate>
+                                {{ __('User Management') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="document-check" href="#" wire:navigate>
+                                {{ __('Moderation Reports') }}
+                            </flux:navlist.item>
+                        </flux:navlist.group>
+                    @endif
+
+                    {{-- Data & Analytics Manager Navigation --}}
+                    @if(auth()->user()->isDataAnalyticsManager())
+                        <flux:navlist.group :heading="__('Data & Analytics')" class="grid">
+                            <flux:navlist.item icon="chart-bar-square" href="#" wire:navigate>
+                                {{ __('Data Analytics') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="presentation-chart-line" href="#" wire:navigate>
+                                {{ __('Performance Metrics') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="document-chart-bar" href="#" wire:navigate>
+                                {{ __('Custom Reports') }}
+                            </flux:navlist.item>
+                        </flux:navlist.group>
+                    @endif
+
+                    {{-- Common Staff Navigation --}}
+                    <flux:navlist.group :heading="__('General')" class="grid">
+                        <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback-center')" :current="request()->routeIs('staff.feedback-center')" wire:navigate>
+                            {{ __('Feedback Center') }}
+                        </flux:navlist.item>
+
+                        <flux:navlist.item icon="user-circle" :href="route('staff.profile-information')" :current="request()->routeIs('staff.profile-information')" wire:navigate>
+                            {{ __('Profile Information') }}
+                        </flux:navlist.item>
+                    </flux:navlist.group>
                 @endif
 
                 {{-- User Navigation - Updated with new menu items --}}
-                @if(auth()->user()->role === 'user')
-                    <flux:navlist.group :heading="__('My Profile')" class="grid">
-                        <flux:navlist.item icon="pencil-square" :href="route('user.profile')" :current="request()->routeIs('user.profile.*')" wire:navigate>
-                            {{ __('Update Profile') }}
-                            <flux:badge size="sm" color="orange">{{ __('My Complete') }}</flux:badge>
-                        </flux:navlist.item>
+@if(auth()->user()->role === 'user')
+    <flux:navlist.group :heading="__('My Profile')" class="grid">
+        <flux:navlist.item icon="pencil-square" :href="route('user.profile')" :current="request()->routeIs('user.profile.*')" wire:navigate>
+            {{ __('Update Profile') }}
+            @php
+                $profileExists = \DB::table('user_profiles')->where('user_id', auth()->id())->exists();
+                if ($profileExists) {
+                    $profile = \DB::table('user_profiles')->where('user_id', auth()->id())->first();
+                    $requiredFields = [
+                        'ic_file_path', 'name', 'identity_card', 'id_color', 'postal_address',
+                        'date_of_birth', 'place_of_birth', 'telephone_home', 'mobile_phone',
+                        'gender', 'religion', 'nationality', 'race', 'email_address'
+                    ];
+                    $completedFields = 0;
+                    foreach ($requiredFields as $field) {
+                        if (!empty($profile->$field)) {
+                            $completedFields++;
+                        }
+                    }
+                    $progress = round(($completedFields / count($requiredFields)) * 100);
+                } else {
+                    $progress = 0;
+                }
+                $badgeColor = $progress === 100 ? 'green' : ($progress > 0 ? 'orange' : 'red');
+            @endphp
+            <flux:badge size="sm" color="{{ $badgeColor }}">{{ $progress }}% Complete</flux:badge>
+        </flux:navlist.item>
 
                         <flux:navlist.item icon="document-text" :href="route('user.questionnaire')" :current="request()->routeIs('user.questionnaire*')" wire:navigate>
                             {{ __('Complete Questionnaire') }}

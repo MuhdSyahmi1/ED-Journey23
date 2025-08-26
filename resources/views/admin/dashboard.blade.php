@@ -29,8 +29,8 @@
                     <div>
                         <h3 class="text-md font-medium text-gray-900 dark:text-white mb-1">Program Managers</h3>
                         <p class="text-gray-600 dark:text-gray-300 text-xs mb-2">Handle program management</p>
-                        <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">{{ $programManagers + $bothRoleManagers }}</div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Program Only: {{ $programManagers }}</p>
+                        <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">{{ $programManagers }}</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Program management staff</p>
                     </div>
                     <div class="mt-2">
                         <span class="text-green-600 dark:text-green-400 text-xs font-medium">View Details</span>
@@ -44,8 +44,8 @@
                     <div>
                         <h3 class="text-md font-medium text-gray-900 dark:text-white mb-1">Admission Managers</h3>
                         <p class="text-gray-600 dark:text-gray-300 text-xs mb-2">Handle admissions process</p>
-                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{{ $admissionManagers + $bothRoleManagers }}</div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Admission Only: {{ $admissionManagers }}</p>
+                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{{ $admissionManagers }}</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Admission processing staff</p>
                     </div>
                     <div class="mt-2">
                         <span class="text-purple-600 dark:text-purple-400 text-xs font-medium">View Details</span>
@@ -89,12 +89,20 @@
                             <span class="font-medium text-gray-900 dark:text-white">{{ $programManagers }}</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center"><div class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>Admission</div>
+                            <div class="flex items-center"><div class="w-2 h-2 bg-purple-500 rounded-full mr-1"></div>Admission</div>
                             <span class="font-medium text-gray-900 dark:text-white">{{ $admissionManagers }}</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center"><div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>Both</div>
-                            <span class="font-medium text-gray-900 dark:text-white">{{ $bothRoleManagers }}</span>
+                            <div class="flex items-center"><div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>News & Events</div>
+                            <span class="font-medium text-gray-900 dark:text-white">{{ $newsEventsManagers }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center"><div class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>Moderators</div>
+                            <span class="font-medium text-gray-900 dark:text-white">{{ $moderators }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center"><div class="w-2 h-2 bg-indigo-500 rounded-full mr-1"></div>Data & Analytics</div>
+                            <span class="font-medium text-gray-900 dark:text-white">{{ $dataAnalyticsManagers }}</span>
                         </div>
                     </div>
                 </div>
@@ -221,10 +229,10 @@
                             this.charts.managerRoles = new Chart(this.$refs.managerRolesChart, {
                                 type: 'doughnut',
                                 data: {
-                                    labels: ['Program', 'Admission', 'Both'],
+                                    labels: ['Program', 'Admission', 'News & Events', 'Moderators', 'Data & Analytics'],
                                     datasets: [{
-                                        data: [{{ $programManagers }}, {{ $admissionManagers }}, {{ $bothRoleManagers }}],
-                                        backgroundColor: ['#3B82F6', '#F59E0B', '#10B981'],
+                                        data: [{{ $programManagers }}, {{ $admissionManagers }}, {{ $newsEventsManagers }}, {{ $moderators }}, {{ $dataAnalyticsManagers }}],
+                                        backgroundColor: ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#6366F1'],
                                         borderWidth: 0
                                     }]
                                 },

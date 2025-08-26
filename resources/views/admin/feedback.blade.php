@@ -42,6 +42,19 @@
                     </select>
                 </div>
                 
+                <div>
+                    <select id="typeFilter" class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                        <option value="all">All Types</option>
+                        <option value="technical_issue">Technical Issue / Bug</option>
+                        <option value="content_error">Content Error</option>
+                        <option value="feature_request">Feature Request / Suggestion</option>
+                        <option value="usability_feedback">Usability / User Experience</option>
+                        <option value="course_feedback">Course / Instructor Feedback</option>
+                        <option value="general_feedback">General Feedback / Other</option>
+                        <option value="account_billing">Account / Billing Issue</option>
+                    </select>
+                </div>
+                
                 <div class="ml-auto">
                     <input type="text" 
                            id="searchInput"
@@ -57,6 +70,7 @@
                 <div class="feedback-card bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700" 
                      data-status="{{ $feedback->status }}" 
                      data-priority="{{ $feedback->priority }}"
+                     data-feedback-type="{{ $feedback->feedback_type ?? 'general_feedback' }}"
                      data-user-name="{{ strtolower($feedback->user->name) }}"
                      data-user-email="{{ strtolower($feedback->user->email) }}"
                      data-subject="{{ strtolower($feedback->subject) }}"
@@ -96,7 +110,12 @@
                             </div>
                             
                             <!-- Status and Priority -->
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-2 flex-wrap">
+                                <!-- Feedback Type Badge -->
+                                <span class="px-2 py-1 text-xs font-medium rounded-full {{ $feedback->feedback_type_color ?? 'bg-gray-100 text-gray-800' }}">
+                                    {{ $feedback->feedback_type_display ?? 'General Feedback' }}
+                                </span>
+                                
                                 <!-- Priority Badge -->
                                 @if($feedback->priority === 'high')
                                     <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded-full">
@@ -290,6 +309,7 @@
             const searchFilter = document.getElementById('searchInput').value.toLowerCase().trim();
             const statusFilter = document.getElementById('statusFilter').value;
             const priorityFilter = document.getElementById('priorityFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
             const cards = document.querySelectorAll('.feedback-card');
             
             let visibleCount = 0;
@@ -297,6 +317,7 @@
             cards.forEach(card => {
                 const status = card.getAttribute('data-status');
                 const priority = card.getAttribute('data-priority');
+                const feedbackType = card.getAttribute('data-feedback-type');
                 const userName = card.getAttribute('data-user-name');
                 const userEmail = card.getAttribute('data-user-email');
                 const subject = card.getAttribute('data-subject');
@@ -321,6 +342,11 @@
                 
                 // Priority filter
                 if (priorityFilter !== 'all' && priority !== priorityFilter) {
+                    showCard = false;
+                }
+                
+                // Feedback Type filter
+                if (typeFilter !== 'all' && feedbackType !== typeFilter) {
                     showCard = false;
                 }
                 
@@ -369,6 +395,7 @@
             document.getElementById('searchInput').value = '';
             document.getElementById('statusFilter').value = 'all';
             document.getElementById('priorityFilter').value = 'all';
+            document.getElementById('typeFilter').value = 'all';
             filterFeedback();
         }
 
@@ -376,6 +403,7 @@
         document.getElementById('searchInput').addEventListener('input', filterFeedback);
         document.getElementById('statusFilter').addEventListener('change', filterFeedback);
         document.getElementById('priorityFilter').addEventListener('change', filterFeedback);
+        document.getElementById('typeFilter').addEventListener('change', filterFeedback);
 
         // Add some visual feedback for search
         document.getElementById('searchInput').addEventListener('focus', function() {

@@ -29,7 +29,7 @@ class UserFeedbackController extends Controller
         $request->validate([
             'subject' => 'required|string|min:5|max:255',
             'message' => 'required|string|min:10|max:1000',
-            'priority' => 'required|in:low,medium,high'
+            'feedback_type' => 'required|in:technical_issue,content_error,feature_request,usability_feedback,course_feedback,general_feedback,account_billing'
         ], [
             'subject.required' => 'Subject is required.',
             'subject.min' => 'Subject must be at least 5 characters.',
@@ -37,8 +37,8 @@ class UserFeedbackController extends Controller
             'message.required' => 'Message is required.',
             'message.min' => 'Message must be at least 10 characters.',
             'message.max' => 'Message cannot exceed 1000 characters.',
-            'priority.required' => 'Priority level is required.',
-            'priority.in' => 'Invalid priority level selected.'
+            'feedback_type.required' => 'Feedback type is required.',
+            'feedback_type.in' => 'Invalid feedback type selected.'
         ]);
 
         try {
@@ -46,8 +46,8 @@ class UserFeedbackController extends Controller
                 'user_id' => Auth::id(),
                 'subject' => $request->subject,
                 'message' => $request->message,
-                'priority' => $request->priority,
-                'status' => 'pending' // Default status
+                'feedback_type' => $request->feedback_type,
+                'status' => 'pending' // Default status (priority will be auto-set by model)
             ]);
 
             return redirect()->route('user.feedback')

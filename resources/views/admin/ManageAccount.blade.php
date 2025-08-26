@@ -57,7 +57,9 @@
                     <option value="all">All Roles</option>
                     <option value="program">Program Manager</option>
                     <option value="admission">Admission Manager</option>
-                    <option value="both">Both Roles</option>
+                    <option value="news_events">News & Events Manager</option>
+                    <option value="moderators">Moderator</option>
+                    <option value="data_analytics">Data & Analytics Manager</option>
                 </select>
             </div>
             <div>
@@ -104,7 +106,9 @@
                                 <span class="inline-flex px-3 py-1 text-xs font-medium rounded-full 
                                     @if($manager->manager_type === 'program') bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
                                     @elseif($manager->manager_type === 'admission') bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300
-                                    @elseif($manager->manager_type === 'both') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
+                                    @elseif($manager->manager_type === 'news_events') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
+                                    @elseif($manager->manager_type === 'moderators') bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
+                                    @elseif($manager->manager_type === 'data_analytics') bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300
                                     @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300 @endif">
                                     {{ $manager->manager_type_display ?? 'Manager' }}
                                 </span>
@@ -214,7 +218,9 @@
                             <option value="">Select role type</option>
                             <option value="program">Program Manager</option>
                             <option value="admission">Admission Manager</option>
-                            <option value="both">Program & Admission Manager</option>
+                            <option value="news_events">News & Events Manager</option>
+                            <option value="moderators">Moderator</option>
+                            <option value="data_analytics">Data & Analytics Manager</option>
                         </select>
                     </div>
 
@@ -296,7 +302,9 @@
                                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
                             <option value="program">Program Manager</option>
                             <option value="admission">Admission Manager</option>
-                            <option value="both">Program & Admission Manager</option>
+                            <option value="news_events">News & Events Manager</option>
+                            <option value="moderators">Moderator</option>
+                            <option value="data_analytics">Data & Analytics Manager</option>
                         </select>
                     </div>
 

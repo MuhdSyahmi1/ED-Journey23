@@ -22,7 +22,18 @@ return new class extends Migration
             // Feedback status
             $table->enum('status', ['pending', 'in-progress', 'solved'])->default('pending');
             
-            // Priority level
+            // Feedback type (replaces priority - priority is auto-determined)
+            $table->enum('feedback_type', [
+                'technical_issue',
+                'content_error', 
+                'feature_request',
+                'usability_feedback',
+                'course_feedback',
+                'general_feedback',
+                'account_billing'
+            ])->default('general_feedback');
+            
+            // Priority level - auto-computed based on feedback_type
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             
             // Admin response
@@ -40,6 +51,7 @@ return new class extends Migration
             // Indexes for better performance
             $table->index(['user_id', 'status']);
             $table->index(['status', 'priority']);
+            $table->index(['feedback_type', 'status']);
             $table->index('created_at');
         });
     }

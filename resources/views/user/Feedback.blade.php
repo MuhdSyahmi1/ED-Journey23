@@ -120,28 +120,35 @@
                             @enderror
                         </div>
 
-                        <!-- Priority Field -->
+                        <!-- Feedback Type Field -->
                         <div class="space-y-2">
-                            <label for="priority" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                Priority Level <span class="text-red-500">*</span>
+                            <label for="feedback_type" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                Feedback Type <span class="text-red-500">*</span>
                             </label>
                             <select 
-                                id="priority"
-                                name="priority" 
+                                id="feedback_type"
+                                name="feedback_type" 
                                 class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 
                                        bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100
                                        focus:border-blue-500 dark:focus:border-blue-400 
                                        focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-400/20
                                        transition-all duration-200 hover:border-slate-300 dark:hover:border-slate-500
-                                       @error('priority') border-red-500 dark:border-red-400 @enderror"
+                                       @error('feedback_type') border-red-500 dark:border-red-400 @enderror"
                                 required
                             >
-                                <option value="">Select priority level</option>
-                                <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>🟢 Low Priority</option>
-                                <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>🟡 Medium Priority</option>
-                                <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>🔴 High Priority</option>
+                                <option value="">Select feedback type</option>
+                                <option value="technical_issue" {{ old('feedback_type') == 'technical_issue' ? 'selected' : '' }}>🔴 Technical Issue / Bug</option>
+                                <option value="account_billing" {{ old('feedback_type') == 'account_billing' ? 'selected' : '' }}>🔴 Account / Billing Issue</option>
+                                <option value="content_error" {{ old('feedback_type') == 'content_error' ? 'selected' : '' }}>🟡 Content Error</option>
+                                <option value="course_feedback" {{ old('feedback_type') == 'course_feedback' ? 'selected' : '' }}>🟡 Course / Instructor Feedback</option>
+                                <option value="feature_request" {{ old('feedback_type') == 'feature_request' ? 'selected' : '' }}>🟢 Feature Request / Suggestion</option>
+                                <option value="usability_feedback" {{ old('feedback_type') == 'usability_feedback' ? 'selected' : '' }}>🟢 Usability / User Experience Feedback</option>
+                                <option value="general_feedback" {{ old('feedback_type') == 'general_feedback' ? 'selected' : '' }}>🟢 General Feedback / Other</option>
                             </select>
-                            @error('priority')
+                            <p class="text-sm text-slate-500 dark:text-slate-400">
+                                🔴 High Priority &nbsp;&nbsp; 🟡 Medium Priority &nbsp;&nbsp; 🟢 Low Priority
+                            </p>
+                            @error('feedback_type')
                                 <p class="text-red-500 dark:text-red-400 text-sm font-medium">{{ $message }}</p>
                             @enderror
                         </div>
@@ -232,7 +239,7 @@
                                             </h3>
                                         </div>
 
-                                        <!-- Status and Priority Badges -->
+                                        <!-- Status and Feedback Type Badges -->
                                         <div class="flex flex-wrap items-center gap-3 mb-4">
                                             @php
                                                 $statusConfig = match($item->status) {
@@ -242,11 +249,15 @@
                                                     default => ['bg' => 'bg-slate-100 dark:bg-slate-700', 'text' => 'text-slate-800 dark:text-slate-200', 'border' => 'border-slate-200 dark:border-slate-600']
                                                 };
 
-                                                $priorityConfig = match($item->priority) {
-                                                    'low' => ['border' => 'border-green-300 dark:border-green-600', 'text' => 'text-green-700 dark:text-green-300', 'emoji' => '🟢'],
-                                                    'medium' => ['border' => 'border-yellow-300 dark:border-yellow-600', 'text' => 'text-yellow-700 dark:text-yellow-300', 'emoji' => '🟡'],
-                                                    'high' => ['border' => 'border-red-300 dark:border-red-600', 'text' => 'text-red-700 dark:text-red-300', 'emoji' => '🔴'],
-                                                    default => ['border' => 'border-slate-300 dark:border-slate-600', 'text' => 'text-slate-700 dark:text-slate-300', 'emoji' => '🟢']
+                                                $feedbackTypeConfig = match($item->feedback_type ?? 'general_feedback') {
+                                                    'technical_issue' => ['bg' => 'bg-red-100 dark:bg-red-900/30', 'text' => 'text-red-700 dark:text-red-300', 'border' => 'border-red-300 dark:border-red-600', 'emoji' => '🔴'],
+                                                    'account_billing' => ['bg' => 'bg-pink-100 dark:bg-pink-900/30', 'text' => 'text-pink-700 dark:text-pink-300', 'border' => 'border-pink-300 dark:border-pink-600', 'emoji' => '🔴'],
+                                                    'content_error' => ['bg' => 'bg-orange-100 dark:bg-orange-900/30', 'text' => 'text-orange-700 dark:text-orange-300', 'border' => 'border-orange-300 dark:border-orange-600', 'emoji' => '🟡'],
+                                                    'course_feedback' => ['bg' => 'bg-yellow-100 dark:bg-yellow-900/30', 'text' => 'text-yellow-700 dark:text-yellow-300', 'border' => 'border-yellow-300 dark:border-yellow-600', 'emoji' => '🟡'],
+                                                    'feature_request' => ['bg' => 'bg-blue-100 dark:bg-blue-900/30', 'text' => 'text-blue-700 dark:text-blue-300', 'border' => 'border-blue-300 dark:border-blue-600', 'emoji' => '🟢'],
+                                                    'usability_feedback' => ['bg' => 'bg-purple-100 dark:bg-purple-900/30', 'text' => 'text-purple-700 dark:text-purple-300', 'border' => 'border-purple-300 dark:border-purple-600', 'emoji' => '🟢'],
+                                                    'general_feedback' => ['bg' => 'bg-gray-100 dark:bg-gray-900/30', 'text' => 'text-gray-700 dark:text-gray-300', 'border' => 'border-gray-300 dark:border-gray-600', 'emoji' => '🟢'],
+                                                    default => ['bg' => 'bg-gray-100 dark:bg-gray-900/30', 'text' => 'text-gray-700 dark:text-gray-300', 'border' => 'border-gray-300 dark:border-gray-600', 'emoji' => '🟢']
                                                 };
                                             @endphp
                                             
@@ -254,8 +265,8 @@
                                                 {{ ucwords(str_replace('-', ' ', $item->status)) }}
                                             </span>
                                             
-                                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border-2 {{ $priorityConfig['border'] }} {{ $priorityConfig['text'] }} bg-white dark:bg-slate-800">
-                                                {{ $priorityConfig['emoji'] }} {{ ucfirst($item->priority) }} Priority
+                                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border-2 {{ $feedbackTypeConfig['border'] }} {{ $feedbackTypeConfig['text'] }} {{ $feedbackTypeConfig['bg'] }}">
+                                                {{ $feedbackTypeConfig['emoji'] }} {{ $item->feedback_type_display ?? 'General Feedback' }}
                                             </span>
                                         </div>
 

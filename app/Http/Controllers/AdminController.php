@@ -34,7 +34,9 @@ class AdminController extends Controller
         // Manager role distribution
         $programManagers = User::where('role', 'staff')->where('manager_type', 'program')->count();
         $admissionManagers = User::where('role', 'staff')->where('manager_type', 'admission')->count();
-        $bothRoleManagers = User::where('role', 'staff')->where('manager_type', 'both')->count();
+        $newsEventsManagers = User::where('role', 'staff')->where('manager_type', 'news_events')->count();
+        $moderators = User::where('role', 'staff')->where('manager_type', 'moderators')->count();
+        $dataAnalyticsManagers = User::where('role', 'staff')->where('manager_type', 'data_analytics')->count();
         
         // Feedback statistics (pending case reports)
         $pendingFeedback = Feedback::where('status', 'pending')->count();
@@ -53,7 +55,9 @@ class AdminController extends Controller
             'inactiveManagers',
             'programManagers',
             'admissionManagers', 
-            'bothRoleManagers',
+            'newsEventsManagers',
+            'moderators',
+            'dataAnalyticsManagers',
             'pendingFeedback',
             'inProgressFeedback',
             'solvedFeedback',
@@ -87,7 +91,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
-            'manager_type' => 'required|in:program,admission,both',
+            'manager_type' => 'required|in:program,admission,news_events,moderators,data_analytics',
             'status' => 'required|in:active,inactive'
         ]);
 
@@ -117,7 +121,7 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $manager->id,
-            'manager_type' => 'required|in:program,admission,both',
+            'manager_type' => 'required|in:program,admission,news_events,moderators,data_analytics',
             'status' => 'required|in:active,inactive'
         ]);
 
@@ -271,7 +275,9 @@ class AdminController extends Controller
             'manager_roles' => [
                 'program' => User::where('role', 'staff')->where('manager_type', 'program')->count(),
                 'admission' => User::where('role', 'staff')->where('manager_type', 'admission')->count(),
-                'both' => User::where('role', 'staff')->where('manager_type', 'both')->count(),
+                'news_events' => User::where('role', 'staff')->where('manager_type', 'news_events')->count(),
+                'moderators' => User::where('role', 'staff')->where('manager_type', 'moderators')->count(),
+                'data_analytics' => User::where('role', 'staff')->where('manager_type', 'data_analytics')->count(),
             ],
             'feedback' => [
                 'pending' => Feedback::where('status', 'pending')->count(),

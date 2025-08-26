@@ -89,12 +89,27 @@ class User extends Authenticatable
     // NEW: Manager Type Methods
     public function isProgramManager(): bool
     {
-        return $this->manager_type === 'program' || $this->manager_type === 'both';
+        return $this->manager_type === 'program';
     }
 
     public function isAdmissionManager(): bool
     {
-        return $this->manager_type === 'admission' || $this->manager_type === 'both';
+        return $this->manager_type === 'admission';
+    }
+
+    public function isNewsEventsManager(): bool
+    {
+        return $this->manager_type === 'news_events';
+    }
+
+    public function isModerator(): bool
+    {
+        return $this->manager_type === 'moderators';
+    }
+
+    public function isDataAnalyticsManager(): bool
+    {
+        return $this->manager_type === 'data_analytics';
     }
 
     public function getManagerTypeDisplayAttribute(): string
@@ -102,7 +117,9 @@ class User extends Authenticatable
         return match($this->manager_type) {
             'program' => 'Program Manager',
             'admission' => 'Admission Manager',
-            'both' => 'Program & Admission Manager',
+            'news_events' => 'News & Events Manager',
+            'moderators' => 'Moderator',
+            'data_analytics' => 'Data & Analytics Manager',
             default => 'Manager',
         };
     }
@@ -167,11 +184,26 @@ class User extends Authenticatable
 
     public function scopeProgramManagers($query)
     {
-        return $query->whereIn('manager_type', ['program', 'both']);
+        return $query->where('manager_type', 'program');
     }
 
     public function scopeAdmissionManagers($query)
     {
-        return $query->whereIn('manager_type', ['admission', 'both']);
+        return $query->where('manager_type', 'admission');
+    }
+
+    public function scopeNewsEventsManagers($query)
+    {
+        return $query->where('manager_type', 'news_events');
+    }
+
+    public function scopeModerators($query)
+    {
+        return $query->where('manager_type', 'moderators');
+    }
+
+    public function scopeDataAnalyticsManagers($query)
+    {
+        return $query->where('manager_type', 'data_analytics');
     }
 }

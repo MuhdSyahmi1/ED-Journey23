@@ -72,14 +72,17 @@
                     {{-- Admission Manager Navigation --}}
                     @if(auth()->user()->isAdmissionManager())
                         <flux:navlist.group :heading="__('Admission Management')" class="grid">
-                            <flux:navlist.item icon="clipboard-document-list" href="#" wire:navigate>
-                                {{ __('Application Management') }}
+                            <flux:navlist.item icon="document-text" :href="route('staff.case-reports')" :current="request()->routeIs('staff.case-reports')" wire:navigate>
+                                {{ __('Case Report') }}
                             </flux:navlist.item>
-                            <flux:navlist.item icon="adjustments-horizontal" href="#" wire:navigate>
-                                {{ __('Admission Criteria') }}
+                            <flux:navlist.item icon="user-circle" href="#" wire:navigate>
+                                {{ __('User Profile') }}
                             </flux:navlist.item>
-                            <flux:navlist.item icon="chart-pie" href="#" wire:navigate>
-                                {{ __('Admission Reports') }}
+                            <flux:navlist.item icon="chart-bar" href="#" wire:navigate>
+                                {{ __('Report Data') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="cog-6-tooth" href="#" wire:navigate>
+                                {{ __('Management') }}
                             </flux:navlist.item>
                         </flux:navlist.group>
                     @endif
@@ -131,10 +134,6 @@
 
                     {{-- Common Staff Navigation --}}
                     <flux:navlist.group :heading="__('General')" class="grid">
-                        <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback-center')" :current="request()->routeIs('staff.feedback-center')" wire:navigate>
-                            {{ __('Feedback Center') }}
-                        </flux:navlist.item>
-
                         <flux:navlist.item icon="user-circle" :href="route('staff.profile-information')" :current="request()->routeIs('staff.profile-information')" wire:navigate>
                             {{ __('Profile Information') }}
                         </flux:navlist.item>

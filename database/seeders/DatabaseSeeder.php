@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         // Then run the feedback seeder (which builds on the admin and test user)
         $this->call([
             FeedbackSeeder::class,
+            CaseReportSeeder::class,
         ]);
     }
 }

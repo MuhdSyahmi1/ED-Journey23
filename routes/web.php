@@ -3,6 +3,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserQuestionnaireController;
 use App\Http\Controllers\UserFeedbackController;
 use App\Http\Controllers\AdminController; // Add this import
+use App\Http\Controllers\CaseReportController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -91,6 +92,12 @@ Route::middleware(['auth'])->group(function () {
         }
         return view('staff.ProfileInformation');
     })->name('staff.profile-information');
+
+    // Staff Case Report routes (for admission managers)
+    Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
+        Route::get('/case-reports', [CaseReportController::class, 'index'])->name('case-reports');
+        Route::patch('/case-report/{caseReport}/status', [CaseReportController::class, 'updateStatus'])->name('case-report.update-status');
+    });
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -227,6 +234,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/questionnaire', [UserQuestionnaireController::class, 'store'])->name('user.questionnaire.store');
     Route::get('/user/questionnaire/results', [UserQuestionnaireController::class, 'results'])->name('user.questionnaire.results');
     Route::get('/user/questionnaire/progress', [UserQuestionnaireController::class, 'getProgress'])->name('user.questionnaire.progress');
+
+    // Case Report routes (for users)
+    Route::post('/user/case-report', [CaseReportController::class, 'store'])->name('user.case-report.store');
 });
 
 // Settings routes

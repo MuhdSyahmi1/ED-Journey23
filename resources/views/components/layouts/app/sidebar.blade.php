@@ -144,15 +144,17 @@
                 {{-- User Navigation - Updated with new menu items --}}
 @if(auth()->user()->role === 'user')
     <flux:navlist.group :heading="__('My Profile')" class="grid">
-        <flux:navlist.item icon="pencil-square" :href="route('user.profile')" :current="request()->routeIs('user.profile.*')" wire:navigate>
-            {{ __('Update Profile') }}
+        <div class="relative">
+            <flux:navlist.item icon="pencil-square" :href="route('user.profile')" :current="request()->routeIs('user.profile.*')" wire:navigate>
+                {{ __('Update Profile') }}
+            </flux:navlist.item>
             @php
                 $profileExists = \DB::table('user_profiles')->where('user_id', auth()->id())->exists();
                 if ($profileExists) {
                     $profile = \DB::table('user_profiles')->where('user_id', auth()->id())->first();
                     $requiredFields = [
                         'ic_file_path', 'name', 'identity_card', 'id_color', 'postal_address',
-                        'date_of_birth', 'place_of_birth', 'telephone_home', 'mobile_phone',
+                        'date_of_birth', 'place_of_birth', 'mobile_phone',
                         'gender', 'religion', 'nationality', 'race', 'email_address'
                     ];
                     $completedFields = 0;
@@ -167,11 +169,15 @@
                 }
                 $badgeColor = $progress === 100 ? 'green' : ($progress > 0 ? 'orange' : 'red');
             @endphp
-            <flux:badge size="sm" color="{{ $badgeColor }}">{{ $progress }}% Complete</flux:badge>
-        </flux:navlist.item>
+            <div class="ml-9 -mt-1 mb-2">
+                <flux:badge size="sm" color="{{ $badgeColor }}">{{ $progress }}% Complete</flux:badge>
+            </div>
+        </div>
 
-                        <flux:navlist.item icon="document-text" :href="route('user.questionnaire')" :current="request()->routeIs('user.questionnaire*')" wire:navigate>
-                            {{ __('Complete Questionnaire') }}
+                        <div class="relative">
+                            <flux:navlist.item icon="document-text" :href="route('user.questionnaire')" :current="request()->routeIs('user.questionnaire*')" wire:navigate>
+                                {{ __('Complete Questionnaire') }}
+                            </flux:navlist.item>
                                 @php
                                 $hasCompleted = \DB::table('user_questionnaire_responses')
                                 ->where('user_id', auth()->id())
@@ -179,13 +185,19 @@
                                 $progress = $hasCompleted ? 100 : 0;
                                 $badgeColor = $hasCompleted ? 'green' : 'red';
                                 @endphp
-                                <flux:badge size="sm" color="{{ $badgeColor }}">{{ $progress }}% Complete</flux:badge>
-                        </flux:navlist.item>
+                                <div class="ml-9 -mt-1 mb-2">
+                                    <flux:badge size="sm" color="{{ $badgeColor }}">{{ $progress }}% Complete</flux:badge>
+                                </div>
+                        </div>
 
-                        <flux:navlist.item icon="cloud-arrow-up" :href="route('user.upload-result')" :current="request()->routeIs('user.upload-result')" wire:navigate>
-                            {{ __('Upload Result') }}
-                            <flux:badge size="sm" color="red">{{ __('0% Complete') }}</flux:badge>
-                        </flux:navlist.item>
+                        <div class="relative">
+                            <flux:navlist.item icon="cloud-arrow-up" :href="route('user.upload-result')" :current="request()->routeIs('user.upload-result')" wire:navigate>
+                                {{ __('Upload Result') }}
+                            </flux:navlist.item>
+                            <div class="ml-9 -mt-1 mb-2">
+                                <flux:badge size="sm" color="red">{{ __('0% Complete') }}</flux:badge>
+                            </div>
+                        </div>
                     </flux:navlist.group>
 
                     <flux:navlist.group :heading="__('Services')" class="grid">

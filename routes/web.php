@@ -219,6 +219,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/profile', [UserProfileController::class, 'store'])->name('user.profile.store');
     Route::get('/user/profile/progress', [UserProfileController::class, 'getProgress'])->name('user.profile.progress');
     Route::get('/user/profile/download-ic', [UserProfileController::class, 'downloadIC'])->name('user.profile.download-ic');
+    Route::get('/user/profile/view-ic', [UserProfileController::class, 'viewIC'])->name('user.profile.view-ic');
 
      // Questionnaire routes
     Route::get('/user/questionnaire', [UserQuestionnaireController::class, 'index'])->name('user.questionnaire');

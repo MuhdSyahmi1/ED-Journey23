@@ -21,7 +21,7 @@ return new class extends Migration
             
             // Personal Information
             $table->string('name');
-            $table->string('identity_card', 8);
+            $table->string('identity_card', 9);
             $table->enum('id_color', ['yellow', 'green', 'red']);
             $table->text('postal_address');
             $table->date('date_of_birth');
@@ -29,14 +29,14 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female']);
             
             // Contact Information
-            $table->string('telephone_home', 20);
+            $table->string('telephone_home', 20)->nullable();
             $table->string('mobile_phone', 20);
             $table->string('email_address');
             
             // Additional Information
             $table->enum('religion', ['islam', 'christianity', 'buddhism', 'hinduism', 'other']);
             $table->string('nationality', 100);
-            $table->enum('race', ['brunei','malay', 'chinese', 'indian', 'other']);
+            $table->enum('race', ['malay', 'chinese', 'indian', 'other']);
             
             // Optional Health Information
             $table->text('health_record')->nullable();

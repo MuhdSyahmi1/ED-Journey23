@@ -1,10 +1,11 @@
 {
-  "enabledMcpjsonServers": [
-    "laravel-boost"
-  ],
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(php:*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "laravel-boost"
+  ]
 }

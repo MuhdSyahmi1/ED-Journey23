@@ -27,17 +27,17 @@ class UserProfileController extends Controller
         $request->validate([
             'ic_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120', // 5MB max
             'name' => 'required|string|max:255',
-            'identity_card' => 'required|string|max:8|regex:/^[0-9]{1,8}$/',
+            'identity_card' => 'required|string|max:9|regex:/^[0-9]{2}-[0-9]{6}$/',
             'id_color' => 'required|in:yellow,green,red',
             'postal_address' => 'required|string|max:500',
             'date_of_birth' => 'required|date|before:today',
             'place_of_birth' => 'required|string|max:255',
-            'telephone_home' => 'required|string|max:20',
+            'telephone_home' => 'nullable|string|max:20',
             'mobile_phone' => 'required|string|max:20',
             'gender' => 'required|in:male,female',
             'religion' => 'required|in:islam,christianity,buddhism,hinduism,other',
             'nationality' => 'required|string|max:100',
-            'race' => 'required|in:brunei,malay,chinese,indian,other',
+            'race' => 'required|in:malay,chinese,indian,other',
             'email_address' => [
                 'required',
                 'email',
@@ -50,7 +50,7 @@ class UserProfileController extends Controller
         ], [
             'ic_file.mimes' => 'IC file must be a JPG, PNG, or PDF file.',
             'ic_file.max' => 'IC file must not exceed 5MB.',
-            'identity_card.regex' => 'Identity card must contain only numbers and be maximum 8 digits.',
+            'identity_card.regex' => 'Identity card must be in format XX-XXXXXX (e.g., 12-123456).',
             'date_of_birth.before' => 'Date of birth must be a valid past date.',
             'email_address.unique' => 'This email address is already taken by another user.',
         ]);
@@ -80,7 +80,7 @@ class UserProfileController extends Controller
                 // Delete old file if exists
                 $existingProfile = DB::table('user_profiles')->where('user_id', Auth::id())->first();
                 if ($existingProfile && $existingProfile->ic_file_path) {
-                    Storage::delete($existingProfile->ic_file_path);
+                    Storage::disk('private')->delete($existingProfile->ic_file_path);
                 }
 
                 // Store new file
@@ -141,10 +141,10 @@ class UserProfileController extends Controller
             return response()->json(['progress' => 0, 'completed' => false]);
         }
 
-        // Define required fields (excluding optional health_record)
+        // Define required fields (excluding optional health_record and telephone_home)
         $requiredFields = [
             'ic_file_path', 'name', 'identity_card', 'id_color', 'postal_address',
-            'date_of_birth', 'place_of_birth', 'telephone_home', 'mobile_phone',
+            'date_of_birth', 'place_of_birth', 'mobile_phone',
             'gender', 'religion', 'nationality', 'race', 'email_address'
         ];
 
@@ -176,10 +176,31 @@ class UserProfileController extends Controller
             return redirect()->back()->with('error', 'IC file not found.');
         }
 
-        if (!Storage::exists($profile->ic_file_path)) {
+        if (!Storage::disk('private')->exists($profile->ic_file_path)) {
             return redirect()->back()->with('error', 'IC file no longer exists on server.');
         }
 
-        return Storage::download($profile->ic_file_path, $profile->ic_file_name);
+        return Storage::disk('private')->download($profile->ic_file_path, $profile->ic_file_name);
+    }
+
+    /**
+     * View IC file (for preview)
+     */
+    public function viewIC()
+    {
+        $profile = DB::table('user_profiles')->where('user_id', Auth::id())->first();
+        
+        if (!$profile || !$profile->ic_file_path) {
+            return response()->json(['error' => 'IC file not found'], 404);
+        }
+
+        if (!Storage::disk('private')->exists($profile->ic_file_path)) {
+            return response()->json(['error' => 'IC file no longer exists on server'], 404);
+        }
+
+        $file = Storage::disk('private')->get($profile->ic_file_path);
+        $mimeType = Storage::disk('private')->mimeType($profile->ic_file_path);
+
+        return response($file, 200)->header('Content-Type', $mimeType);
     }
 }

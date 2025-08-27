@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         // First run your existing admin seeder
         $this->call([
             AdminUserSeeder::class,
+            StaffSeeder::class,
         ]);
 
         // Create your existing test user

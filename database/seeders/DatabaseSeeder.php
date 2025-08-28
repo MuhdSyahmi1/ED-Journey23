@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             FeedbackSeeder::class,
             CaseReportSeeder::class,
+            UserProfileSeeder::class,
         ]);
     }
 }

@@ -4,6 +4,8 @@ use App\Http\Controllers\UserQuestionnaireController;
 use App\Http\Controllers\UserFeedbackController;
 use App\Http\Controllers\AdminController; // Add this import
 use App\Http\Controllers\CaseReportController;
+use App\Http\Controllers\AdmissionUserProfileController;
+use App\Http\Controllers\UserGradesController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -98,6 +100,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/case-reports', [CaseReportController::class, 'index'])->name('case-reports');
         Route::patch('/case-report/{caseReport}/status', [CaseReportController::class, 'updateStatus'])->name('case-report.update-status');
     });
+
+    // Staff Admission User Profile routes
+    Route::middleware(['auth'])->prefix('staff/admission')->name('staff.admission.')->group(function () {
+        Route::get('/user-profile', [AdmissionUserProfileController::class, 'index'])->name('user-profile');
+        Route::get('/user-profile/{id}', [AdmissionUserProfileController::class, 'show'])->name('user-profile.show');
+        Route::post('/user-profile/{id}/verify', [AdmissionUserProfileController::class, 'verify'])->name('user-profile.verify');
+        Route::post('/user-profile/{id}/reject', [AdmissionUserProfileController::class, 'reject'])->name('user-profile.reject');
+        Route::get('/user-profile/{id}/view-ic', [AdmissionUserProfileController::class, 'viewIC'])->name('user-profile.view-ic');
+    });
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -126,12 +137,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('user.questionnaire');
 
     // NEW: Upload Result Route
-    Route::get('/user/upload-result', function () {
-        if (auth()->user()->role !== 'user') {
-            abort(403, 'Unauthorized');
-        }
-        return view('user.upload-result');
-    })->name('user.upload-result');
+    Route::get('/user/upload-result', [UserGradesController::class, 'index'])->name('user.upload-result');
 
     // NEW: Recommendations Route
     Route::get('/user/recommendations', function () {
@@ -237,6 +243,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Case Report routes (for users)
     Route::post('/user/case-report', [CaseReportController::class, 'store'])->name('user.case-report.store');
+
+    // Grades routes (for users)
+    Route::post('/user/grades/upload', [UserGradesController::class, 'upload'])->name('user.grades.upload');
 });
 
 // Settings routes

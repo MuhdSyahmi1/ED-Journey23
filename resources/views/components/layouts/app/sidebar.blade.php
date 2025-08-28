@@ -75,7 +75,7 @@
                             <flux:navlist.item icon="document-text" :href="route('staff.case-reports')" :current="request()->routeIs('staff.case-reports')" wire:navigate>
                                 {{ __('Case Report') }}
                             </flux:navlist.item>
-                            <flux:navlist.item icon="user-circle" href="#" wire:navigate>
+                            <flux:navlist.item icon="user-circle" :href="route('staff.admission.user-profile')" :current="request()->routeIs('staff.admission.user-profile*')" wire:navigate>
                                 {{ __('User Profile') }}
                             </flux:navlist.item>
                             <flux:navlist.item icon="chart-bar" href="#" wire:navigate>

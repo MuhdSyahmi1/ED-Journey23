@@ -54,9 +54,38 @@ class GradeExtractionService
 
     // Common HNTec programme patterns
     private array $hntecProgrammes = [
+        // Specific HNTec programmes
+        'construction engineering',
+        'geomatics',
+        'interior design',
+        'building services engineering',
+        'instrumentation and control engineering',
+        'mechanical engineering',
+        'plant engineering',
+        'automobile technology',
+        'electrical engineering',
+        'business and finance',
+        'office administration',
+        'hospitality operations',
+        'travel and tourism',
+        'computer networking',
+        'information technology',
+        'information and library studies',
+        'telecommunication systems',
+        'aircraft maintenance engineering (avionics)',
+        'aircraft maintenance engineering (airframe & engine)',
+        'electronic engineering',
+        'electronics and media technology',
+        'construction & draughting (dual tvet)',
+        'real estate management & agency',
+        'agrotechnology',
+        'aquaculture technology',
+        'food science and technology',
+        'applied sciences',
+        // General patterns (kept for broader matching)
         'engineering', 'business', 'computing', 'hospitality', 'tourism',
         'construction', 'mechanical', 'electrical', 'civil', 'automotive',
-        'accounting', 'marketing', 'management', 'information technology',
+        'accounting', 'marketing', 'management',
         'software development', 'network', 'multimedia', 'graphics'
     ];
 
@@ -229,12 +258,15 @@ class GradeExtractionService
 
         // If we found both programme and CGPA, create the grade entry
         if ($programme && $cgpa !== null) {
+            // Format CGPA to remove trailing zeros
+            $formattedCgpa = rtrim(rtrim(number_format($cgpa, 2, '.', ''), '0'), '.');
+            
             $extractedGrades[] = [
                 'subject' => $programme,
                 'grade' => null,
-                'cgpa' => $cgpa,
+                'cgpa' => $formattedCgpa,
                 'qualification' => 'HNTec',
-                'context_line' => "Programme: {$programme}, CGPA: {$cgpa}",
+                'context_line' => "Programme: {$programme}, CGPA: {$formattedCgpa}",
                 'confidence' => $this->calculateHntecConfidence($programme, $cgpa),
                 'line_number' => 0
             ];
@@ -453,10 +485,10 @@ class GradeExtractionService
             $confidence += 0.2;
         }
         
-        // Higher confidence if programme mentions specific field
-        $technicalFields = ['information technology', 'engineering', 'business', 'computing'];
-        foreach ($technicalFields as $field) {
-            if (stripos($programme, $field) !== false) {
+        // Higher confidence if programme matches known HNTec programmes
+        $programmeNormalized = strtolower($programme);
+        foreach ($this->hntecProgrammes as $knownProgramme) {
+            if (stripos($programmeNormalized, strtolower($knownProgramme)) !== false) {
                 $confidence += 0.1;
                 break;
             }

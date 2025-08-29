@@ -3,8 +3,10 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserQuestionnaireController;
 use App\Http\Controllers\UserFeedbackController;
 use App\Http\Controllers\AdminController; // Add this import
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\CaseReportController;
 use App\Http\Controllers\AdmissionUserProfileController;
+use App\Http\Controllers\OLevelSubjectController;
 use App\Http\Controllers\UserGradesController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -99,6 +101,11 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
         Route::get('/case-reports', [CaseReportController::class, 'index'])->name('case-reports');
         Route::patch('/case-report/{caseReport}/status', [CaseReportController::class, 'updateStatus'])->name('case-report.update-status');
+        
+        // Staff Feedback routes
+        Route::get('/feedback', [StaffController::class, 'feedback'])->name('feedback');
+        Route::post('/reply-feedback/{id}', [StaffController::class, 'replyFeedback'])->name('reply-feedback');
+        Route::patch('/update-feedback-status/{id}', [StaffController::class, 'updateFeedbackStatus'])->name('update-feedback-status');
     });
 
     // Staff Admission User Profile routes
@@ -108,6 +115,20 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/user-profile/{id}/verify', [AdmissionUserProfileController::class, 'verify'])->name('user-profile.verify');
         Route::post('/user-profile/{id}/reject', [AdmissionUserProfileController::class, 'reject'])->name('user-profile.reject');
         Route::get('/user-profile/{id}/view-ic', [AdmissionUserProfileController::class, 'viewIC'])->name('user-profile.view-ic');
+        
+        // Programme Management route
+        Route::get('/programme-management', function () {
+            if (auth()->user()->role !== 'staff' || !auth()->user()->isAdmissionManager()) {
+                abort(403, 'Unauthorized');
+            }
+            return view('staff.admission.programme-management');
+        })->name('programme-management');
+        
+        // O Level Subjects routes
+        Route::get('/olevel-subjects', [OLevelSubjectController::class, 'index'])->name('olevel-subjects');
+        Route::post('/olevel-subjects', [OLevelSubjectController::class, 'store'])->name('olevel-subjects.store');
+        Route::put('/olevel-subjects/{oLevelSubject}', [OLevelSubjectController::class, 'update'])->name('olevel-subjects.update');
+        Route::delete('/olevel-subjects/{oLevelSubject}', [OLevelSubjectController::class, 'destroy'])->name('olevel-subjects.destroy');
     });
 });
 

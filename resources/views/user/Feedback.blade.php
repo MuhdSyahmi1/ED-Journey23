@@ -275,7 +275,7 @@
                                             {{ $item->message }}
                                         </p>
 
-                                        <!-- Admin Response -->
+                                        <!-- Admin/Staff Response -->
                                         @if($item->admin_reply)
                                         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-700/50 rounded-xl p-6 mt-4">
                                             <div class="flex items-center gap-3 mb-3">
@@ -285,7 +285,13 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <span class="font-semibold text-blue-900 dark:text-blue-100">Admin Response</span>
+                                                    <span class="font-semibold text-blue-900 dark:text-blue-100">
+                                                        @if($item->repliedByUser && $item->repliedByUser->role === 'staff')
+                                                            Staff Response
+                                                        @else
+                                                            Admin Response
+                                                        @endif
+                                                    </span>
                                                     @if($item->replied_at)
                                                         <span class="text-sm text-blue-600 dark:text-blue-300 ml-2">
                                                             {{ $item->replied_at->diffForHumans() }}

@@ -81,8 +81,14 @@
                             <flux:navlist.item icon="chart-bar" href="#" wire:navigate>
                                 {{ __('Report Data') }}
                             </flux:navlist.item>
-                            <flux:navlist.item icon="cog-6-tooth" href="#" wire:navigate>
-                                {{ __('Management') }}
+                            <flux:navlist.item icon="bell" href="#" wire:navigate>
+                                {{ __('Notifications') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback')" :current="request()->routeIs('staff.feedback')" wire:navigate>
+                                {{ __('Feedback Center') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="academic-cap" href="{{ route('staff.admission.programme-management') }}" wire:navigate>
+                                {{ __('Program Management') }}
                             </flux:navlist.item>
                         </flux:navlist.group>
                     @endif

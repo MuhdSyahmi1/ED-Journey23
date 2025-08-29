@@ -13,8 +13,9 @@ class UserFeedbackController extends Controller
      */
     public function index()
     {
-        // Get current user's feedback with pagination
+        // Get current user's feedback with pagination and replier information
         $feedback = Feedback::where('user_id', Auth::id())
+            ->with('repliedByUser')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

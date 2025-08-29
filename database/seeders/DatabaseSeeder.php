@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             FeedbackSeeder::class,
             CaseReportSeeder::class,
             UserProfileSeeder::class,
+            OLevelSubjectsSeeder::class,
         ]);
     }
 }

@@ -1,17 +1,19 @@
 <x-layouts.app title="Subject/Programme Management">
-    <div class="space-y-6">
-        <!-- Page Header -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-            <div class="text-center">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">SUBJECT/PROGRAMME MANAGEMENT</h1>
-                <p class="text-gray-600 dark:text-gray-400">Manage academic subjects and programmes</p>
-            </div>
-        </div>
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 transition-colors duration-300">
+        <div class="p-6">
+            <div class="max-w-7xl mx-auto space-y-6">
+                <!-- Page Header -->
+                <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-400/90 to-purple-500/90 text-white text-center py-4">
+                        <h1 class="text-2xl font-bold">SUBJECT/PROGRAMME MANAGEMENT</h1>
+                        <p class="text-sm opacity-90 mt-1">Manage academic subjects and programmes</p>
+                    </div>
+                </div>
 
-        <!-- Navigation Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- O Level Subjects -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden group">
+                <!-- Navigation Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- O Level Subjects -->
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 hover:shadow-2xl transition-all duration-200 overflow-hidden group">
                 <a href="{{ route('staff.admission.olevel-subjects') }}" class="block p-4 h-full" wire:navigate>
                     <div class="text-center">
                         <div class="w-12 h-12 mx-auto mb-3 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors duration-200">
@@ -25,9 +27,9 @@
                 </a>
             </div>
 
-            <!-- A Level Subjects -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden group">
-                <a href="#" class="block p-4 h-full">
+                    <!-- A Level Subjects -->
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 hover:shadow-2xl transition-all duration-200 overflow-hidden group">
+                <a href="{{ route('staff.admission.alevel-subjects') }}" class="block p-4 h-full" wire:navigate>
                     <div class="text-center">
                         <div class="w-12 h-12 mx-auto mb-3 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors duration-200">
                             <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,8 +42,8 @@
                 </a>
             </div>
 
-            <!-- HNTEC Programmes -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden group">
+                    <!-- HNTEC Programmes -->
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 hover:shadow-2xl transition-all duration-200 overflow-hidden group">
                 <a href="#" class="block p-4 h-full">
                     <div class="text-center">
                         <div class="w-12 h-12 mx-auto mb-3 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition-colors duration-200">
@@ -55,8 +57,8 @@
                 </a>
             </div>
 
-            <!-- Diploma Programmes -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden group">
+                    <!-- Diploma Programmes -->
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 hover:shadow-2xl transition-all duration-200 overflow-hidden group">
                 <a href="#" class="block p-4 h-full">
                     <div class="text-center">
                         <div class="w-12 h-12 mx-auto mb-3 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50 transition-colors duration-200">
@@ -70,6 +72,8 @@
                         <p class="text-xs text-gray-600 dark:text-gray-400">Manage diploma programme requirements</p>
                     </div>
                 </a>
+            </div>
+                </div>
             </div>
         </div>
     </div>

@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             CaseReportSeeder::class,
             UserProfileSeeder::class,
             OLevelSubjectsSeeder::class,
+            ALevelSubjectsSeeder::class,
         ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\CaseReportController;
 use App\Http\Controllers\AdmissionUserProfileController;
 use App\Http\Controllers\OLevelSubjectController;
+use App\Http\Controllers\ALevelSubjectController;
 use App\Http\Controllers\UserGradesController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -129,6 +130,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/olevel-subjects', [OLevelSubjectController::class, 'store'])->name('olevel-subjects.store');
         Route::put('/olevel-subjects/{oLevelSubject}', [OLevelSubjectController::class, 'update'])->name('olevel-subjects.update');
         Route::delete('/olevel-subjects/{oLevelSubject}', [OLevelSubjectController::class, 'destroy'])->name('olevel-subjects.destroy');
+        
+        // A Level Subjects routes
+        Route::get('/alevel-subjects', [ALevelSubjectController::class, 'index'])->name('alevel-subjects');
+        Route::post('/alevel-subjects', [ALevelSubjectController::class, 'store'])->name('alevel-subjects.store');
+        Route::put('/alevel-subjects/{aLevelSubject}', [ALevelSubjectController::class, 'update'])->name('alevel-subjects.update');
+        Route::delete('/alevel-subjects/{aLevelSubject}', [ALevelSubjectController::class, 'destroy'])->name('alevel-subjects.destroy');
     });
 });
 

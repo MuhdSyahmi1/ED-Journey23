@@ -44,7 +44,7 @@
 
                     <!-- HNTEC Programmes -->
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 hover:shadow-2xl transition-all duration-200 overflow-hidden group">
-                <a href="#" class="block p-4 h-full">
+                <a href="{{ route('staff.admission.hntec-programmes') }}" class="block p-4 h-full" wire:navigate>
                     <div class="text-center">
                         <div class="w-12 h-12 mx-auto mb-3 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition-colors duration-200">
                             <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +59,7 @@
 
                     <!-- Diploma Programmes -->
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 hover:shadow-2xl transition-all duration-200 overflow-hidden group">
-                <a href="#" class="block p-4 h-full">
+                <a href="{{ route('staff.admission.diploma-programmes') }}" class="block p-4 h-full" wire:navigate>
                     <div class="text-center">
                         <div class="w-12 h-12 mx-auto mb-3 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50 transition-colors duration-200">
                             <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

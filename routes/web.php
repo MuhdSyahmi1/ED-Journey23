@@ -8,6 +8,8 @@ use App\Http\Controllers\CaseReportController;
 use App\Http\Controllers\AdmissionUserProfileController;
 use App\Http\Controllers\OLevelSubjectController;
 use App\Http\Controllers\ALevelSubjectController;
+use App\Http\Controllers\HntecProgrammeController;
+use App\Http\Controllers\DiplomaProgrammeController;
 use App\Http\Controllers\UserGradesController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -136,6 +138,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/alevel-subjects', [ALevelSubjectController::class, 'store'])->name('alevel-subjects.store');
         Route::put('/alevel-subjects/{aLevelSubject}', [ALevelSubjectController::class, 'update'])->name('alevel-subjects.update');
         Route::delete('/alevel-subjects/{aLevelSubject}', [ALevelSubjectController::class, 'destroy'])->name('alevel-subjects.destroy');
+        
+        // HNTEC Programmes routes
+        Route::get('/hntec-programmes', [HntecProgrammeController::class, 'index'])->name('hntec-programmes');
+        Route::post('/hntec-programmes', [HntecProgrammeController::class, 'store'])->name('hntec-programmes.store');
+        Route::put('/hntec-programmes/{hntecProgramme}', [HntecProgrammeController::class, 'update'])->name('hntec-programmes.update');
+        Route::delete('/hntec-programmes/{hntecProgramme}', [HntecProgrammeController::class, 'destroy'])->name('hntec-programmes.destroy');
+        
+        // Diploma Programmes routes
+        Route::get('/diploma-programmes', [DiplomaProgrammeController::class, 'index'])->name('diploma-programmes');
+        Route::post('/diploma-programmes', [DiplomaProgrammeController::class, 'store'])->name('diploma-programmes.store');
+        Route::put('/diploma-programmes/{diplomaProgramme}', [DiplomaProgrammeController::class, 'update'])->name('diploma-programmes.update');
+        Route::delete('/diploma-programmes/{diplomaProgramme}', [DiplomaProgrammeController::class, 'destroy'])->name('diploma-programmes.destroy');
     });
 });
 

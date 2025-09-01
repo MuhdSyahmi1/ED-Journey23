@@ -32,6 +32,12 @@ class DatabaseSeeder extends Seeder
             UserProfileSeeder::class,
             OLevelSubjectsSeeder::class,
             ALevelSubjectsSeeder::class,
+            HntecProgrammesSeeder::class,
+            DiplomaProgrammesSeeder::class,
+            // New seeders for school programmes and requirements
+            SchoolProgrammesSeeder::class,
+            ProgrammeHntecRequirementsSeeder::class,
+            ProgrammeOlevelRequirementsSeeder::class,
         ]);
     }
 }

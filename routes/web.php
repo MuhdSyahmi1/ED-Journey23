@@ -99,7 +99,126 @@ Route::middleware(['auth'])->group(function () {
         }
         return view('staff.ProfileInformation');
     })->name('staff.profile-information');
+});
 
+// Staff Program Management routes
+Route::middleware(['auth'])->prefix('staff/program')->name('staff.program.')->group(function () {
+    Route::get('/programme-management', function () {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        return view('staff.program.programme-management');
+    })->name('programme-management');
+    
+    // Individual School routes
+    Route::get('/school/{school}', function ($school) {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        // Validate school parameter
+        $validSchools = ['business', 'health', 'ict', 'engineering', 'petrochemical'];
+        if (!in_array($school, $validSchools)) {
+            abort(404);
+        }
+        
+        return view('staff.program.school', compact('school'));
+    })->name('school');
+    
+    // School-specific programme routes
+    Route::get('/school/{school}/programmes', function ($school) {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        // Validate school parameter
+        $validSchools = ['business', 'health', 'ict', 'engineering', 'petrochemical'];
+        if (!in_array($school, $validSchools)) {
+            abort(404);
+        }
+        
+        return view('staff.program.schools.' . $school . '.programmes', compact('school'));
+    })->name('school.programmes');
+    
+    // Entry requirements routes
+    Route::get('/school/{school}/programmes/{programmeId}/entry-requirements/hntec', function ($school, $programmeId) {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        // Validate school parameter
+        $validSchools = ['business', 'health', 'ict', 'engineering', 'petrochemical'];
+        if (!in_array($school, $validSchools)) {
+            abort(404);
+        }
+        
+        return view('staff.program.schools.' . $school . '.entry-requirements.hntec', compact('school', 'programmeId'));
+    })->name('school.programmes.hntec');
+    
+    Route::get('/school/{school}/programmes/{programmeId}/entry-requirements/olevel', function ($school, $programmeId) {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        // Validate school parameter
+        $validSchools = ['business', 'health', 'ict', 'engineering', 'petrochemical'];
+        if (!in_array($school, $validSchools)) {
+            abort(404);
+        }
+        
+        return view('staff.program.schools.' . $school . '.entry-requirements.olevel', compact('school', 'programmeId'));
+    })->name('school.programmes.olevel');
+    
+    // API Routes for programme management
+    Route::prefix('api/school/{school}')->name('api.school.')->group(function () {
+        // School programme API routes
+        Route::get('/programmes', [App\Http\Controllers\SchoolProgrammeController::class, 'index'])->name('programmes.index');
+        Route::post('/programmes', [App\Http\Controllers\SchoolProgrammeController::class, 'store'])->name('programmes.store');
+        Route::put('/programmes/{programme}', [App\Http\Controllers\SchoolProgrammeController::class, 'update'])->name('programmes.update');
+        Route::delete('/programmes/{programme}', [App\Http\Controllers\SchoolProgrammeController::class, 'destroy'])->name('programmes.destroy');
+        Route::delete('/programmes/bulk', [App\Http\Controllers\SchoolProgrammeController::class, 'bulkDestroy'])->name('programmes.bulk-destroy');
+        Route::get('/programmes/available', [App\Http\Controllers\SchoolProgrammeController::class, 'getAvailableProgrammes'])->name('programmes.available');
+        Route::get('/programmes/statistics', [App\Http\Controllers\SchoolProgrammeController::class, 'getStatistics'])->name('programmes.statistics');
+        
+        // HNTec requirements API routes
+        Route::get('/programmes/{programmeId}/hntec', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'index'])->name('programmes.hntec.index');
+        Route::post('/programmes/{programmeId}/hntec', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'store'])->name('programmes.hntec.store');
+        Route::put('/programmes/{programmeId}/hntec/{requirement}', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'update'])->name('programmes.hntec.update');
+        Route::delete('/programmes/{programmeId}/hntec/{requirement}', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'destroy'])->name('programmes.hntec.destroy');
+        Route::delete('/programmes/{programmeId}/hntec/bulk', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'bulkDestroy'])->name('programmes.hntec.bulk-destroy');
+        Route::get('/programmes/{programmeId}/hntec/available', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'getAvailableHntecProgrammes'])->name('programmes.hntec.available');
+        Route::get('/programmes/{programmeId}/hntec/statistics', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'getStatistics'])->name('programmes.hntec.statistics');
+        
+        // Alternative route patterns for frontend compatibility
+        Route::get('/programmes/{programmeId}/available-hntec-programmes', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'getAvailableHntecProgrammes'])->name('programmes.available-hntec-programmes');
+        Route::get('/programmes/{programmeId}/hntec-requirements', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'index'])->name('programmes.hntec-requirements.index');
+        Route::post('/programmes/{programmeId}/hntec-requirements', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'store'])->name('programmes.hntec-requirements.store');
+        Route::put('/programmes/{programmeId}/hntec-requirements/{requirement}', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'update'])->name('programmes.hntec-requirements.update');
+        Route::delete('/programmes/{programmeId}/hntec-requirements/{requirement}', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'destroy'])->name('programmes.hntec-requirements.destroy');
+        Route::delete('/programmes/{programmeId}/hntec-requirements/bulk-delete', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'bulkDestroy'])->name('programmes.hntec-requirements.bulk-destroy');
+        Route::get('/programmes/{programmeId}/hntec-statistics', [App\Http\Controllers\ProgrammeHntecRequirementController::class, 'getStatistics'])->name('programmes.hntec-statistics');
+        
+        // O Level requirements API routes
+        Route::get('/programmes/{programmeId}/olevel', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'index'])->name('programmes.olevel.index');
+        Route::post('/programmes/{programmeId}/olevel', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'store'])->name('programmes.olevel.store');
+        Route::put('/programmes/{programmeId}/olevel/{requirement}', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'update'])->name('programmes.olevel.update');
+        Route::delete('/programmes/{programmeId}/olevel/{requirement}', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'destroy'])->name('programmes.olevel.destroy');
+        Route::delete('/programmes/{programmeId}/olevel/bulk', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'bulkDestroy'])->name('programmes.olevel.bulk-destroy');
+        Route::get('/programmes/{programmeId}/olevel/available', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'getAvailableOLevelSubjects'])->name('programmes.olevel.available');
+        Route::get('/programmes/{programmeId}/olevel/statistics', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'getStatistics'])->name('programmes.olevel.statistics');
+        
+        // Alternative route patterns for O-Level frontend compatibility
+        Route::get('/programmes/{programmeId}/available-olevel-subjects', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'getAvailableOLevelSubjects'])->name('programmes.available-olevel-subjects');
+        Route::get('/programmes/{programmeId}/olevel-requirements', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'index'])->name('programmes.olevel-requirements.index');
+        Route::post('/programmes/{programmeId}/olevel-requirements', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'store'])->name('programmes.olevel-requirements.store');
+        Route::put('/programmes/{programmeId}/olevel-requirements/{requirement}', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'update'])->name('programmes.olevel-requirements.update');
+        Route::delete('/programmes/{programmeId}/olevel-requirements/{requirement}', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'destroy'])->name('programmes.olevel-requirements.destroy');
+        Route::delete('/programmes/{programmeId}/olevel-requirements/bulk-delete', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'bulkDestroy'])->name('programmes.olevel-requirements.bulk-destroy');
+        Route::get('/programmes/{programmeId}/olevel-statistics', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'getStatistics'])->name('programmes.olevel-statistics');
+    });
+});
+
+Route::middleware(['auth'])->group(function () {
     // Staff Case Report routes (for admission managers)
     Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
         Route::get('/case-reports', [CaseReportController::class, 'index'])->name('case-reports');

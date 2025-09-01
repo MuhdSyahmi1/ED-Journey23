@@ -17,6 +17,20 @@ class StaffSeeder extends Seeder
         // Create 16 staff/managers with different roles and specializations
         $staff = [
             [
+                'name' => 'Staff User',
+                'email' => 'staff@example.com',
+                'role' => 'staff',
+                'manager_type' => 'program',
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Staff User 2',
+                'email' => 'staff2@example.com',
+                'role' => 'staff',
+                'manager_type' => 'admission',
+                'status' => 'active',
+            ],
+            [
                 'name' => 'Sarah Johnson',
                 'email' => 'sarah.johnson@politeknikbrunei.edu.bn',
                 'role' => 'staff',

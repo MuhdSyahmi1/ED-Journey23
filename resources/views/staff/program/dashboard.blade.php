@@ -13,21 +13,18 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">{{ auth()->user()->manager_type_display }}</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Program Management -->
-                        <div class="bg-blue-100 dark:bg-blue-900 p-4 rounded-lg">
-                            <h4 class="font-semibold">Program Management</h4>
+                        <!-- Programme Management -->
+                        <a href="{{ route('staff.program.programme-management') }}" class="bg-blue-100 dark:bg-blue-900 p-4 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors cursor-pointer">
+                            <h4 class="font-semibold">Programme Management</h4>
                             <p class="text-sm">Manage academic programs and courses</p>
-                        </div>
+                        </a>
                         
                         <div class="bg-green-100 dark:bg-green-900 p-4 rounded-lg">
-                            <h4 class="font-semibold">Curriculum Planning</h4>
-                            <p class="text-sm">Plan and update curriculum</p>
+                            <h4 class="font-semibold">Feedback Center</h4>
+                            <p class="text-sm">View Feedbacks from users</p>
                         </div>
                         
-                        <div class="bg-purple-100 dark:bg-purple-900 p-4 rounded-lg">
-                            <h4 class="font-semibold">Program Reports</h4>
-                            <p class="text-sm">View program performance metrics</p>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

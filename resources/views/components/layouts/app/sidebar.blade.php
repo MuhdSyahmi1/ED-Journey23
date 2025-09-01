@@ -57,14 +57,11 @@
                     {{-- Program Manager Navigation --}}
                     @if(auth()->user()->isProgramManager())
                         <flux:navlist.group :heading="__('Program Management')" class="grid">
-                            <flux:navlist.item icon="academic-cap" href="#" wire:navigate>
-                                {{ __('Program Management') }}
+                            <flux:navlist.item icon="academic-cap" href="/staff/program/programme-management" wire:navigate>
+                                {{ __('Programme Management') }}
                             </flux:navlist.item>
-                            <flux:navlist.item icon="document-text" href="#" wire:navigate>
-                                {{ __('Curriculum Planning') }}
-                            </flux:navlist.item>
-                            <flux:navlist.item icon="chart-bar" href="#" wire:navigate>
-                                {{ __('Program Reports') }}
+                            <flux:navlist.item icon="chat-bubble-left-right" href="#" wire:navigate>
+                                {{ __('Feedback Center') }}
                             </flux:navlist.item>
                         </flux:navlist.group>
                     @endif

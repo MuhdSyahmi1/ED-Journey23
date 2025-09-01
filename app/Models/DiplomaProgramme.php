@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DiplomaProgramme extends Model
 {
+    use HasFactory;
     /**
      * The table associated with the model.
      */
@@ -52,5 +55,21 @@ class DiplomaProgramme extends Model
             'School of Science & Engineering',
             'School of Petrochemical'
         ];
+    }
+
+    /**
+     * Get all school programmes for this diploma programme.
+     */
+    public function schoolProgrammes(): HasMany
+    {
+        return $this->hasMany(SchoolProgramme::class);
+    }
+
+    /**
+     * Scope a query to filter by school name.
+     */
+    public function scopeForSchool($query, string $school)
+    {
+        return $query->where('school', 'like', '%' . $school . '%');
     }
 }

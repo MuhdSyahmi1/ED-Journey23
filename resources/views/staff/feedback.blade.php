@@ -205,7 +205,7 @@
                             
                             <!-- Reply Form (Hidden by default) -->
                             <div id="reply-form-{{ $feedback->id }}" class="hidden pt-4 border-t border-gray-200 dark:border-gray-700">
-                                <form action="{{ route('staff.reply-feedback', $feedback->id) }}" method="POST" class="space-y-3">
+                                <form action="@if(auth()->user()->role === 'admin'){{ route('admin.reply-feedback', $feedback->id) }}@elseif(auth()->user()->isProgramManager()){{ route('staff.program.reply-feedback', $feedback->id) }}@else{{ route('staff.reply-feedback', $feedback->id) }}@endif" method="POST" class="space-y-3">
                                     @csrf
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Reply:</label>
@@ -265,7 +265,15 @@
         }
 
         function changeStatus(id, status) {
-            fetch('/staff/update-feedback-status/' + id, {
+            let updateUrl;
+            @if(auth()->user()->role === 'admin')
+                updateUrl = '/admin/update-feedback-status/' + id;
+            @elseif(auth()->user()->isProgramManager())
+                updateUrl = '/staff/program/update-feedback-status/' + id;
+            @else
+                updateUrl = '/staff/update-feedback-status/' + id;
+            @endif
+            fetch(updateUrl, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

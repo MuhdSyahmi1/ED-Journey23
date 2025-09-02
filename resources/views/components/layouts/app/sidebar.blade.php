@@ -60,7 +60,7 @@
                             <flux:navlist.item icon="academic-cap" href="/staff/program/programme-management" wire:navigate>
                                 {{ __('Programme Management') }}
                             </flux:navlist.item>
-                            <flux:navlist.item icon="chat-bubble-left-right" href="#" wire:navigate>
+                            <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.program.feedback')" :current="request()->routeIs('staff.program.feedback*')" wire:navigate>
                                 {{ __('Feedback Center') }}
                             </flux:navlist.item>
                         </flux:navlist.group>
@@ -102,6 +102,9 @@
                             <flux:navlist.item icon="calendar" href="#" wire:navigate>
                                 {{ __('Content Calendar') }}
                             </flux:navlist.item>
+                            <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback')" :current="request()->routeIs('staff.feedback')" wire:navigate>
+                                {{ __('Feedback Center') }}
+                            </flux:navlist.item>
                         </flux:navlist.group>
                     @endif
 
@@ -117,6 +120,9 @@
                             <flux:navlist.item icon="document-check" href="#" wire:navigate>
                                 {{ __('Moderation Reports') }}
                             </flux:navlist.item>
+                            <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback')" :current="request()->routeIs('staff.feedback')" wire:navigate>
+                                {{ __('Feedback Center') }}
+                            </flux:navlist.item>
                         </flux:navlist.group>
                     @endif
 
@@ -131,6 +137,9 @@
                             </flux:navlist.item>
                             <flux:navlist.item icon="document-chart-bar" href="#" wire:navigate>
                                 {{ __('Custom Reports') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="chat-bubble-left-right" :href="route('staff.feedback')" :current="request()->routeIs('staff.feedback')" wire:navigate>
+                                {{ __('Feedback Center') }}
                             </flux:navlist.item>
                         </flux:navlist.group>
                     @endif

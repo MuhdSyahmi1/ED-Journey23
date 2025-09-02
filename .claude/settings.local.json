@@ -13,7 +13,8 @@
       "mcp__laravel-boost__list-routes",
       "mcp__laravel-boost__get-absolute-url",
       "mcp__laravel-boost__browser-logs",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(grep:*)"
     ]
   },
   "enabledMcpjsonServers": [

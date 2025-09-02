@@ -216,6 +216,90 @@ Route::middleware(['auth'])->prefix('staff/program')->name('staff.program.')->gr
         Route::delete('/programmes/{programmeId}/olevel-requirements/bulk-delete', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'bulkDestroy'])->name('programmes.olevel-requirements.bulk-destroy');
         Route::get('/programmes/{programmeId}/olevel-statistics', [App\Http\Controllers\ProgrammeOlevelRequirementController::class, 'getStatistics'])->name('programmes.olevel-statistics');
     });
+    
+    // Program Manager Feedback route
+    Route::get('/feedback', function () {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        // Get all feedback with user information - same as StaffController
+        $allFeedback = \App\Models\Feedback::with(['user', 'repliedByUser'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Group feedback by status for easy filtering
+        $pendingFeedback = $allFeedback->where('status', 'pending');
+        $inProgressFeedback = $allFeedback->where('status', 'in-progress');
+        $solvedFeedback = $allFeedback->where('status', 'solved');
+        
+        // Get feedback statistics
+        $stats = [
+            'total' => $allFeedback->count(),
+            'pending' => $pendingFeedback->count(),
+            'in_progress' => $inProgressFeedback->count(),
+            'solved' => $solvedFeedback->count(),
+            'high_priority' => $allFeedback->where('priority', 'high')->count(),
+        ];
+        
+        return view('staff.feedback', compact(
+            'allFeedback', 
+            'pendingFeedback', 
+            'inProgressFeedback', 
+            'solvedFeedback', 
+            'stats'
+        ));
+    })->name('feedback');
+    
+    // Program Manager Feedback action routes
+    Route::post('/reply-feedback/{id}', function (\Illuminate\Http\Request $request, $id) {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        $request->validate([
+            'admin_reply' => 'required|string|min:10',
+            'status' => 'required|in:pending,in-progress,solved'
+        ]);
+        
+        $feedback = \App\Models\Feedback::findOrFail($id);
+        
+        $feedback->update([
+            'admin_reply' => $request->admin_reply,
+            'status' => $request->status,
+            'replied_by' => auth()->id(),
+            'replied_at' => now(),
+            'resolved_at' => $request->status === 'solved' ? now() : null,
+        ]);
+        
+        $statusText = match($request->status) {
+            'pending' => 'marked as pending',
+            'in-progress' => 'marked as in progress',
+            'solved' => 'marked as solved',
+        };
+        
+        return redirect()->route('staff.program.feedback')
+            ->with('success', "Feedback replied to and {$statusText}!");
+    })->name('reply-feedback');
+    
+    Route::patch('/update-feedback-status/{id}', function (\Illuminate\Http\Request $request, $id) {
+        if (auth()->user()->role !== 'staff' || !auth()->user()->isProgramManager()) {
+            abort(403, 'Unauthorized');
+        }
+        
+        $request->validate([
+            'status' => 'required|in:pending,in-progress,solved'
+        ]);
+        
+        $feedback = \App\Models\Feedback::findOrFail($id);
+        
+        $feedback->update([
+            'status' => $request->status,
+            'resolved_at' => $request->status === 'solved' ? now() : null,
+        ]);
+        
+        return response()->json(['success' => true]);
+    })->name('update-feedback-status');
 });
 
 Route::middleware(['auth'])->group(function () {

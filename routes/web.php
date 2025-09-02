@@ -353,6 +353,92 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/diploma-programmes', [DiplomaProgrammeController::class, 'store'])->name('diploma-programmes.store');
         Route::put('/diploma-programmes/{diplomaProgramme}', [DiplomaProgrammeController::class, 'update'])->name('diploma-programmes.update');
         Route::delete('/diploma-programmes/{diplomaProgramme}', [DiplomaProgrammeController::class, 'destroy'])->name('diploma-programmes.destroy');
+        
+        // View Student Results routes for case reports
+        Route::get('/view-results/{userId}', function ($userId) {
+            if (auth()->user()->role !== 'staff' || !auth()->user()->isAdmissionManager()) {
+                abort(403, 'Unauthorized');
+            }
+            
+            $user = \App\Models\User::findOrFail($userId);
+            
+            // Get OCR results with grades for O-Level and A-Level
+            $oLevelResults = \App\Models\OcrResult::where('user_id', $userId)
+                ->where('ocr_type', 'o_level')
+                ->with('studentGrades')
+                ->latest()
+                ->first();
+                
+            $aLevelResults = \App\Models\OcrResult::where('user_id', $userId)
+                ->where('ocr_type', 'a_level')
+                ->with('studentGrades')
+                ->latest()
+                ->first();
+                
+            // Get HNTEC results using the HntecResult model
+            $hntecResults = \App\Models\HntecResult::where('user_id', $userId)
+                ->with('ocrResult')
+                ->get();
+            
+            // Get case report for this user if it exists
+            $caseReport = \App\Models\CaseReport::where('user_id', $userId)->first();
+            
+            return view('staff.admission.view-results', compact(
+                'user',
+                'oLevelResults', 
+                'aLevelResults', 
+                'hntecResults',
+                'caseReport'
+            ));
+        })->name('view-results');
+        
+        // Update student grades routes
+        Route::post('/update-grade/{gradeId}', function (\Illuminate\Http\Request $request, $gradeId) {
+            if (auth()->user()->role !== 'staff' || !auth()->user()->isAdmissionManager()) {
+                abort(403, 'Unauthorized');
+            }
+            
+            $request->validate([
+                'grade_type' => 'required|in:student_grade,hntec_result',
+                'subject' => 'required|string',
+                'grade' => 'required|string', 
+                'syllabus' => 'nullable|string',
+            ]);
+            
+            // Update based on grade type
+            if ($request->grade_type === 'hntec_result') {
+                $grade = \App\Models\HntecResult::findOrFail($gradeId);
+                $grade->update([
+                    'programme' => $request->subject,
+                    'cgpa' => floatval($request->grade),
+                ]);
+            } else {
+                $grade = \App\Models\StudentGrade::findOrFail($gradeId);
+                $grade->update([
+                    'subject' => $request->subject,
+                    'grade' => $request->grade,
+                    'syllabus' => $request->syllabus,
+                ]);
+            }
+            
+            return response()->json(['success' => true, 'message' => 'Grade updated successfully']);
+        })->name('update-grade');
+        
+        // Update case report status
+        Route::patch('/case-report-status/{caseReportId}', function (\Illuminate\Http\Request $request, $caseReportId) {
+            if (auth()->user()->role !== 'staff' || !auth()->user()->isAdmissionManager()) {
+                abort(403, 'Unauthorized');
+            }
+            
+            $request->validate([
+                'status' => 'required|in:pending,in progress,solved'
+            ]);
+            
+            $caseReport = \App\Models\CaseReport::findOrFail($caseReportId);
+            $caseReport->update(['status' => $request->status]);
+            
+            return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+        })->name('case-report-status');
     });
 });
 

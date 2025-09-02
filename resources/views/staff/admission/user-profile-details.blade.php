@@ -121,7 +121,7 @@
                                 <!-- Mobile -->
                                 <div>
                                     <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Mobile Phone</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->telephone_mobile ?? 'Not provided' }}</div>
+                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->mobile_phone ?? 'Not provided' }}</div>
                                 </div>
 
                                 <!-- Home Phone -->
@@ -133,7 +133,7 @@
                                 <!-- Address -->
                                 <div>
                                     <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Address</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->address ?? 'Not provided' }}</div>
+                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->postal_address ?? 'Not provided' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -152,21 +152,49 @@
                             
                             @if($profile->ic_file_path)
                                 <div class="text-center">
-                                    <div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 mb-4">
-                                        <svg class="mx-auto h-12 w-12 text-slate-400 dark:text-slate-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">IC Document uploaded</p>
-                                        <a href="{{ route('staff.admission.user-profile.view-ic', $profile->user_id) }}" 
-                                           target="_blank"
-                                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    @php
+                                        $fileExtension = pathinfo($profile->ic_file_path, PATHINFO_EXTENSION);
+                                        $isImage = in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png']);
+                                    @endphp
+                                    
+                                    @if($isImage)
+                                        <!-- Display IC Image -->
+                                        <div class="border-2 border-slate-300 dark:border-slate-600 rounded-xl p-4 mb-4 bg-slate-50 dark:bg-slate-700">
+                                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">IC Document ({{ $profile->ic_file_name }})</p>
+                                            <img src="{{ route('staff.admission.user-profile.view-ic', $profile->user_id) }}" 
+                                                 alt="IC Document" 
+                                                 class="max-w-full h-auto max-h-96 rounded-lg mx-auto shadow-lg"
+                                                 style="max-width: 600px;">
+                                            <div class="mt-3">
+                                                <a href="{{ route('staff.admission.user-profile.view-ic', $profile->user_id) }}" 
+                                                   target="_blank"
+                                                   class="inline-flex items-center px-3 py-2 text-sm bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
+                                                    Open Full Size
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <!-- Display PDF placeholder with view button -->
+                                        <div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 mb-4">
+                                            <svg class="mx-auto h-16 w-16 text-slate-400 dark:text-slate-500 mb-3" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
                                             </svg>
-                                            View IC Document
-                                        </a>
-                                    </div>
+                                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">IC Document (PDF)</p>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">{{ $profile->ic_file_name }}</p>
+                                            <a href="{{ route('staff.admission.user-profile.view-ic', $profile->user_id) }}" 
+                                               target="_blank"
+                                               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                View PDF Document
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                             @else
                                 <div class="text-center py-12">

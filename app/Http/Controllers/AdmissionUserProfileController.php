@@ -163,4 +163,92 @@ class AdmissionUserProfileController extends Controller
 
         return response($file, 200)->header('Content-Type', $mimeType);
     }
+
+    /**
+     * Display report data for user profiles
+     */
+    public function reportData(Request $request)
+    {
+        // Check if user is admission manager
+        if (auth()->user()->role !== 'staff' || auth()->user()->manager_type !== 'admission') {
+            abort(403, 'Unauthorized');
+        }
+
+        $query = DB::table('user_profiles')
+            ->join('users', 'user_profiles.user_id', '=', 'users.id')
+            ->select(
+                'user_profiles.user_id',
+                'user_profiles.name as full_name',
+                'user_profiles.email_address',
+                'user_profiles.verification_status',
+                'user_profiles.created_at as application_date'
+            );
+
+        // Apply search filter if provided
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('user_profiles.name', 'like', "%{$search}%")
+                  ->orWhere('user_profiles.email_address', 'like', "%{$search}%")
+                  ->orWhere('user_profiles.user_id', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply status filter if provided
+        if ($request->filled('status')) {
+            $query->where('user_profiles.verification_status', $request->input('status'));
+        }
+
+        // Order by application date (most recent first)
+        $reportData = $query->orderBy('user_profiles.created_at', 'desc')->get();
+
+        return view('staff.admission.report-data', compact('reportData', 'request'));
+    }
+
+    /**
+     * Generate PDF report for user profiles
+     */
+    public function generatePdfReport(Request $request)
+    {
+        // Check if user is admission manager
+        if (auth()->user()->role !== 'staff' || auth()->user()->manager_type !== 'admission') {
+            abort(403, 'Unauthorized');
+        }
+
+        $query = DB::table('user_profiles')
+            ->join('users', 'user_profiles.user_id', '=', 'users.id')
+            ->select(
+                'user_profiles.user_id',
+                'user_profiles.name as full_name',
+                'user_profiles.email_address',
+                'user_profiles.verification_status',
+                'user_profiles.created_at as application_date'
+            );
+
+        // Apply same filters as the report page
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('user_profiles.name', 'like', "%{$search}%")
+                  ->orWhere('user_profiles.email_address', 'like', "%{$search}%")
+                  ->orWhere('user_profiles.user_id', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('user_profiles.verification_status', $request->input('status'));
+        }
+
+        $reportData = $query->orderBy('user_profiles.created_at', 'desc')->get();
+        
+        // Generate HTML file that can be printed to PDF
+        $filename = 'user-profiles-report-' . date('Y-m-d-H-i-s') . '.html';
+        
+        // For now, return the PDF view directly which can be saved as PDF by browser
+        $html = view('staff.admission.report-pdf', compact('reportData'))->render();
+        
+        return response($html)
+            ->header('Content-Type', 'text/html')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    }
 }

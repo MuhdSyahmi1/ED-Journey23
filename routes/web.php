@@ -322,6 +322,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/user-profile/{id}/reject', [AdmissionUserProfileController::class, 'reject'])->name('user-profile.reject');
         Route::get('/user-profile/{id}/view-ic', [AdmissionUserProfileController::class, 'viewIC'])->name('user-profile.view-ic');
         
+        // Report Data routes
+        Route::get('/report-data', [AdmissionUserProfileController::class, 'reportData'])->name('report-data');
+        Route::get('/report-data/pdf', [AdmissionUserProfileController::class, 'generatePdfReport'])->name('report-data.pdf');
+        
         // Programme Management route
         Route::get('/programme-management', function () {
             if (auth()->user()->role !== 'staff' || !auth()->user()->isAdmissionManager()) {

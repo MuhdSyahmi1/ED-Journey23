@@ -15,7 +15,8 @@
       "mcp__laravel-boost__browser-logs",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(readlink:*)"
+      "Bash(readlink:*)",
+      "Bash(composer:*)"
     ]
   },
   "enabledMcpjsonServers": [

@@ -205,8 +205,17 @@
                             <flux:navlist.item icon="cloud-arrow-up" :href="route('user.upload-result')" :current="request()->routeIs('user.upload-result')" wire:navigate>
                                 {{ __('Upload Result') }}
                             </flux:navlist.item>
+                            @php
+                                // Check if user has uploaded mandatory O-Level results
+                                $hasOLevel = \DB::table('ocr_results')
+                                    ->where('user_id', auth()->id())
+                                    ->where('ocr_type', 'o_level')
+                                    ->exists();
+                                $uploadProgress = $hasOLevel ? 100 : 0;
+                                $badgeColor = $hasOLevel ? 'green' : 'red';
+                            @endphp
                             <div class="ml-9 -mt-1 mb-2">
-                                <flux:badge size="sm" color="red">{{ __('0% Complete') }}</flux:badge>
+                                <flux:badge size="sm" color="{{ $badgeColor }}">{{ $uploadProgress }}% Complete</flux:badge>
                             </div>
                         </div>
                     </flux:navlist.group>

@@ -11,6 +11,7 @@ use App\Http\Controllers\ALevelSubjectController;
 use App\Http\Controllers\HntecProgrammeController;
 use App\Http\Controllers\DiplomaProgrammeController;
 use App\Http\Controllers\UserGradesController;
+use App\Http\Controllers\HecasInfoController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -482,13 +483,9 @@ Route::middleware(['auth'])->group(function () {
         return view('user.recommendations');
     })->name('user.recommendations');
 
-    // NEW: HECAS Information Route
-    Route::get('/user/hecas-info', function () {
-        if (auth()->user()->role !== 'user') {
-            abort(403, 'Unauthorized');
-        }
-        return view('user.hecas-info');
-    })->name('user.hecas-info');
+    // NEW: HECAS Information Routes
+    Route::get('/user/hecas-info', [HecasInfoController::class, 'index'])->name('user.hecas-info');
+    Route::post('/user/hecas-info', [HecasInfoController::class, 'store'])->name('user.hecas-info.store');
 
     // NEW: Favourites Route
     Route::get('/user/favourites', function () {

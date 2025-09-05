@@ -24,6 +24,14 @@
         <div class="p-6">
             <div class="max-w-7xl mx-auto">
                 
+                <!-- Back Button -->
+                <div class="mb-6">
+                    <flux:button variant="ghost" size="sm" href="{{ route('staff.program.school', 'health') }}">
+                        <flux:icon.arrow-left class="w-4 h-4 mr-2" />
+                        Back to Health School
+                    </flux:button>
+                </div>
+                
                 <!-- Success/Error Messages -->
                 @if(session('success'))
                     <div class="mb-6 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-700 rounded-xl p-4">
@@ -46,14 +54,6 @@
                         </div>
                     </div>
                 @endif
-
-                <!-- Back Button -->
-                <div class="mb-6">
-                    <flux:button variant="ghost" size="sm" href="{{ route('staff.program.school', 'health') }}">
-                        <flux:icon.arrow-left class="w-4 h-4 mr-2" />
-                        Back to Health School
-                    </flux:button>
-                </div>
 
                 <!-- Header -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-6">
@@ -237,10 +237,10 @@
     </div>
 
     <!-- Add O Level Requirement Modal -->
-    <div id="addOLevelModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div id="addOLevelModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onclick="closeAddOLevelModal()"></div>
-            <div class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-xl rounded-2xl">
+            <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75" onclick="closeAddOLevelModal()"></div>
+            <div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Add O Level Entry Requirement</h3>
                     <button onclick="closeAddOLevelModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -299,6 +299,71 @@
                         </button>
                         <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
                             Add Requirement
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit O Level Requirement Modal -->
+    <div id="editOLevelModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75" onclick="closeEditOLevelModal()"></div>
+            <div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit O Level Entry Requirement</h3>
+                    <button onclick="closeEditOLevelModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="editOLevelForm" onsubmit="submitEditOLevel(event)">
+                    <input type="hidden" id="editOLevelRequirementId" name="requirement_id">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="editOLevelSubjectName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject Name</label>
+                            <input type="text" id="editOLevelSubjectName" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-gray-100 cursor-not-allowed">
+                        </div>
+
+                        <div>
+                            <label for="editOLevelQualification" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qualification</label>
+                            <input type="text" id="editOLevelQualification" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-gray-100 cursor-not-allowed">
+                        </div>
+                        
+                        <div>
+                            <label for="editOLevelCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                            <select id="editOLevelCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">Select Category</option>
+                                <option value="Compulsory">Compulsory</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="editMinGrade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum Grade</label>
+                            <select id="editMinGrade" name="min_grade" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">Select Minimum Grade</option>
+                                <option value="A*">A*</option>
+                                <option value="A(a)">A(a)</option>
+                                <option value="B(b)">B(b)</option>
+                                <option value="C(c)">C(c)</option>
+                                <option value="D(d)">D(d)</option>
+                                <option value="E(e)">E(e)</option>
+                                <option value="F(f)">F(f)</option>
+                                <option value="U">U</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeEditOLevelModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
+                            Update Requirement
                         </button>
                     </div>
                 </form>
@@ -630,8 +695,15 @@
         }
 
         function openAddOLevelModal() {
-            loadAvailableOLevelSubjects();
-            document.getElementById('addOLevelModal').classList.remove('hidden');
+            console.log('Opening add O Level modal...');
+            const modal = document.getElementById('addOLevelModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                console.log('Modal should be visible now');
+                loadAvailableOLevelSubjects();
+            } else {
+                console.error('Modal element not found!');
+            }
         }
 
         function closeAddOLevelModal() {
@@ -669,7 +741,54 @@
         }
 
         function editOLevelRequirement(id) {
-            showError('Edit functionality will be implemented in a future update.');
+            const requirement = oLevelRequirements.find(req => req.id === id);
+            if (!requirement) {
+                showError('O Level requirement not found');
+                return;
+            }
+
+            // Populate the edit form
+            document.getElementById('editOLevelRequirementId').value = requirement.id;
+            document.getElementById('editOLevelSubjectName').value = requirement.o_level_subject?.name || 'Unknown Subject';
+            document.getElementById('editOLevelQualification').value = requirement.o_level_subject?.qualification || '';
+            document.getElementById('editOLevelCategory').value = requirement.category;
+            document.getElementById('editMinGrade').value = requirement.min_grade;
+
+            // Show the modal
+            document.getElementById('editOLevelModal').classList.remove('hidden');
+        }
+
+        function closeEditOLevelModal() {
+            document.getElementById('editOLevelModal').classList.add('hidden');
+            document.getElementById('editOLevelForm').reset();
+        }
+
+        async function submitEditOLevel(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('editOLevelForm');
+            const formData = new FormData(form);
+            const requirementId = formData.get('requirement_id');
+            const data = {
+                category: formData.get('category'),
+                min_grade: formData.get('min_grade')
+            };
+
+            try {
+                const url = `/staff/program/api/school/${school}/programmes/${programmeId}/olevel-requirements/${requirementId}`;
+                await apiRequest(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                showSuccess('O Level requirement updated successfully!');
+                closeEditOLevelModal();
+                loadOLevelRequirements(); // Refresh the table
+                loadStatistics(); // Update statistics
+                
+            } catch (error) {
+                showError('Failed to update O Level requirement: ' + error.message);
+            }
         }
 
         async function deleteOLevelRequirement(id) {

@@ -3,13 +3,13 @@
     $schoolSlug = 'petrochemical';
     // This would normally come from the controller
     $programmeId = request()->route('programmeId') ?? 1;
-    $programmeName = 'Sample Programme'; // This would come from database
+    $programmeName = 'Bachelor of Business Administration'; // This would come from database
 @endphp
 
 <x-layouts.app>
     <x-slot name="header">
         <div class="flex items-center gap-4">
-            <a href="{{ route('staff.program.school', 'petrochemical') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            <a href="{{ route('staff.program.school.programmes', 'petrochemical') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -20,7 +20,7 @@
         </div>
     </x-slot>
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50 dark:from-slate-900 dark:to-orange-950 transition-colors duration-300">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 transition-colors duration-300">
         <div class="p-6">
             <div class="max-w-7xl mx-auto">
                 
@@ -57,11 +57,11 @@
 
                 <!-- Header -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-6">
-                    <div class="bg-gradient-to-r from-orange-400/90 to-orange-600/90 text-white p-6">
+                    <div class="bg-gradient-to-r from-purple-400/90 to-purple-600/90 text-white p-6">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h1 class="text-3xl font-bold">HNTec Entry Requirements</h1>
-                                <p class="text-orange-100 mt-2">{{ $programmeName }} - {{ $schoolName }}</p>
+                                <p class="text-purple-100 mt-2">{{ $programmeName }} - {{ $schoolName }}</p>
                             </div>
                             <button onclick="openAddHntecModal()" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,13 +77,13 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
                         <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/20">
-                                <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/20">
+                                <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100" id="totalHntec">4</p>
+                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100" id="totalHntec">5</p>
                                 <p class="text-sm text-slate-600 dark:text-slate-400">Total Requirements</p>
                             </div>
                         </div>
@@ -105,14 +105,14 @@
 
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
                         <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/20">
-                                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/20">
+                                <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </div>
                             <div class="ml-4">
                                 <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">2</p>
-                                <p class="text-sm text-slate-600 dark:text-slate-400">Non-Relevant Programmes</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Not Relevant</p>
                             </div>
                         </div>
                     </div>
@@ -121,11 +121,11 @@
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/20">
                                 <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">2.8</p>
+                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">3.0</p>
                                 <p class="text-sm text-slate-600 dark:text-slate-400">Average Min CGPA</p>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                 <!-- Filters and Search -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 mb-6">
                     <form method="GET" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <!-- Search -->
                             <div class="lg:col-span-2">
                                 <label for="search" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Search</label>
@@ -144,7 +144,7 @@
                                        name="search" 
                                        value="{{ request('search') }}"
                                        placeholder="Search HNTec programmes..."
-                                       class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                       class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             </div>
 
                             <!-- Category Filter -->
@@ -152,35 +152,22 @@
                                 <label for="category" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Category</label>
                                 <select id="category" 
                                         name="category" 
-                                        class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                        class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                     <option value="">All Categories</option>
                                     <option value="Relevant" {{ request('category') == 'Relevant' ? 'selected' : '' }}>Relevant</option>
-                                    <option value="Not relevant" {{ request('category') == 'Not relevant' ? 'selected' : '' }}>Not Relevant</option>
-                                </select>
-                            </div>
-
-                            <!-- CGPA Range Filter -->
-                            <div>
-                                <label for="cgpa_range" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">CGPA Range</label>
-                                <select id="cgpa_range" 
-                                        name="cgpa_range" 
-                                        class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                                    <option value="">All CGPA Ranges</option>
-                                    <option value="2.0-2.5" {{ request('cgpa_range') == '2.0-2.5' ? 'selected' : '' }}>2.0 - 2.5</option>
-                                    <option value="2.5-3.0" {{ request('cgpa_range') == '2.5-3.0' ? 'selected' : '' }}>2.5 - 3.0</option>
-                                    <option value="3.0-3.5" {{ request('cgpa_range') == '3.0-3.5' ? 'selected' : '' }}>3.0 - 3.5</option>
+                                    <option value="Not Relevant" {{ request('category') == 'Not Relevant' ? 'selected' : '' }}>Not Relevant</option>
                                 </select>
                             </div>
 
                             <!-- Action Buttons -->
                             <div class="flex items-end gap-2">
-                                <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors">
                                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                     </svg>
                                     Filter
                                 </button>
-                                <a href="{{ route('staff.program.school.programmes.hntec', ['school' => 'petrochemical', 'programmeId' => $programmeId]) }}" class="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                <a href="{{ route('staff.program.school.programmes.hntec', ['school' => 'business', 'programmeId' => $programmeId]) }}" class="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
                                     Reset
                                 </a>
                             </div>
@@ -214,9 +201,9 @@
                             <thead class="bg-slate-50 dark:bg-slate-700/50">
                                 <tr>
                                     <th class="px-6 py-4 text-left">
-                                        <input type="checkbox" id="selectAll" class="rounded border-slate-300 text-orange-600 focus:ring-orange-500">
+                                        <input type="checkbox" id="selectAll" class="rounded border-slate-300 text-purple-600 focus:ring-purple-500">
                                     </th>
-                                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Programme Name</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">HNTec Programme Name</th>
                                     <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Category</th>
                                     <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Min. CGPA</th>
                                     <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
@@ -232,7 +219,6 @@
                         <!-- Pagination will be added here -->
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -254,25 +240,58 @@
                 <form id="addHntecForm" onsubmit="submitAddHntec(event)">
                     <div class="space-y-4">
                         <div>
-                            <label for="hntecProgrammeName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Programme Name</label>
-                            <select id="hntecProgrammeName" name="programme_name" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                                <option value="">Select Programme</option>
+                            <label for="hntecProgrammeName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">HNTec Programme Name</label>
+                            <select id="hntecProgrammeName" name="hntec_programme_name" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                <option value="">Select HNTec Programme</option>
                                 <!-- Will be populated by JavaScript -->
                             </select>
                         </div>
                         
                         <div>
                             <label for="hntecCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                            <select id="hntecCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <select id="hntecCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                                 <option value="">Select Category</option>
                                 <option value="Relevant">Relevant</option>
-                                <option value="Not relevant">Not Relevant</option>
+                                <option value="Not Relevant">Not Relevant</option>
                             </select>
                         </div>
 
                         <div>
                             <label for="minCgpa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum CGPA</label>
-                            <input type="number" id="minCgpa" name="min_cgpa" step="0.1" min="0" max="4" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="e.g. 2.5">
+                            <select id="minCgpa" name="min_cgpa" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                <option value="">Select Minimum CGPA</option>
+                                <option value="1.0">1.0</option>
+                                <option value="1.1">1.1</option>
+                                <option value="1.2">1.2</option>
+                                <option value="1.3">1.3</option>
+                                <option value="1.4">1.4</option>
+                                <option value="1.5">1.5</option>
+                                <option value="1.6">1.6</option>
+                                <option value="1.7">1.7</option>
+                                <option value="1.8">1.8</option>
+                                <option value="1.9">1.9</option>
+                                <option value="2.0">2.0</option>
+                                <option value="2.1">2.1</option>
+                                <option value="2.2">2.2</option>
+                                <option value="2.3">2.3</option>
+                                <option value="2.4">2.4</option>
+                                <option value="2.5">2.5</option>
+                                <option value="2.6">2.6</option>
+                                <option value="2.7">2.7</option>
+                                <option value="2.8">2.8</option>
+                                <option value="2.9">2.9</option>
+                                <option value="3.0">3.0</option>
+                                <option value="3.1">3.1</option>
+                                <option value="3.2">3.2</option>
+                                <option value="3.3">3.3</option>
+                                <option value="3.4">3.4</option>
+                                <option value="3.5">3.5</option>
+                                <option value="3.6">3.6</option>
+                                <option value="3.7">3.7</option>
+                                <option value="3.8">3.8</option>
+                                <option value="3.9">3.9</option>
+                                <option value="4.0">4.0</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -280,8 +299,91 @@
                         <button type="button" onclick="closeAddHntecModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500">
                             Cancel
                         </button>
-                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700">
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">
                             Add Requirement
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit HNTec Requirement Modal -->
+    <div id="editHntecModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75" onclick="closeEditHntecModal()"></div>
+            <div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit HNTec Entry Requirement</h3>
+                    <button onclick="closeEditHntecModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="editHntecForm" onsubmit="submitEditHntecRequirement(event)">
+                    <input type="hidden" id="editRequirementId" name="requirement_id">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="editHntecProgrammeName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">HNTec Programme</label>
+                            <input type="text" id="editHntecProgrammeName" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-gray-100 cursor-not-allowed">
+                        </div>
+                        
+                        <div>
+                            <label for="editHntecCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                            <select id="editHntecCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                <option value="">Select Category</option>
+                                <option value="Relevant">Relevant</option>
+                                <option value="Not Relevant">Not Relevant</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="editMinCgpa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum CGPA</label>
+                            <select id="editMinCgpa" name="min_cgpa" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                <option value="">Select Minimum CGPA</option>
+                                <option value="1.0">1.0</option>
+                                <option value="1.1">1.1</option>
+                                <option value="1.2">1.2</option>
+                                <option value="1.3">1.3</option>
+                                <option value="1.4">1.4</option>
+                                <option value="1.5">1.5</option>
+                                <option value="1.6">1.6</option>
+                                <option value="1.7">1.7</option>
+                                <option value="1.8">1.8</option>
+                                <option value="1.9">1.9</option>
+                                <option value="2.0">2.0</option>
+                                <option value="2.1">2.1</option>
+                                <option value="2.2">2.2</option>
+                                <option value="2.3">2.3</option>
+                                <option value="2.4">2.4</option>
+                                <option value="2.5">2.5</option>
+                                <option value="2.6">2.6</option>
+                                <option value="2.7">2.7</option>
+                                <option value="2.8">2.8</option>
+                                <option value="2.9">2.9</option>
+                                <option value="3.0">3.0</option>
+                                <option value="3.1">3.1</option>
+                                <option value="3.2">3.2</option>
+                                <option value="3.3">3.3</option>
+                                <option value="3.4">3.4</option>
+                                <option value="3.5">3.5</option>
+                                <option value="3.6">3.6</option>
+                                <option value="3.7">3.7</option>
+                                <option value="3.8">3.8</option>
+                                <option value="3.9">3.9</option>
+                                <option value="4.0">4.0</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeEditHntecModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">
+                            Update Requirement
                         </button>
                     </div>
                 </form>
@@ -319,7 +421,6 @@
             // Search functionality
             const searchInput = document.getElementById('search');
             const categorySelect = document.getElementById('category');
-            const cgpaRangeSelect = document.getElementById('cgpa_range');
             
             if (searchInput) {
                 searchInput.addEventListener('input', debounce(() => {
@@ -330,13 +431,6 @@
 
             if (categorySelect) {
                 categorySelect.addEventListener('change', () => {
-                    currentPage = 1;
-                    loadHntecRequirements();
-                });
-            }
-
-            if (cgpaRangeSelect) {
-                cgpaRangeSelect.addEventListener('change', () => {
                     currentPage = 1;
                     loadHntecRequirements();
                 });
@@ -418,12 +512,10 @@
             try {
                 const searchTerm = document.getElementById('search').value;
                 const category = document.getElementById('category').value;
-                const cgpaRange = document.getElementById('cgpa_range').value;
                 
                 const params = new URLSearchParams();
                 if (searchTerm) params.append('search', searchTerm);
                 if (category) params.append('category', category);
-                if (cgpaRange) params.append('cgpa_range', cgpaRange);
                 params.append('page', currentPage);
                 
                 const url = `/staff/program/api/school/${school}/programmes/${programmeId}/hntec-requirements?${params}`;
@@ -463,7 +555,7 @@
                     document.getElementById('totalHntec').textContent = response.data.total_requirements;
                     document.querySelector('[id="totalHntec"]').closest('.bg-white\\/80').nextElementSibling.querySelector('.text-2xl').textContent = response.data.relevant_programmes;
                     document.querySelector('[id="totalHntec"]').closest('.bg-white\\/80').nextElementSibling.nextElementSibling.querySelector('.text-2xl').textContent = response.data.not_relevant_programmes;
-                    document.querySelector('[id="totalHntec"]').closest('.bg-white\\/80').nextElementSibling.nextElementSibling.nextElementSibling.querySelector('.text-2xl').textContent = response.data.average_min_cgpa || '2.8';
+                    document.querySelector('[id="totalHntec"]').closest('.bg-white\\/80').nextElementSibling.nextElementSibling.nextElementSibling.querySelector('.text-2xl').textContent = response.data.average_min_cgpa || '0.0';
                 }
                 
             } catch (error) {
@@ -506,13 +598,13 @@
             }
 
             hntecRequirements.forEach(requirement => {
-                const categoryColor = requirement.category === 'Relevant' ? 'green' : 'red';
+                const categoryColor = requirement.category === 'Relevant' ? 'green' : 'orange';
                 const programmeName = requirement.hntec_programme?.name || 'Unknown Programme';
                 
                 const row = `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="checkbox" name="selected_hntec[]" value="${requirement.id}" class="rounded border-slate-300 text-orange-600 focus:ring-orange-500" onchange="updateBulkActions()">
+                            <input type="checkbox" name="selected_hntec[]" value="${requirement.id}" class="rounded border-slate-300 text-purple-600 focus:ring-purple-500" onchange="updateBulkActions()">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-slate-100">${programmeName}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -523,7 +615,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400">${requirement.min_cgpa}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex gap-2">
-                                <button onclick="editHntecRequirement(${requirement.id})" class="text-orange-600 hover:text-orange-900 dark:text-orange-400 dark:hover:text-orange-300">
+                                <button onclick="editHntecRequirement(${requirement.id})" class="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
@@ -610,7 +702,7 @@
             try {
                 const formData = new FormData(event.target);
                 const data = {
-                    hntec_programme_id: formData.get('programme_name'),
+                    hntec_programme_id: formData.get('hntec_programme_name'),
                     category: formData.get('category'),
                     min_cgpa: formData.get('min_cgpa')
                 };
@@ -633,7 +725,53 @@
         }
 
         function editHntecRequirement(id) {
-            showError('Edit functionality will be implemented in a future update.');
+            const requirement = hntecRequirements.find(req => req.id === id);
+            if (!requirement) {
+                showError('HNTec requirement not found');
+                return;
+            }
+
+            // Populate the edit form
+            document.getElementById('editRequirementId').value = requirement.id;
+            document.getElementById('editHntecProgrammeName').value = requirement.hntec_programme?.name || 'Unknown Programme';
+            document.getElementById('editHntecCategory').value = requirement.category;
+            document.getElementById('editMinCgpa').value = requirement.min_cgpa;
+
+            // Show the modal
+            document.getElementById('editHntecModal').classList.remove('hidden');
+        }
+
+        function closeEditHntecModal() {
+            document.getElementById('editHntecModal').classList.add('hidden');
+            document.getElementById('editHntecForm').reset();
+        }
+
+        async function submitEditHntecRequirement(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('editHntecForm');
+            const formData = new FormData(form);
+            const requirementId = formData.get('requirement_id');
+            const data = {
+                category: formData.get('category'),
+                min_cgpa: formData.get('min_cgpa')
+            };
+
+            try {
+                const url = `/staff/program/api/school/${school}/programmes/${programmeId}/hntec-requirements/${requirementId}`;
+                await apiRequest(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                showSuccess('HNTec requirement updated successfully!');
+                closeEditHntecModal();
+                loadHntecRequirements(); // Refresh the table
+                loadStatistics(); // Update statistics
+                
+            } catch (error) {
+                showError('Failed to update HNTec requirement: ' + error.message);
+            }
         }
 
         async function deleteHntecRequirement(id) {

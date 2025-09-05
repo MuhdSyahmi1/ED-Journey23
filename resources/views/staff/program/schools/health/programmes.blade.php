@@ -1,12 +1,12 @@
 @php
-    $schoolName = 'School of Business';
-    $schoolSlug = 'business';
+    $schoolName = 'School of Health Sciences';
+    $schoolSlug = 'health';
 @endphp
 
 <x-layouts.app>
     <x-slot name="header">
         <div class="flex items-center gap-4">
-            <a href="{{ route('staff.program.school', 'business') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            <a href="{{ route('staff.program.school', 'health') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -163,7 +163,7 @@
                                     </svg>
                                     Filter
                                 </button>
-                                <a href="{{ route('staff.program.school.programmes', 'business') }}" class="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                <a href="{{ route('staff.program.school.programmes', 'health') }}" class="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
                                     Reset
                                 </a>
                             </div>
@@ -331,7 +331,7 @@
         let availableDiplomaProgrammes = [];
         let currentPage = 1;
         let totalPages = 1;
-        const school = 'business';
+        const school = 'health';
 
         // CSRF token for API requests
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');

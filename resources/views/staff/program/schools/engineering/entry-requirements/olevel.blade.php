@@ -3,13 +3,13 @@
     $schoolSlug = 'engineering';
     // This would normally come from the controller
     $programmeId = request()->route('programmeId') ?? 1;
-    $programmeName = 'Sample Programme'; // This would come from database
+    $programmeName = 'Bachelor of Business Administration'; // This would come from database
 @endphp
 
 <x-layouts.app>
     <x-slot name="header">
         <div class="flex items-center gap-4">
-            <a href="{{ route('staff.program.school', 'engineering') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            <a href="{{ route('staff.program.school.programmes', 'engineering') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -20,7 +20,7 @@
         </div>
     </x-slot>
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-red-50 dark:from-slate-900 dark:to-red-950 transition-colors duration-300">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 transition-colors duration-300">
         <div class="p-6">
             <div class="max-w-7xl mx-auto">
                 
@@ -57,11 +57,11 @@
 
                 <!-- Header -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-6">
-                    <div class="bg-gradient-to-r from-red-400/90 to-red-600/90 text-white p-6">
+                    <div class="bg-gradient-to-r from-green-400/90 to-green-600/90 text-white p-6">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h1 class="text-3xl font-bold">O Level Entry Requirements</h1>
-                                <p class="text-red-100 mt-2">{{ $programmeName }} - {{ $schoolName }}</p>
+                                <p class="text-green-100 mt-2">{{ $programmeName }} - {{ $schoolName }}</p>
                             </div>
                             <button onclick="openAddOLevelModal()" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,8 +77,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
                         <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/20">
-                                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20">
+                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                                 </svg>
                             </div>
@@ -119,8 +119,8 @@
 
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
                         <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20">
-                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/20">
+                                <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
                             </div>
@@ -144,7 +144,7 @@
                                        name="search" 
                                        value="{{ request('search') }}"
                                        placeholder="Search O Level subjects..."
-                                       class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                       class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             </div>
 
                             <!-- Qualification Filter -->
@@ -152,7 +152,7 @@
                                 <label for="qualification" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Qualification</label>
                                 <select id="qualification" 
                                         name="qualification" 
-                                        class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                        class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                     <option value="">All Qualifications</option>
                                     <option value="IGCSE" {{ request('qualification') == 'IGCSE' ? 'selected' : '' }}>IGCSE</option>
                                     <option value="GCE" {{ request('qualification') == 'GCE' ? 'selected' : '' }}>GCE</option>
@@ -164,7 +164,7 @@
                                 <label for="category" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Category</label>
                                 <select id="category" 
                                         name="category" 
-                                        class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                        class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                     <option value="">All Categories</option>
                                     <option value="Compulsory" {{ request('category') == 'Compulsory' ? 'selected' : '' }}>Compulsory</option>
                                     <option value="General" {{ request('category') == 'General' ? 'selected' : '' }}>General</option>
@@ -173,13 +173,13 @@
 
                             <!-- Action Buttons -->
                             <div class="flex items-end gap-2">
-                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
                                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                     </svg>
                                     Filter
                                 </button>
-                                <a href="{{ route('staff.program.school.programmes.olevel', ['school' => 'engineering', 'programmeId' => $programmeId]) }}" class="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                <a href="{{ route('staff.program.school.programmes.olevel', ['school' => 'business', 'programmeId' => $programmeId]) }}" class="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
                                     Reset
                                 </a>
                             </div>
@@ -213,7 +213,7 @@
                             <thead class="bg-slate-50 dark:bg-slate-700/50">
                                 <tr>
                                     <th class="px-6 py-4 text-left">
-                                        <input type="checkbox" id="selectAll" class="rounded border-slate-300 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" id="selectAll" class="rounded border-slate-300 text-green-600 focus:ring-green-500">
                                     </th>
                                     <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Subject Name</th>
                                     <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Qualifications</th>
@@ -232,7 +232,6 @@
                         <!-- Pagination will be added here -->
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -255,7 +254,7 @@
                     <div class="space-y-4">
                         <div>
                             <label for="oLevelSubjectName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject Name</label>
-                            <select id="oLevelSubjectName" name="subject_name" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500 focus:border-red-500" onchange="updateQualifications()">
+                            <select id="oLevelSubjectName" name="subject_name" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="updateQualifications()">
                                 <option value="">Select Subject</option>
                                 <!-- Will be populated by JavaScript -->
                             </select>
@@ -263,7 +262,7 @@
 
                         <div>
                             <label for="oLevelQualification" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qualification</label>
-                            <select id="oLevelQualification" name="qualification" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <select id="oLevelQualification" name="qualification" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                                 <option value="">Select Qualification</option>
                                 <!-- Will be populated based on subject selection -->
                             </select>
@@ -271,7 +270,7 @@
                         
                         <div>
                             <label for="oLevelCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                            <select id="oLevelCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <select id="oLevelCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                                 <option value="">Select Category</option>
                                 <option value="Compulsory">Compulsory</option>
                                 <option value="General">General</option>
@@ -280,7 +279,7 @@
 
                         <div>
                             <label for="minGrade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum Grade</label>
-                            <select id="minGrade" name="min_grade" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <select id="minGrade" name="min_grade" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                                 <option value="">Select Minimum Grade</option>
                                 <option value="A*">A*</option>
                                 <option value="A(a)">A(a)</option>
@@ -298,8 +297,73 @@
                         <button type="button" onclick="closeAddOLevelModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500">
                             Cancel
                         </button>
-                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
                             Add Requirement
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit O Level Requirement Modal -->
+    <div id="editOLevelModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75" onclick="closeEditOLevelModal()"></div>
+            <div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit O Level Entry Requirement</h3>
+                    <button onclick="closeEditOLevelModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="editOLevelForm" onsubmit="submitEditOLevel(event)">
+                    <input type="hidden" id="editOLevelRequirementId" name="requirement_id">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="editOLevelSubjectName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject Name</label>
+                            <input type="text" id="editOLevelSubjectName" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-gray-100 cursor-not-allowed">
+                        </div>
+
+                        <div>
+                            <label for="editOLevelQualification" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qualification</label>
+                            <input type="text" id="editOLevelQualification" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-gray-100 cursor-not-allowed">
+                        </div>
+                        
+                        <div>
+                            <label for="editOLevelCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                            <select id="editOLevelCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">Select Category</option>
+                                <option value="Compulsory">Compulsory</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="editMinGrade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum Grade</label>
+                            <select id="editMinGrade" name="min_grade" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">Select Minimum Grade</option>
+                                <option value="A*">A*</option>
+                                <option value="A(a)">A(a)</option>
+                                <option value="B(b)">B(b)</option>
+                                <option value="C(c)">C(c)</option>
+                                <option value="D(d)">D(d)</option>
+                                <option value="E(e)">E(e)</option>
+                                <option value="F(f)">F(f)</option>
+                                <option value="U">U</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeEditOLevelModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
+                            Update Requirement
                         </button>
                     </div>
                 </form>
@@ -543,14 +607,14 @@
 
             oLevelRequirements.forEach(requirement => {
                 const categoryColor = requirement.category === 'Compulsory' ? 'red' : 'blue';
-                const qualificationColor = requirement.o_level_subject?.qualification === 'IGCSE' ? 'red' : 'indigo';
+                const qualificationColor = requirement.o_level_subject?.qualification === 'IGCSE' ? 'purple' : 'indigo';
                 const subjectName = requirement.o_level_subject?.name || 'Unknown Subject';
                 const qualification = requirement.o_level_subject?.qualification || 'Unknown';
                 
                 const row = `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="checkbox" name="selected_olevel[]" value="${requirement.id}" class="rounded border-slate-300 text-red-600 focus:ring-red-500" onchange="updateBulkActions()">
+                            <input type="checkbox" name="selected_olevel[]" value="${requirement.id}" class="rounded border-slate-300 text-green-600 focus:ring-green-500" onchange="updateBulkActions()">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-slate-100">${subjectName}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -566,7 +630,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400">${requirement.min_grade}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex gap-2">
-                                <button onclick="editOLevelRequirement(${requirement.id})" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                <button onclick="editOLevelRequirement(${requirement.id})" class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
@@ -677,7 +741,54 @@
         }
 
         function editOLevelRequirement(id) {
-            showError('Edit functionality will be implemented in a future update.');
+            const requirement = oLevelRequirements.find(req => req.id === id);
+            if (!requirement) {
+                showError('O Level requirement not found');
+                return;
+            }
+
+            // Populate the edit form
+            document.getElementById('editOLevelRequirementId').value = requirement.id;
+            document.getElementById('editOLevelSubjectName').value = requirement.o_level_subject?.name || 'Unknown Subject';
+            document.getElementById('editOLevelQualification').value = requirement.o_level_subject?.qualification || '';
+            document.getElementById('editOLevelCategory').value = requirement.category;
+            document.getElementById('editMinGrade').value = requirement.min_grade;
+
+            // Show the modal
+            document.getElementById('editOLevelModal').classList.remove('hidden');
+        }
+
+        function closeEditOLevelModal() {
+            document.getElementById('editOLevelModal').classList.add('hidden');
+            document.getElementById('editOLevelForm').reset();
+        }
+
+        async function submitEditOLevel(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('editOLevelForm');
+            const formData = new FormData(form);
+            const requirementId = formData.get('requirement_id');
+            const data = {
+                category: formData.get('category'),
+                min_grade: formData.get('min_grade')
+            };
+
+            try {
+                const url = `/staff/program/api/school/${school}/programmes/${programmeId}/olevel-requirements/${requirementId}`;
+                await apiRequest(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                showSuccess('O Level requirement updated successfully!');
+                closeEditOLevelModal();
+                loadOLevelRequirements(); // Refresh the table
+                loadStatistics(); // Update statistics
+                
+            } catch (error) {
+                showError('Failed to update O Level requirement: ' + error.message);
+            }
         }
 
         async function deleteOLevelRequirement(id) {

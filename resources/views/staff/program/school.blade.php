@@ -306,6 +306,58 @@
         </div>
     </div>
 
+    <!-- Edit Programme Modal -->
+    <div id="editProgrammeModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onclick="closeEditProgrammeModal()"></div>
+            <div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Programme</h3>
+                    <button onclick="closeEditProgrammeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="editProgrammeForm" onsubmit="submitEditProgramme(event)">
+                    <input type="hidden" id="editProgrammeId" name="programme_id">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="editProgrammeName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Programme Name</label>
+                            <input type="text" id="editProgrammeName" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-gray-100 cursor-not-allowed">
+                        </div>
+                        
+                        <div>
+                            <label for="editProgrammeDuration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Duration</label>
+                            <select id="editProgrammeDuration" name="duration" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Select Duration</option>
+                                <option value="1.0">1.0 Years</option>
+                                <option value="1.5">1.5 Years</option>
+                                <option value="2.0">2.0 Years</option>
+                                <option value="2.5">2.5 Years</option>
+                                <option value="3.0">3.0 Years</option>
+                                <option value="3.5">3.5 Years</option>
+                                <option value="4.0">4.0 Years</option>
+                                <option value="4.5">4.5 Years</option>
+                                <option value="5.0">5.0 Years</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeEditProgrammeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                            Update Programme
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Global variables
         let programmes = [];
@@ -318,10 +370,17 @@
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - initializing school programme management');
+            console.log('School:', school);
+            
             loadProgrammes();
             loadAvailableProgrammes();
             loadStatistics();
             setupEventListeners();
+            
+            // Test modal accessibility
+            const editModal = document.getElementById('editProgrammeModal');
+            console.log('Edit modal found:', !!editModal);
         });
 
         function setupEventListeners() {
@@ -606,8 +665,69 @@
         }
 
         function editProgramme(id) {
-            // TODO: Implement edit modal and functionality
-            showInfo('Edit functionality coming soon!');
+            console.log('Edit programme called with id:', id);
+            console.log('Available programmes:', programmes);
+            
+            const programme = programmes.find(p => p.id === id);
+            if (!programme) {
+                console.error('Programme not found for id:', id);
+                showError('Programme not found');
+                return;
+            }
+
+            console.log('Found programme:', programme);
+
+            // Populate the edit form
+            document.getElementById('editProgrammeId').value = programme.id;
+            document.getElementById('editProgrammeName').value = programme.diploma_programme?.name || 'Unknown Programme';
+            document.getElementById('editProgrammeDuration').value = programme.duration;
+
+            console.log('Form populated, showing modal');
+
+            // Show the modal
+            const modal = document.getElementById('editProgrammeModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                console.log('Modal should be visible now');
+            } else {
+                console.error('Modal element not found!');
+                showError('Edit modal not found');
+            }
+        }
+
+        function closeEditProgrammeModal() {
+            document.getElementById('editProgrammeModal').classList.add('hidden');
+            document.getElementById('editProgrammeForm').reset();
+        }
+
+        async function submitEditProgramme(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('editProgrammeForm');
+            const formData = new FormData(form);
+            const programmeId = formData.get('programme_id');
+            const data = {
+                duration: formData.get('duration')
+            };
+
+            try {
+                const url = `/staff/program/api/school/${school}/programmes/${programmeId}`;
+                console.log('Updating programme with URL:', url);
+                console.log('Update data:', data);
+                
+                await apiRequest(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                showSuccess('Programme updated successfully!');
+                closeEditProgrammeModal();
+                loadProgrammes(); // Refresh the table
+                loadStatistics(); // Update statistics
+                
+            } catch (error) {
+                showError('Failed to update programme: ' + error.message);
+            }
         }
 
         async function deleteProgramme(id) {

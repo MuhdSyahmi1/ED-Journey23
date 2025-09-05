@@ -24,6 +24,14 @@
         <div class="p-6">
             <div class="max-w-7xl mx-auto">
                 
+                <!-- Back Button -->
+                <div class="mb-6">
+                    <flux:button variant="ghost" size="sm" href="{{ route('staff.program.school', 'health') }}">
+                        <flux:icon.arrow-left class="w-4 h-4 mr-2" />
+                        Back to Health School
+                    </flux:button>
+                </div>
+                
                 <!-- Success/Error Messages -->
                 @if(session('success'))
                     <div class="mb-6 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-700 rounded-xl p-4">
@@ -47,21 +55,13 @@
                     </div>
                 @endif
 
-                <!-- Back Button -->
-                <div class="mb-6">
-                    <flux:button variant="ghost" size="sm" href="{{ route('staff.program.school', 'health') }}">
-                        <flux:icon.arrow-left class="w-4 h-4 mr-2" />
-                        Back to Health School
-                    </flux:button>
-                </div>
-
                 <!-- Header -->
                 <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-6">
-                    <div class="bg-gradient-to-r from-green-400/90 to-green-600/90 text-white p-6">
+                    <div class="bg-gradient-to-r from-purple-400/90 to-purple-600/90 text-white p-6">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h1 class="text-3xl font-bold">HNTec Entry Requirements</h1>
-                                <p class="text-green-100 mt-2">{{ $programmeName }} - {{ $schoolName }}</p>
+                                <p class="text-purple-100 mt-2">{{ $programmeName }} - {{ $schoolName }}</p>
                             </div>
                             <button onclick="openAddHntecModal()" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,8 +77,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
                         <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20">
-                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/20">
+                                <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                             </div>
@@ -224,10 +224,10 @@
     </div>
 
     <!-- Add HNTec Requirement Modal -->
-    <div id="addHntecModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div id="addHntecModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onclick="closeAddHntecModal()"></div>
-            <div class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-xl rounded-2xl">
+            <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75" onclick="closeAddHntecModal()"></div>
+            <div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Add HNTec Entry Requirement</h3>
                     <button onclick="closeAddHntecModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -301,6 +301,89 @@
                         </button>
                         <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">
                             Add Requirement
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit HNTec Requirement Modal -->
+    <div id="editHntecModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75" onclick="closeEditHntecModal()"></div>
+            <div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit HNTec Entry Requirement</h3>
+                    <button onclick="closeEditHntecModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="editHntecForm" onsubmit="submitEditHntecRequirement(event)">
+                    <input type="hidden" id="editRequirementId" name="requirement_id">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="editHntecProgrammeName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">HNTec Programme</label>
+                            <input type="text" id="editHntecProgrammeName" readonly class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-gray-100 cursor-not-allowed">
+                        </div>
+                        
+                        <div>
+                            <label for="editHntecCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                            <select id="editHntecCategory" name="category" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                <option value="">Select Category</option>
+                                <option value="Relevant">Relevant</option>
+                                <option value="Not Relevant">Not Relevant</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="editMinCgpa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum CGPA</label>
+                            <select id="editMinCgpa" name="min_cgpa" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                <option value="">Select Minimum CGPA</option>
+                                <option value="1.0">1.0</option>
+                                <option value="1.1">1.1</option>
+                                <option value="1.2">1.2</option>
+                                <option value="1.3">1.3</option>
+                                <option value="1.4">1.4</option>
+                                <option value="1.5">1.5</option>
+                                <option value="1.6">1.6</option>
+                                <option value="1.7">1.7</option>
+                                <option value="1.8">1.8</option>
+                                <option value="1.9">1.9</option>
+                                <option value="2.0">2.0</option>
+                                <option value="2.1">2.1</option>
+                                <option value="2.2">2.2</option>
+                                <option value="2.3">2.3</option>
+                                <option value="2.4">2.4</option>
+                                <option value="2.5">2.5</option>
+                                <option value="2.6">2.6</option>
+                                <option value="2.7">2.7</option>
+                                <option value="2.8">2.8</option>
+                                <option value="2.9">2.9</option>
+                                <option value="3.0">3.0</option>
+                                <option value="3.1">3.1</option>
+                                <option value="3.2">3.2</option>
+                                <option value="3.3">3.3</option>
+                                <option value="3.4">3.4</option>
+                                <option value="3.5">3.5</option>
+                                <option value="3.6">3.6</option>
+                                <option value="3.7">3.7</option>
+                                <option value="3.8">3.8</option>
+                                <option value="3.9">3.9</option>
+                                <option value="4.0">4.0</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeEditHntecModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">
+                            Update Requirement
                         </button>
                     </div>
                 </form>
@@ -597,8 +680,15 @@
         }
 
         function openAddHntecModal() {
-            loadAvailableHntecProgrammes();
-            document.getElementById('addHntecModal').classList.remove('hidden');
+            console.log('Opening add HNTec modal...');
+            const modal = document.getElementById('addHntecModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                console.log('Modal should be visible now');
+                loadAvailableHntecProgrammes();
+            } else {
+                console.error('Modal element not found!');
+            }
         }
 
         function closeAddHntecModal() {
@@ -635,7 +725,53 @@
         }
 
         function editHntecRequirement(id) {
-            showError('Edit functionality will be implemented in a future update.');
+            const requirement = hntecRequirements.find(req => req.id === id);
+            if (!requirement) {
+                showError('HNTec requirement not found');
+                return;
+            }
+
+            // Populate the edit form
+            document.getElementById('editRequirementId').value = requirement.id;
+            document.getElementById('editHntecProgrammeName').value = requirement.hntec_programme?.name || 'Unknown Programme';
+            document.getElementById('editHntecCategory').value = requirement.category;
+            document.getElementById('editMinCgpa').value = requirement.min_cgpa;
+
+            // Show the modal
+            document.getElementById('editHntecModal').classList.remove('hidden');
+        }
+
+        function closeEditHntecModal() {
+            document.getElementById('editHntecModal').classList.add('hidden');
+            document.getElementById('editHntecForm').reset();
+        }
+
+        async function submitEditHntecRequirement(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('editHntecForm');
+            const formData = new FormData(form);
+            const requirementId = formData.get('requirement_id');
+            const data = {
+                category: formData.get('category'),
+                min_cgpa: formData.get('min_cgpa')
+            };
+
+            try {
+                const url = `/staff/program/api/school/${school}/programmes/${programmeId}/hntec-requirements/${requirementId}`;
+                await apiRequest(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                showSuccess('HNTec requirement updated successfully!');
+                closeEditHntecModal();
+                loadHntecRequirements(); // Refresh the table
+                loadStatistics(); // Update statistics
+                
+            } catch (error) {
+                showError('Failed to update HNTec requirement: ' + error.message);
+            }
         }
 
         async function deleteHntecRequirement(id) {

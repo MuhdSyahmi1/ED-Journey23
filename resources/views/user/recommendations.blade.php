@@ -66,6 +66,50 @@
             </div>
         </div>
 
+        <!-- Application Status -->
+        @if($existingApplications->count() > 0)
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Your Applications</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach($existingApplications as $application)
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-medium text-gray-900 dark:text-white">{{ $application->schoolProgramme->diplomaProgramme->name }}</h3>
+                                <span class="bg-{{ $application->getStatusColor() }}-100 text-{{ $application->getStatusColor() }}-800 px-2 py-1 rounded-full text-xs">
+                                    {{ $application->getStatusText() }}
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $application->getPreferenceText() }} • {{ ucfirst($application->schoolProgramme->school) }} School</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Applied: {{ $application->applied_at->format('M d, Y') }}</p>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <p class="text-sm text-blue-800 dark:text-blue-200">
+                        <span class="font-medium">Application Status:</span> You have submitted {{ $existingApplications->count() }} of 2 maximum applications.
+                    </p>
+                </div>
+            </div>
+        @else
+            <!-- Application Instructions -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-6 mb-8 text-white">
+                <h2 class="text-2xl font-bold mb-2">Ready to Apply?</h2>
+                <p class="mb-4">You can apply for up to 2 programmes. Select your preferred programmes from the qualified lists below.</p>
+                <div class="bg-white/10 rounded-lg p-4">
+                    <div id="selected-programmes" class="hidden">
+                        <h3 class="font-semibold mb-2">Selected Programmes:</h3>
+                        <div id="programme-list" class="space-y-2 mb-4"></div>
+                        <button type="button" id="submit-applications" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                            Submit Applications
+                        </button>
+                    </div>
+                    <div id="no-selection" class="text-center">
+                        <p>Select programmes below to start your application</p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Qualified Programmes -->
         @if(count($recommendations['qualified']) > 0)
             <div class="mb-8">
@@ -135,6 +179,25 @@
                                     </div>
                                 @endif
                             </div>
+                            
+                            @if($existingApplications->count() == 0)
+                                <button type="button" 
+                                        class="apply-btn w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors mt-4"
+                                        data-programme-id="{{ $programme->id }}"
+                                        data-programme-name="{{ $programme->diplomaProgramme->name }}"
+                                        data-school="{{ ucfirst($programme->school) }}">
+                                    Apply for this Programme
+                                </button>
+                            @else
+                                @php
+                                    $hasApplied = $existingApplications->contains('school_programme_id', $programme->id);
+                                @endphp
+                                @if($hasApplied)
+                                    <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-2 px-4 rounded-lg mt-4 text-center">
+                                        ✓ Applied
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -196,6 +259,25 @@
                                     </div>
                                 @endif
                             </div>
+                            
+                            @if($existingApplications->count() == 0)
+                                <button type="button" 
+                                        class="apply-btn w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-lg transition-colors mt-4"
+                                        data-programme-id="{{ $programme->id }}"
+                                        data-programme-name="{{ $programme->diplomaProgramme->name }}"
+                                        data-school="{{ ucfirst($programme->school) }}">
+                                    Apply for this Programme
+                                </button>
+                            @else
+                                @php
+                                    $hasApplied = $existingApplications->contains('school_programme_id', $programme->id);
+                                @endphp
+                                @if($hasApplied)
+                                    <div class="w-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-2 px-4 rounded-lg mt-4 text-center">
+                                        ✓ Applied
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -304,5 +386,37 @@
         @endif
     </div>
 </div>
+
+<!-- Application Confirmation Modal -->
+<div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Confirm Application Submission</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">You are about to apply for the following programmes:</p>
+            <div id="modal-programme-list" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4"></div>
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3 mb-6">
+                <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                    <strong>Warning:</strong> You can only apply for 2 programmes maximum. This action cannot be undone.
+                </p>
+            </div>
+            <div class="flex gap-3">
+                <button type="button" id="cancel-application" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors">
+                    Cancel
+                </button>
+                <button type="button" id="confirm-application" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    Submit Applications
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="application-form" action="{{ route('user.applications.store') }}" method="POST" class="hidden">
+    @csrf
+    <div id="programme-inputs"></div>
+</form>
+
+{{-- Include external JavaScript for applications --}}
+<script src="{{ asset('js/student-applications.js') }}"></script>
 
 </x-layouts.app>

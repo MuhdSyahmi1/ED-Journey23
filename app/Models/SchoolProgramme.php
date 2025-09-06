@@ -15,7 +15,8 @@ class SchoolProgramme extends Model
         'diploma_programme_id',
         'school',
         'duration',
-        'is_active'
+        'is_active',
+        'admission_quota'
     ];
 
     protected $casts = [

@@ -57,7 +57,13 @@ class UserRecommendationController extends Controller
         // Analyze programmes using Smart Requirements Analysis
         $recommendations = $this->analyzeRequirements($programmes, $oLevelGrades, $aLevelGrades, $hntecGrades);
         
-        return view('user.recommendations', compact('recommendations', 'oLevelGrades', 'aLevelGrades', 'hntecGrades'));
+        // Get user's existing applications
+        $existingApplications = \App\Models\StudentApplication::where('user_id', $user->id)
+            ->with(['schoolProgramme.diplomaProgramme'])
+            ->orderBy('preference_rank')
+            ->get();
+        
+        return view('user.recommendations', compact('recommendations', 'oLevelGrades', 'aLevelGrades', 'hntecGrades', 'existingApplications'));
     }
     
     private function analyzeRequirements($programmes, $oLevelGrades, $aLevelGrades, $hntecGrades): array

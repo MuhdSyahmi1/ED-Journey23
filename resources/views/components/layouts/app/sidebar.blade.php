@@ -75,6 +75,15 @@
                             <flux:navlist.item icon="document-text" :href="route('staff.case-reports')" :current="request()->routeIs('staff.case-reports')" wire:navigate>
                                 {{ __('Case Report') }}
                             </flux:navlist.item>
+                            <flux:navlist.item icon="document-text" :href="route('staff.admission.applications')" :current="request()->routeIs('staff.admission.applications*')" wire:navigate>
+                                {{ __('Review Student Applications') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="scale" :href="route('staff.admission.quotas')" :current="request()->routeIs('staff.admission.quotas')" wire:navigate>
+                                {{ __('Manage Quotas') }}
+                            </flux:navlist.item>
+                            <flux:navlist.item icon="exclamation-triangle" :href="route('staff.admission.appeals')" :current="request()->routeIs('staff.admission.appeals*')" wire:navigate>
+                                {{ __('Student Appeals') }}
+                            </flux:navlist.item>
                             <flux:navlist.item icon="chart-bar" :href="route('staff.admission.report-data')" :current="request()->routeIs('staff.admission.report-data*')" wire:navigate>
                                 {{ __('Report Data') }}
                             </flux:navlist.item>
@@ -227,6 +236,10 @@
 
                         <flux:navlist.item icon="light-bulb" :href="route('user.recommendations')" :current="request()->routeIs('user.recommendations')" wire:navigate>
                             {{ __('Get Recommendations') }}
+                        </flux:navlist.item>
+
+                        <flux:navlist.item icon="document-text" :href="route('user.my-applications')" :current="request()->routeIs('user.my-applications')" wire:navigate>
+                            {{ __('My Applications') }}
                         </flux:navlist.item>
 
                         <flux:navlist.item icon="building-library" :href="route('user.hecas-info')" :current="request()->routeIs('user.hecas-info')" wire:navigate>

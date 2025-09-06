@@ -103,6 +103,24 @@ Route::middleware(['auth'])->group(function () {
     })->name('staff.profile-information');
 });
 
+// Staff Admission Management routes
+Route::middleware(['auth'])->prefix('staff/admission')->name('staff.admission.')->group(function () {
+    Route::get('/applications', [\App\Http\Controllers\AdmissionController::class, 'applications'])->name('applications');
+    Route::get('/application/{id}', [\App\Http\Controllers\AdmissionController::class, 'showApplication'])->name('application');
+    Route::post('/application/{id}/status', [\App\Http\Controllers\AdmissionController::class, 'updateApplicationStatus'])->name('application.update-status');
+    Route::post('/bulk-update', [\App\Http\Controllers\AdmissionController::class, 'bulkUpdateStatus'])->name('bulk-update');
+    
+    // Quota Management routes
+    Route::get('/quotas', [\App\Http\Controllers\AdmissionController::class, 'quotas'])->name('quotas');
+    Route::post('/quota/{id}', [\App\Http\Controllers\AdmissionController::class, 'updateQuota'])->name('quota.update');
+    Route::post('/bulk-update-quotas', [\App\Http\Controllers\AdmissionController::class, 'bulkUpdateQuotas'])->name('bulk-update-quotas');
+    
+    // Appeal Management routes
+    Route::get('/appeals', [\App\Http\Controllers\AdmissionController::class, 'appeals'])->name('appeals');
+    Route::get('/appeal/{id}', [\App\Http\Controllers\AdmissionController::class, 'showAppeal'])->name('appeal');
+    Route::post('/appeal/{id}/status', [\App\Http\Controllers\AdmissionController::class, 'updateAppealStatus'])->name('appeal.update-status');
+});
+
 // Staff Program Management routes
 Route::middleware(['auth'])->prefix('staff/program')->name('staff.program.')->group(function () {
     Route::get('/programme-management', function () {
@@ -483,6 +501,17 @@ Route::middleware(['auth'])->group(function () {
         }
         return app(UserRecommendationController::class)->index();
     })->name('user.recommendations');
+
+    // NEW: Student Application Routes
+    Route::post('/user/applications', [\App\Http\Controllers\StudentApplicationController::class, 'store'])->name('user.applications.store');
+    Route::get('/user/application-submitted', [\App\Http\Controllers\StudentApplicationController::class, 'applicationSubmitted'])->name('user.application-submitted');
+    Route::get('/user/my-applications', [\App\Http\Controllers\StudentApplicationController::class, 'myApplications'])->name('user.my-applications');
+
+    // NEW: Student Appeal Routes
+    Route::get('/user/appeals/create/{applicationId}', [\App\Http\Controllers\StudentAppealController::class, 'create'])->name('user.appeals.create');
+    Route::post('/user/appeals/{applicationId}', [\App\Http\Controllers\StudentAppealController::class, 'store'])->name('user.appeals.store');
+    Route::get('/user/appeals/{appealId}', [\App\Http\Controllers\StudentAppealController::class, 'show'])->name('user.appeals.show');
+    Route::get('/user/my-appeals', [\App\Http\Controllers\StudentAppealController::class, 'index'])->name('user.my-appeals');
 
     // NEW: HECAS Information Routes
     Route::get('/user/hecas-info', [HecasInfoController::class, 'index'])->name('user.hecas-info');

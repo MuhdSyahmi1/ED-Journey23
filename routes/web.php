@@ -11,6 +11,7 @@ use App\Http\Controllers\ALevelSubjectController;
 use App\Http\Controllers\HntecProgrammeController;
 use App\Http\Controllers\DiplomaProgrammeController;
 use App\Http\Controllers\UserGradesController;
+use App\Http\Controllers\UserRecommendationController;
 use App\Http\Controllers\HecasInfoController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -480,7 +481,7 @@ Route::middleware(['auth'])->group(function () {
         if (auth()->user()->role !== 'user') {
             abort(403, 'Unauthorized');
         }
-        return view('user.recommendations');
+        return app(UserRecommendationController::class)->index();
     })->name('user.recommendations');
 
     // NEW: HECAS Information Routes

@@ -277,9 +277,9 @@ class GradeExtractionService
 
     private function parseOLevelLine(string $line, int $lineNumber): ?array
     {
-        // Look for O-Level grades (A, B, C, D, E)
-        if (preg_match('/\b([A-E])\b/', $line, $matches)) {
-            $grade = $matches[1];
+        // Look for O-Level grades (A, B, C, D, E) including Malaysian format (A1, B3, C5, etc.)
+        if (preg_match('/\b([A-E])(\d*)?\b/', $line, $matches)) {
+            $grade = $this->normalizeGrade($matches[1]);
             
             if ($this->isFalsePositive($line, $grade)) {
                 return null;
@@ -407,6 +407,15 @@ class GradeExtractionService
             return intval($matches[1]);
         }
         return null;
+    }
+
+    private function normalizeGrade(string $grade): string
+    {
+        // Extract just the letter part from Malaysian format (B3 -> B, C5 -> C)
+        if (preg_match('/^([A-F])\d*$/', $grade, $matches)) {
+            return strtoupper($matches[1]);
+        }
+        return strtoupper($grade);
     }
 
     private function normalizeALevelGrade(string $grade): string

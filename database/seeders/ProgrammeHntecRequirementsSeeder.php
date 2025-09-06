@@ -69,9 +69,10 @@ class ProgrammeHntecRequirementsSeeder extends Seeder
             'ict' => [
                 'Diploma in Data Analytics' => [
                     'relevant' => [
-                        'Higher National Diploma in Computer Studies' => 2.5,
-                        'Higher National Diploma in Information Technology' => 2.3,
-                        'Higher National Diploma in Mathematics & Statistics' => 2.5,
+                        'Higher National Diploma in Computer Studies' => 2.7,
+                        'Higher National Diploma in Information Technology' => 2.7,
+                        'HNTec in Information Technology' => 2.7,
+                        'Higher National Diploma in Mathematics & Statistics' => 2.7,
                     ],
                     'not_relevant' => [
                         'Higher National Diploma in Business Studies' => 3.0,
@@ -80,9 +81,10 @@ class ProgrammeHntecRequirementsSeeder extends Seeder
                 ],
                 'Diploma in Web Technology / Web Development' => [
                     'relevant' => [
-                        'Higher National Diploma in Computer Studies' => 2.3,
-                        'Higher National Diploma in Information Technology' => 2.5,
-                        'Higher National Diploma in Software Engineering' => 2.3,
+                        'Higher National Diploma in Computer Studies' => 2.7,
+                        'Higher National Diploma in Information Technology' => 2.7,
+                        'HNTec in Information Technology' => 2.7,
+                        'Higher National Diploma in Software Engineering' => 2.7,
                     ],
                     'not_relevant' => [
                         'Higher National Diploma in Business Studies' => 3.0,
@@ -91,9 +93,10 @@ class ProgrammeHntecRequirementsSeeder extends Seeder
                 ],
                 'Diploma in Applications Development' => [
                     'relevant' => [
-                        'Higher National Diploma in Computer Studies' => 2.5,
-                        'Higher National Diploma in Software Engineering' => 2.3,
-                        'Higher National Diploma in Information Technology' => 2.5,
+                        'Higher National Diploma in Computer Studies' => 2.7,
+                        'Higher National Diploma in Software Engineering' => 2.7,
+                        'Higher National Diploma in Information Technology' => 2.7,
+                        'HNTec in Information Technology' => 2.7,
                     ],
                     'not_relevant' => [
                         'Higher National Diploma in Business Studies' => 3.0,
@@ -113,9 +116,10 @@ class ProgrammeHntecRequirementsSeeder extends Seeder
                 ],
                 'Diploma in Information Systems' => [
                     'relevant' => [
-                        'Higher National Diploma in Computer Studies' => 2.5,
-                        'Higher National Diploma in Information Technology' => 2.3,
-                        'Higher National Diploma in Information Systems' => 2.3,
+                        'Higher National Diploma in Computer Studies' => 2.7,
+                        'Higher National Diploma in Information Technology' => 2.7,
+                        'HNTec in Information Technology' => 2.7,
+                        'Higher National Diploma in Information Systems' => 2.7,
                     ],
                     'not_relevant' => [
                         'Higher National Diploma in Business Studies' => 3.0,
@@ -124,9 +128,10 @@ class ProgrammeHntecRequirementsSeeder extends Seeder
                 ],
                 'Diploma in Cloud & Networking' => [
                     'relevant' => [
-                        'Higher National Diploma in Computer Studies' => 2.5,
-                        'Higher National Diploma in Information Technology' => 2.3,
-                        'Higher National Diploma in Network Engineering' => 2.3,
+                        'Higher National Diploma in Computer Studies' => 2.7,
+                        'Higher National Diploma in Information Technology' => 2.7,
+                        'HNTec in Information Technology' => 2.7,
+                        'Higher National Diploma in Network Engineering' => 2.7,
                     ],
                     'not_relevant' => [
                         'Higher National Diploma in Business Studies' => 3.0,
@@ -308,13 +313,15 @@ class ProgrammeHntecRequirementsSeeder extends Seeder
                         $hntecProgramme = HntecProgramme::firstOrCreate(['name' => $hntecName]);
 
                         // Create the requirement
+                        $categoryValue = $category === 'relevant' ? 'Relevant' : 'Not Relevant';
+                        
                         ProgrammeHntecRequirement::firstOrCreate(
                             [
                                 'school_programme_id' => $schoolProgramme->id,
                                 'hntec_programme_id' => $hntecProgramme->id,
                             ],
                             [
-                                'category' => ucfirst(str_replace('_', ' ', $category)),
+                                'category' => $categoryValue,
                                 'min_cgpa' => $minCgpa,
                             ]
                         );

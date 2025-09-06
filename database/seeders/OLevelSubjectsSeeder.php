@@ -30,7 +30,7 @@ class OLevelSubjectsSeeder extends Seeder
             ['name' => 'Combined Science', 'qualification' => 'IGCSE'],
             
             // Languages
-            ['name' => 'Bahasa Malaysia', 'qualification' => 'GCE'],
+            ['name' => 'Bahasa Melayu', 'qualification' => 'GCE'],
             ['name' => 'Chinese Language', 'qualification' => 'GCE'],
             ['name' => 'Chinese Language', 'qualification' => 'IGCSE'],
             ['name' => 'Tamil Language', 'qualification' => 'GCE'],

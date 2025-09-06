@@ -38,6 +38,8 @@ class DatabaseSeeder extends Seeder
             SchoolProgrammesSeeder::class,
             ProgrammeHntecRequirementsSeeder::class,
             ProgrammeOlevelRequirementsSeeder::class,
+            // Admission test data (must run after programmes are seeded)
+            AdmissionTestDataSeeder::class,
         ]);
     }
 }

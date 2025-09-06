@@ -31,6 +31,9 @@ class AdmissionController extends Controller
             'schoolProgramme.diplomaProgramme',
             'reviewer'
         ])
+        ->whereHas('user.userProfile', function($q) {
+            $q->where('verification_status', 'verified');
+        })
         ->orderBy('applied_at', 'desc');
 
         // Filter by status
@@ -86,7 +89,11 @@ class AdmissionController extends Controller
             'schoolProgramme.oLevelRequirements.oLevelSubject',
             'schoolProgramme.hntecRequirements.hntecProgramme',
             'reviewer'
-        ])->findOrFail($id);
+        ])
+        ->whereHas('user.userProfile', function($q) {
+            $q->where('verification_status', 'verified');
+        })
+        ->findOrFail($id);
 
         // Get student's qualifications
         $studentGrades = \App\Models\StudentGrade::where('user_id', $application->user_id)
@@ -131,7 +138,9 @@ class AdmissionController extends Controller
             'review_notes' => 'nullable|string|max:1000'
         ]);
 
-        $application = StudentApplication::findOrFail($id);
+        $application = StudentApplication::whereHas('user.userProfile', function($q) {
+            $q->where('verification_status', 'verified');
+        })->findOrFail($id);
 
         // Check if programme has quota and enforce it for acceptances
         if ($request->status === 'accepted') {
@@ -187,7 +196,9 @@ class AdmissionController extends Controller
         DB::transaction(function() use ($request, &$updated, &$errors) {
             foreach ($request->application_ids as $id) {
                 try {
-                    $application = StudentApplication::findOrFail($id);
+                    $application = StudentApplication::whereHas('user.userProfile', function($q) {
+                        $q->where('verification_status', 'verified');
+                    })->findOrFail($id);
 
                     // Check quota for acceptances
                     if ($request->status === 'accepted') {

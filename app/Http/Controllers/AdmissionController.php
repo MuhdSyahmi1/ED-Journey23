@@ -349,6 +349,17 @@ class AdmissionController extends Controller
             ];
         }
 
+        // Filter by status if requested
+        if ($request->filled('status')) {
+            $statusFilter = $request->status;
+            $quotaData = array_filter($quotaData, function($data) use ($statusFilter) {
+                if ($statusFilter === 'quotas_set') {
+                    return $data['quota'] > 0;
+                }
+                return $data['status']['status'] === $statusFilter;
+            });
+        }
+
         // Sort by utilization percentage descending
         usort($quotaData, fn($a, $b) => $b['utilization_percentage'] <=> $a['utilization_percentage']);
 

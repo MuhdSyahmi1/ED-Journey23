@@ -49,64 +49,72 @@
                     @endphp
 
                     <!-- Total Cases -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/20">
-                                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $totalCases }}</p>
-                                <p class="text-sm text-slate-600 dark:text-slate-400">Total Cases</p>
+                    <a href="{{ route('staff.case-reports') }}" class="block rounded-xl {{ !request('status') ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/20">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $totalCases }}</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">Total Cases</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Pending Cases -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/20">
-                                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $pendingCases }}</p>
-                                <p class="text-sm text-slate-600 dark:text-slate-400">Pending</p>
+                    <a href="{{ route('staff.case-reports', ['status' => 'pending']) }}" class="block rounded-xl {{ request('status') == 'pending' ? 'ring-2 ring-red-500 bg-red-50/50 dark:bg-red-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/20">
+                                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $pendingCases }}</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">Pending</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- In Progress Cases -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/20">
-                                <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $inProgressCases }}</p>
-                                <p class="text-sm text-slate-600 dark:text-slate-400">In Progress</p>
+                    <a href="{{ route('staff.case-reports', ['status' => 'in progress']) }}" class="block rounded-xl {{ request('status') == 'in progress' ? 'ring-2 ring-orange-500 bg-orange-50/50 dark:bg-orange-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/20">
+                                    <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $inProgressCases }}</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">In Progress</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Solved Cases -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20">
-                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $solvedCases }}</p>
-                                <p class="text-sm text-slate-600 dark:text-slate-400">Solved</p>
+                    <a href="{{ route('staff.case-reports', ['status' => 'solved']) }}" class="block rounded-xl {{ request('status') == 'solved' ? 'ring-2 ring-green-500 bg-green-50/50 dark:bg-green-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20">
+                                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $solvedCases }}</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">Solved</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Filters and Search -->

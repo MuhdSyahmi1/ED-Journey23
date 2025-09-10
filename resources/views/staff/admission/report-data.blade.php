@@ -98,72 +98,97 @@
 
                 <!-- Statistics -->
                 @php
-                    $totalApplications = $reportData->count();
-                    $verifiedApplications = $reportData->where('verification_status', 'verified')->count();
-                    $pendingApplications = $reportData->where('verification_status', 'pending')->count();
-                    $rejectedApplications = $reportData->where('verification_status', 'rejected')->count();
+                    // Get counts from original unfiltered data
+                    $allDataQuery = \DB::table('user_profiles')
+                        ->join('users', 'user_profiles.user_id', '=', 'users.id')
+                        ->select('user_profiles.verification_status');
+                    
+                    // Apply only search filter (not status filter) to get accurate totals
+                    if (request()->filled('search')) {
+                        $search = request()->input('search');
+                        $allDataQuery->where(function($q) use ($search) {
+                            $q->where('user_profiles.name', 'like', "%{$search}%")
+                              ->orWhere('user_profiles.email_address', 'like', "%{$search}%")
+                              ->orWhere('user_profiles.user_id', 'like', "%{$search}%");
+                        });
+                    }
+                    
+                    $allData = $allDataQuery->get();
+                    
+                    $totalApplications = $allData->count();
+                    $verifiedApplications = $allData->where('verification_status', 'verified')->count();
+                    $pendingApplications = $allData->where('verification_status', 'pending')->count();
+                    $rejectedApplications = $allData->where('verification_status', 'rejected')->count();
                 @endphp
 
                 <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-6">
                     <!-- Total Applications -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total Applications</p>
-                                <p class="text-3xl font-bold text-slate-900 dark:text-slate-100">{{ $totalApplications }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-blue-400/20 to-indigo-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
+                    <a href="{{ route('staff.admission.report-data', array_merge(request()->except('status'), [])) }}" class="block rounded-2xl {{ !request('status') ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total Applications</p>
+                                    <p class="text-3xl font-bold text-slate-900 dark:text-slate-100">{{ $totalApplications }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-400/20 to-indigo-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Verified Applications -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Verified</p>
-                                <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $verifiedApplications }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-400/20 to-emerald-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                    <a href="{{ route('staff.admission.report-data', array_merge(request()->except('status'), ['status' => 'verified'])) }}" class="block rounded-2xl {{ request('status') == 'verified' ? 'ring-2 ring-green-500 bg-green-50/50 dark:bg-green-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Verified</p>
+                                    <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $verifiedApplications }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-400/20 to-emerald-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Pending Applications -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Pending</p>
-                                <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">{{ $pendingApplications }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-orange-400/20 to-amber-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                    <a href="{{ route('staff.admission.report-data', array_merge(request()->except('status'), ['status' => 'pending'])) }}" class="block rounded-2xl {{ request('status') == 'pending' ? 'ring-2 ring-orange-500 bg-orange-50/50 dark:bg-orange-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Pending</p>
+                                    <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">{{ $pendingApplications }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-orange-400/20 to-amber-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Rejected Applications -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Rejected</p>
-                                <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $rejectedApplications }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-red-400/20 to-rose-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                    <a href="{{ route('staff.admission.report-data', array_merge(request()->except('status'), ['status' => 'rejected'])) }}" class="block rounded-2xl {{ request('status') == 'rejected' ? 'ring-2 ring-red-500 bg-red-50/50 dark:bg-red-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Rejected</p>
+                                    <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $rejectedApplications }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-red-400/20 to-rose-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Export Button -->

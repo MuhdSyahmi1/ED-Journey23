@@ -3,22 +3,26 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Review Student Applications</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300">Manage and process programme applications</p>
-            <div class="mt-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                    </svg>
-                    <p class="text-sm text-blue-800 dark:text-blue-200">
-                        <strong>Note:</strong> Only applications from verified users are shown here. 
-                        If you're missing applications, check 
-                        <a href="{{ route('staff.admission.user-profile') }}" class="underline hover:no-underline">User Profile Verification</a> 
-                        to verify pending profiles first.
-                    </p>
-                </div>
+        <!-- Header -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-blue-400/90 to-purple-500/90 text-white text-center py-4">
+                <h1 class="text-2xl font-bold">REVIEW STUDENT APPLICATIONS</h1>
+                <p class="text-sm opacity-90 mt-1">Manage and process programme applications</p>
+            </div>
+        </div>
+
+        <!-- Info Notice -->
+        <div class="mb-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                <p class="text-sm text-blue-800 dark:text-blue-200">
+                    <strong>Note:</strong> Only applications from verified users are shown here. 
+                    If you're missing applications, check 
+                    <a href="{{ route('staff.admission.user-profile') }}" class="underline hover:no-underline">User Profile Verification</a> 
+                    to verify pending profiles first.
+                </p>
             </div>
         </div>
 
@@ -60,26 +64,47 @@
 
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['total'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Total Applications</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['pending'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Pending Review</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $stats['accepted'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Accepted</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $stats['rejected'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Rejected</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $stats['waitlisted'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Waitlisted</div>
-            </div>
+            <!-- Total Applications -->
+            <a href="{{ route('staff.admission.applications') }}" class="block rounded-lg {{ !request('status') ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['total'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Applications</div>
+                </div>
+            </a>
+            
+            <!-- Pending Review -->
+            <a href="{{ route('staff.admission.applications', ['status' => 'pending']) }}" class="block rounded-lg {{ request('status') == 'pending' ? 'ring-2 ring-yellow-500 bg-yellow-50/50 dark:bg-yellow-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['pending'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Pending Review</div>
+                </div>
+            </a>
+            
+            <!-- Accepted -->
+            <a href="{{ route('staff.admission.applications', ['status' => 'accepted']) }}" class="block rounded-lg {{ request('status') == 'accepted' ? 'ring-2 ring-green-500 bg-green-50/50 dark:bg-green-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $stats['accepted'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Accepted</div>
+                </div>
+            </a>
+            
+            <!-- Rejected -->
+            <a href="{{ route('staff.admission.applications', ['status' => 'rejected']) }}" class="block rounded-lg {{ request('status') == 'rejected' ? 'ring-2 ring-red-500 bg-red-50/50 dark:bg-red-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $stats['rejected'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Rejected</div>
+                </div>
+            </a>
+            
+            <!-- Waitlisted -->
+            <a href="{{ route('staff.admission.applications', ['status' => 'waitlisted']) }}" class="block rounded-lg {{ request('status') == 'waitlisted' ? 'ring-2 ring-purple-500 bg-purple-50/50 dark:bg-purple-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $stats['waitlisted'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Waitlisted</div>
+                </div>
+            </a>
+            
+            <!-- Today -->
             <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
                 <div class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ $stats['today'] }}</div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Today</div>
@@ -95,11 +120,11 @@
                            name="search" 
                            value="{{ request('search') }}"
                            placeholder="Student name or email..."
-                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white">
+                           class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-                    <select name="status" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white">
+                    <select name="status" class="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Status</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Accepted</option>
@@ -109,7 +134,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">School</label>
-                    <select name="school" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white">
+                    <select name="school" class="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Schools</option>
                         @foreach($schools as $school)
                             <option value="{{ $school }}" {{ request('school') === $school ? 'selected' : '' }}>
@@ -120,7 +145,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Programme</label>
-                    <select name="programme" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white">
+                    <select name="programme" class="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Programmes</option>
                         @foreach($programmes as $programme)
                             <option value="{{ $programme->id }}" {{ request('programme') == $programme->id ? 'selected' : '' }}>

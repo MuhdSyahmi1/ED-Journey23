@@ -13,11 +13,11 @@
             </div>
         @endif
 
-        <!-- Page Header -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-            <div class="text-center">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">FEEDBACK CENTER</h1>
-                <p class="text-gray-600 dark:text-gray-400">Manage and respond to user feedback</p>
+        <!-- Header -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-blue-400/90 to-purple-500/90 text-white text-center py-4">
+                <h1 class="text-2xl font-bold">FEEDBACK CENTER</h1>
+                <p class="text-sm opacity-90 mt-1">Manage and respond to user feedback</p>
             </div>
         </div>
 

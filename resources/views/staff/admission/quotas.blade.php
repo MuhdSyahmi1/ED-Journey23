@@ -3,38 +3,83 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Manage Admission Quotas</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300">Set and monitor programme admission quotas</p>
+        <!-- Header -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-blue-400/90 to-purple-500/90 text-white text-center py-4">
+                <h1 class="text-2xl font-bold">MANAGE ADMISSION QUOTAS</h1>
+                <p class="text-sm opacity-90 mt-1">Set and monitor programme admission quotas</p>
+            </div>
         </div>
 
         <!-- Overall Statistics -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
             @php
-                $totalProgrammes = count($quotaData);
-                $quotasSet = collect($quotaData)->where('quota', '>', 0)->count();
-                $fullProgrammes = collect($quotaData)->where('status.status', 'full')->count();
-                $nearlyFullProgrammes = collect($quotaData)->where('status.status', 'nearly_full')->count();
-                $averageUtilization = collect($quotaData)->where('quota', '>', 0)->avg('utilization_percentage');
+                // Get counts from original data (before filtering)
+                $allProgrammes = \App\Models\SchoolProgramme::with(['diplomaProgramme'])->where('is_active', 1)->get();
+                $totalProgrammes = $allProgrammes->count();
+                $quotasSet = $allProgrammes->where('admission_quota', '>', 0)->count();
+                
+                // Calculate full and nearly full programmes
+                $fullProgrammes = 0;
+                $nearlyFullProgrammes = 0;
+                $totalUtilization = 0;
+                $quotasWithUtilization = 0;
+                
+                foreach ($allProgrammes as $programme) {
+                    $acceptedApplications = \App\Models\StudentApplication::where('school_programme_id', $programme->id)
+                        ->where('status', 'accepted')
+                        ->count();
+                    $quota = $programme->admission_quota ?? 0;
+                    
+                    if ($quota > 0) {
+                        $utilizationPercentage = ($acceptedApplications / $quota) * 100;
+                        $totalUtilization += $utilizationPercentage;
+                        $quotasWithUtilization++;
+                        
+                        if ($acceptedApplications >= $quota) {
+                            $fullProgrammes++;
+                        } elseif ($utilizationPercentage >= 90) {
+                            $nearlyFullProgrammes++;
+                        }
+                    }
+                }
+                
+                $averageUtilization = $quotasWithUtilization > 0 ? round($totalUtilization / $quotasWithUtilization, 1) : 0;
             @endphp
             
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $totalProgrammes }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Total Programmes</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $quotasSet }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Quotas Set</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $fullProgrammes }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Full Programmes</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ $nearlyFullProgrammes }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Nearly Full</div>
-            </div>
+            <!-- Total Programmes -->
+            <a href="{{ route('staff.admission.quotas', array_merge(request()->except('status'), [])) }}" class="block rounded-lg {{ !request('status') ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $totalProgrammes }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Programmes</div>
+                </div>
+            </a>
+            
+            <!-- Quotas Set -->
+            <a href="{{ route('staff.admission.quotas', array_merge(request()->except('status'), ['status' => 'quotas_set'])) }}" class="block rounded-lg {{ request('status') == 'quotas_set' ? 'ring-2 ring-green-500 bg-green-50/50 dark:bg-green-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $quotasSet }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Quotas Set</div>
+                </div>
+            </a>
+            
+            <!-- Full Programmes -->
+            <a href="{{ route('staff.admission.quotas', array_merge(request()->except('status'), ['status' => 'full'])) }}" class="block rounded-lg {{ request('status') == 'full' ? 'ring-2 ring-red-500 bg-red-50/50 dark:bg-red-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $fullProgrammes }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Full Programmes</div>
+                </div>
+            </a>
+            
+            <!-- Nearly Full -->
+            <a href="{{ route('staff.admission.quotas', array_merge(request()->except('status'), ['status' => 'nearly_full'])) }}" class="block rounded-lg {{ request('status') == 'nearly_full' ? 'ring-2 ring-orange-500 bg-orange-50/50 dark:bg-orange-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ $nearlyFullProgrammes }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Nearly Full</div>
+                </div>
+            </a>
+            
+            <!-- Average Utilization (non-clickable) -->
             <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
                 <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ round($averageUtilization ?? 0, 1) }}%</div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Avg Utilization</div>
@@ -46,7 +91,7 @@
             <form method="GET" class="flex gap-4 items-end">
                 <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Filter by School</label>
-                    <select name="school" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white">
+                    <select name="school" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Schools</option>
                         @foreach($schools as $school)
                             <option value="{{ $school }}" {{ request('school') === $school ? 'selected' : '' }}>
@@ -78,7 +123,7 @@
                                placeholder="Quota value" 
                                min="0" 
                                max="1000"
-                               class="w-32 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white text-sm">
+                               class="w-32 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                         <button type="button" 
                                 onclick="applyBulkQuota()" 
                                 class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
@@ -155,7 +200,7 @@
                                                    value="{{ $data['quota'] }}"
                                                    min="0" 
                                                    max="1000"
-                                                   class="quota-input w-20 rounded border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white text-sm"
+                                                   class="quota-input w-20 px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                                                    data-programme-id="{{ $data['programme']->id }}">
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">

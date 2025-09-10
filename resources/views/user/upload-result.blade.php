@@ -522,12 +522,31 @@
                     @endif
                 </div>
 
+                <!-- Sticky Floating Report Case Button -->
+                @if((isset($oLevelResults) && $oLevelResults && $oLevelResults->studentGrades->count() > 0) || 
+                    (isset($aLevelResults) && $aLevelResults && $aLevelResults->studentGrades->count() > 0) || 
+                    (isset($hntecResults) && $hntecResults && $hntecResults->count() > 0))
+                    <div class="fixed bottom-8 right-8 z-50">
+                        <button type="button" 
+                                onclick="document.getElementById('report-case-section').scrollIntoView({ behavior: 'smooth' })"
+                                title="Having Issues? Report if your grades were scanned incorrectly."
+                                class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold py-4 px-6 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 group">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                                </svg>
+                                <span class="hidden sm:inline">Report Case</span>
+                            </div>
+                        </button>
+                    </div>
+                @endif
+
                 <!-- Report Case Section -->
-                <div class="mt-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8">
+                <div id="report-case-section" class="mt-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8">
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Having Issues?</h3>
-                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Report if your grades were scanned incorrectly</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Report if your grades were scanned incorrectly.</p>
                         </div>
                         <div x-data="{ showForm: false }" 
                              x-init="showForm = false">

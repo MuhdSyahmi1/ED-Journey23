@@ -245,10 +245,6 @@
                         <flux:navlist.item icon="building-library" :href="route('user.hecas-info')" :current="request()->routeIs('user.hecas-info')" wire:navigate>
                             {{ __('HECAS Information') }}
                         </flux:navlist.item>
-
-                        <flux:navlist.item icon="heart" :href="route('user.favourites')" :current="request()->routeIs('user.favourites')" wire:navigate>
-                            {{ __('My Favourite') }}
-                        </flux:navlist.item>
                     </flux:navlist.group>
 
                     <flux:navlist.group :heading="__('Support')" class="grid">

@@ -106,64 +106,72 @@
 
                 <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-6">
                     <!-- Total Profiles -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total Profiles</p>
-                                <p class="text-3xl font-bold text-slate-900 dark:text-slate-100">{{ $totalProfiles }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-blue-400/20 to-indigo-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
+                    <a href="{{ route('staff.admission.user-profile') }}" class="block rounded-2xl {{ !request('status') ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total Profiles</p>
+                                    <p class="text-3xl font-bold text-slate-900 dark:text-slate-100">{{ $totalProfiles }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-400/20 to-indigo-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Verified Profiles -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Verified</p>
-                                <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $verifiedProfiles }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-400/20 to-emerald-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                    <a href="{{ route('staff.admission.user-profile', ['status' => 'verified']) }}" class="block rounded-2xl {{ request('status') == 'verified' ? 'ring-2 ring-green-500 bg-green-50/50 dark:bg-green-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Verified</p>
+                                    <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $verifiedProfiles }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-400/20 to-emerald-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Pending Profiles -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Pending</p>
-                                <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">{{ $pendingProfiles }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-orange-400/20 to-amber-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                    <a href="{{ route('staff.admission.user-profile', ['status' => 'pending']) }}" class="block rounded-2xl {{ request('status') == 'pending' ? 'ring-2 ring-orange-500 bg-orange-50/50 dark:bg-orange-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Pending</p>
+                                    <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">{{ $pendingProfiles }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-orange-400/20 to-amber-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Rejected Profiles -->
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Rejected</p>
-                                <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $rejectedProfiles }}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-r from-red-400/20 to-rose-500/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                    <a href="{{ route('staff.admission.user-profile', ['status' => 'rejected']) }}" class="block rounded-2xl {{ request('status') == 'rejected' ? 'ring-2 ring-red-500 bg-red-50/50 dark:bg-red-900/20' : '' }}">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-6 hover:shadow-2xl transition-all duration-200 cursor-pointer hover:scale-105">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Rejected</p>
+                                    <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $rejectedProfiles }}</p>
+                                </div>
+                                <div class="w-12 h-12 bg-gradient-to-r from-red-400/20 to-rose-500/20 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- User Profiles Table -->

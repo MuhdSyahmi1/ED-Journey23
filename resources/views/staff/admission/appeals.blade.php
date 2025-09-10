@@ -3,34 +3,57 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Student Appeals Management</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300">Review and manage student admission appeals</p>
+        <!-- Header -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-blue-400/90 to-purple-500/90 text-white text-center py-4">
+                <h1 class="text-2xl font-bold">STUDENT APPEALS MANAGEMENT</h1>
+                <p class="text-sm opacity-90 mt-1">Review and manage student admission appeals</p>
+            </div>
         </div>
 
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['total'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Total Appeals</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['pending'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Pending</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['under_review'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Under Review</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $stats['approved'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Approved</div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $stats['rejected'] }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Rejected</div>
-            </div>
+            <!-- Total Appeals -->
+            <a href="{{ route('staff.admission.appeals') }}" class="block rounded-lg {{ !request('status') ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['total'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Appeals</div>
+                </div>
+            </a>
+            
+            <!-- Pending -->
+            <a href="{{ route('staff.admission.appeals', ['status' => 'pending']) }}" class="block rounded-lg {{ request('status') == 'pending' ? 'ring-2 ring-yellow-500 bg-yellow-50/50 dark:bg-yellow-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['pending'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Pending</div>
+                </div>
+            </a>
+            
+            <!-- Under Review -->
+            <a href="{{ route('staff.admission.appeals', ['status' => 'under_review']) }}" class="block rounded-lg {{ request('status') == 'under_review' ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['under_review'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Under Review</div>
+                </div>
+            </a>
+            
+            <!-- Approved -->
+            <a href="{{ route('staff.admission.appeals', ['status' => 'approved']) }}" class="block rounded-lg {{ request('status') == 'approved' ? 'ring-2 ring-green-500 bg-green-50/50 dark:bg-green-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $stats['approved'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Approved</div>
+                </div>
+            </a>
+            
+            <!-- Rejected -->
+            <a href="{{ route('staff.admission.appeals', ['status' => 'rejected']) }}" class="block rounded-lg {{ request('status') == 'rejected' ? 'ring-2 ring-red-500 bg-red-50/50 dark:bg-red-900/20' : '' }}">
+                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center hover:shadow-xl transition-all duration-200 cursor-pointer hover:scale-105">
+                    <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $stats['rejected'] }}</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Rejected</div>
+                </div>
+            </a>
+            
+            <!-- Today (non-clickable) -->
             <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
                 <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $stats['today'] }}</div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Today</div>
@@ -42,7 +65,7 @@
             <form method="GET" class="flex gap-4 items-end">
                 <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Filter by Status</label>
-                    <select name="status" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white">
+                    <select name="status" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">All Status</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="under_review" {{ request('status') === 'under_review' ? 'selected' : '' }}>Under Review</option>
@@ -54,7 +77,7 @@
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search Student</label>
                     <input type="text" name="search" value="{{ request('search') }}" 
                            placeholder="Student name or email" 
-                           class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white">
+                           class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div class="flex gap-2">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">

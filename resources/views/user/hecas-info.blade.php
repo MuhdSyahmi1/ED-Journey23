@@ -59,7 +59,7 @@
                         <!-- HECAS ID Field -->
                         <div class="space-y-2">
                             <label for="hecas_id" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                HECAS ID <span class="text-slate-500">(Optional)</span>
+                                HECAS ID <span class="text-slate-500">(Required)</span>
                             </label>
                             <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">
                                 Format: 31/12345678/01 (If you have applied through HECAS before)

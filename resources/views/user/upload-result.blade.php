@@ -627,6 +627,8 @@
                                             required>
                                         <option value="">Select Case Type</option>
                                         <option value="Incorrect Data" {{ old('case_type') == 'Incorrect Data' ? 'selected' : '' }}>Incorrect Data</option>
+                                        <option value="Missing Subject" {{ old('case_type') == 'Missing Subject' ? 'selected' : '' }}>Missing Subject</option>
+                                        <option value="Incorrect Data & Missing Subject" {{ old('case_type') == 'Incorrect Data & Missing Subject' ? 'selected' : '' }}>Incorrect Data & Missing Subject</option>
                                     </select>
                                     @error('case_type')
                                         <p class="text-red-500 dark:text-red-400 text-sm">{{ $message }}</p>

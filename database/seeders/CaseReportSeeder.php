@@ -14,6 +14,16 @@ class CaseReportSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if case reports already exist
+        if (CaseReport::count() > 0) {
+            $this->command->info('Case reports already exist. Skipping seeding to prevent duplicates.');
+            $this->command->info('Current case report count: ' . CaseReport::count());
+            $this->command->info('If you want to re-seed, please clear existing case reports first:');
+            $this->command->info('Run: php artisan tinker');
+            $this->command->info('Then: App\\Models\\CaseReport::truncate();');
+            return;
+        }
+
         // Get all regular users (not admin/staff)
         $users = User::where('role', 'user')->get();
 
@@ -35,8 +45,9 @@ class CaseReportSeeder extends Seeder
             $users = User::where('role', 'user')->get();
         }
 
-        // Sample case report data
+        // Sample case report data with all three case types
         $caseReports = [
+            // Incorrect Data examples
             [
                 'subject' => 'Mathematics',
                 'subject_type' => 'O-Level',
@@ -59,13 +70,6 @@ class CaseReportSeeder extends Seeder
                 'status' => 'solved',
             ],
             [
-                'subject' => 'Biology',
-                'subject_type' => 'O-Level',
-                'case_type' => 'Incorrect Data',
-                'description' => 'Biology grade scanned incorrectly. The system read B as E due to poor image quality during scanning.',
-                'status' => 'pending',
-            ],
-            [
                 'subject' => 'Chemistry',
                 'subject_type' => 'A-Level',
                 'case_type' => 'Incorrect Data',
@@ -79,33 +83,79 @@ class CaseReportSeeder extends Seeder
                 'description' => 'The HnTEC Information Technology grade was completely missed by the scanner. I achieved a Distinction but it\'s not showing up.',
                 'status' => 'solved',
             ],
+            
+            // Missing Subject examples
+            [
+                'subject' => 'Economics',
+                'subject_type' => 'O-Level',
+                'case_type' => 'Missing Subject',
+                'description' => 'My Economics O-Level result is completely missing from the scanned results. I have this subject on my certificate but it was not detected.',
+                'status' => 'pending',
+            ],
+            [
+                'subject' => 'Geography',
+                'subject_type' => 'A-Level',
+                'case_type' => 'Missing Subject',
+                'description' => 'Geography A-Level is missing from my results. The scanner failed to detect this subject entirely despite it being clearly printed on my certificate.',
+                'status' => 'in progress',
+            ],
+            [
+                'subject' => 'Art and Design',
+                'subject_type' => 'O-Level',
+                'case_type' => 'Missing Subject',
+                'description' => 'Art and Design subject is not showing up in my O-Level results. This subject should be there with a grade of B+.',
+                'status' => 'solved',
+            ],
+            [
+                'subject' => 'Electrical Engineering',
+                'subject_type' => 'Hntec',
+                'case_type' => 'Missing Subject',
+                'description' => 'My HnTEC Electrical Engineering programme is completely missing from the scan. I completed this with a Merit grade.',
+                'status' => 'pending',
+            ],
             [
                 'subject' => 'Business Studies',
+                'subject_type' => 'A-Level',
+                'case_type' => 'Missing Subject',
+                'description' => 'Business Studies A-Level subject was not detected by the scanning system. This is a required subject for my university application.',
+                'status' => 'in progress',
+            ],
+            
+            // Incorrect Data & Missing Subject examples
+            [
+                'subject' => 'Biology',
                 'subject_type' => 'O-Level',
-                'case_type' => 'Incorrect Data',
-                'description' => 'Business Studies grade shows C+ instead of A-. The scanning seems to have difficulty with the plus/minus symbols.',
+                'case_type' => 'Incorrect Data & Missing Subject',
+                'description' => 'Biology grade scanned incorrectly as E instead of B, and my Additional Mathematics subject is completely missing from the results.',
                 'status' => 'pending',
             ],
             [
                 'subject' => 'Computer Science',
                 'subject_type' => 'A-Level',
-                'case_type' => 'Incorrect Data',
-                'description' => 'Computer Science A-Level grade scanned as C when my certificate clearly shows A. Need this corrected for university applications.',
+                'case_type' => 'Incorrect Data & Missing Subject',
+                'description' => 'Computer Science shows wrong grade (C instead of A) and my Further Mathematics A-Level subject is missing entirely.',
                 'status' => 'in progress',
             ],
             [
                 'subject' => 'Mechanical Engineering',
                 'subject_type' => 'Hntec',
-                'case_type' => 'Incorrect Data',
-                'description' => 'HnTEC Mechanical Engineering result not recognized. I have a Merit grade but the system shows no result.',
+                'case_type' => 'Incorrect Data & Missing Subject',
+                'description' => 'HnTEC Mechanical Engineering shows Pass instead of Merit, and my Civil Engineering programme is missing from the scan.',
                 'status' => 'solved',
             ],
             [
                 'subject' => 'History',
                 'subject_type' => 'O-Level',
-                'case_type' => 'Incorrect Data',
-                'description' => 'History grade incorrectly scanned as E when my actual grade is B. This affects my overall GPA calculation.',
+                'case_type' => 'Incorrect Data & Missing Subject',
+                'description' => 'History grade incorrectly scanned as E when it should be B, and my Islamic Religious Knowledge subject is not detected at all.',
                 'status' => 'pending',
+            ],
+            [
+                'subject' => 'Accounting',
+                'subject_type' => 'A-Level',
+                'case_type' => 'Incorrect Data & Missing Subject',
+                'description' => 'Accounting A-Level shows wrong grade (D instead of A-) and my Economics A-Level subject is completely missing from the results.',
+                'status' => 'in progress',
             ],
         ];
 
@@ -126,7 +176,7 @@ class CaseReportSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('Created 10 case reports successfully!');
+        $this->command->info('Created 15 case reports successfully!');
         $this->command->info('Case reports created for users: ' . $users->pluck('name')->join(', '));
     }
 }

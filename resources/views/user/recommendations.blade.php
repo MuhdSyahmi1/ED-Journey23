@@ -1,16 +1,21 @@
 <x-layouts.app title="Programme Recommendations">
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">Programme Recommendations</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300">Discover the best programmes based on your qualifications</p>
-        </div>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 transition-colors duration-300">
+    <div class="p-6">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Header -->
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-8">
+                <div class="bg-gradient-to-r from-blue-400/90 to-indigo-500/90 text-white text-center py-6">
+                    <h1 class="text-3xl font-bold">PROGRAMME RECOMMENDATIONS</h1>
+                    <p class="text-sm opacity-90 mt-2">Discover the best programmes based on your qualifications</p>
+                </div>
+            </div>
 
 
         <!-- Student Qualifications Summary -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-8">
-            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Your Qualifications</h2>
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">Your Qualifications</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- O-Level Qualifications -->
@@ -68,8 +73,8 @@
 
         <!-- Application Status -->
         @if($existingApplications->count() > 0)
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-8">
-                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Your Applications</h2>
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8 mb-8">
+                <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">Your Applications</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach($existingApplications as $application)
                         <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
@@ -92,7 +97,8 @@
             </div>
         @else
             <!-- Application Instructions -->
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-6 mb-8 text-white">
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8 mb-8">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white">
                 <h2 class="text-2xl font-bold mb-2">Ready to Apply?</h2>
                 <p class="mb-4">You can apply for up to 2 programmes. Select your preferred programmes from the qualified lists below.</p>
                 <div class="bg-white/10 rounded-lg p-4">
@@ -106,6 +112,7 @@
                     <div id="no-selection" class="text-center">
                         <p>Select programmes below to start your application</p>
                     </div>
+                </div>
                 </div>
             </div>
         @endif
@@ -124,7 +131,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($recommendations['qualified'] as $item)
                         @php $programme = $item['programme']; $analysis = $item['analysis']; @endphp
-                        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-600 p-6 hover:shadow-xl transition-shadow">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-green-200/60 dark:border-green-600/60 p-6 hover:shadow-2xl transition-all duration-300">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
                                     <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
@@ -218,7 +225,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($recommendations['non_tailored_qualified'] as $item)
                         @php $programme = $item['programme']; $analysis = $item['analysis']; @endphp
-                        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border-2 border-yellow-200 dark:border-yellow-600 p-6 hover:shadow-xl transition-shadow">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-yellow-200/60 dark:border-yellow-600/60 p-6 hover:shadow-2xl transition-all duration-300">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
                                     <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
@@ -298,7 +305,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach(array_slice($recommendations['non_qualified'], 0, 9) as $item)
                         @php $programme = $item['programme']; $analysis = $item['analysis']; @endphp
-                        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border-2 border-red-200 dark:border-red-600 p-6 hover:shadow-xl transition-shadow opacity-75">
+                        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-red-200/60 dark:border-red-600/60 p-6 hover:shadow-2xl transition-all duration-300 opacity-75">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
                                     <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
@@ -360,8 +367,9 @@
 
         <!-- No Data State -->
         @if(count($recommendations['qualified']) == 0 && count($recommendations['non_tailored_qualified']) == 0 && count($recommendations['non_qualified']) == 0)
-            <div class="text-center py-12">
-                <div class="max-w-md mx-auto">
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8">
+                <div class="text-center py-8">
+                    <div class="max-w-md mx-auto">
                     <div class="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -381,6 +389,7 @@
                             Upload Your Results
                         </a>
                     </div>
+                    </div>
                 </div>
             </div>
         @endif
@@ -389,10 +398,10 @@
 
 <!-- Application Confirmation Modal -->
 <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full mx-4">
-        <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Confirm Application Submission</h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-4">You are about to apply for the following programmes:</p>
+    <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200/60 dark:border-slate-700/60 max-w-md w-full mx-4">
+        <div class="p-8">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">Confirm Application Submission</h3>
+            <p class="text-slate-600 dark:text-slate-300 mb-4">You are about to apply for the following programmes:</p>
             <div id="modal-programme-list" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4"></div>
             <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3 mb-6">
                 <p class="text-sm text-yellow-800 dark:text-yellow-200">

@@ -1,41 +1,47 @@
 <x-layouts.app title="My Applications">
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 py-6">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- Page Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">My Applications</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300">Track the status of your programme applications</p>
-        </div>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 transition-colors duration-300">
+    <div class="p-6">
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- Header -->
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden mb-8">
+                <div class="bg-gradient-to-r from-blue-400/90 to-indigo-500/90 text-white text-center py-6">
+                    <h1 class="text-3xl font-bold">MY APPLICATIONS</h1>
+                    <p class="text-sm opacity-90 mt-2">Track the status of your programme applications</p>
+                </div>
+            </div>
 
         @if($applications->count() > 0)
             <!-- Application Statistics -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8 mb-8">
+                <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">Application Statistics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200/60 dark:border-blue-700/60 p-6 text-center">
                     <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $applications->count() }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Applications</div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $applications->where('status', 'pending')->count() }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Pending Review</div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $applications->where('status', 'accepted')->count() }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Accepted</div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $applications->where('status', 'rejected')->count() }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Rejected</div>
+                    <div class="text-sm text-slate-600 dark:text-slate-400">Total Applications</div>
+                    </div>
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200/60 dark:border-yellow-700/60 p-6 text-center">
+                        <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $applications->where('status', 'pending')->count() }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Pending Review</div>
+                    </div>
+                    <div class="bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200/60 dark:border-green-700/60 p-6 text-center">
+                        <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $applications->where('status', 'accepted')->count() }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Accepted</div>
+                    </div>
+                    <div class="bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200/60 dark:border-red-700/60 p-6 text-center">
+                        <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $applications->where('status', 'rejected')->count() }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Rejected</div>
+                    </div>
                 </div>
             </div>
 
             <!-- Applications List -->
             <div class="space-y-6">
                 @foreach($applications as $application)
-                    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden">
                         <!-- Application Header -->
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="p-8 border-b border-slate-200/60 dark:border-slate-700/60">
                             <div class="flex flex-col lg:flex-row lg:items-center justify-between">
                                 <div class="mb-4 lg:mb-0">
                                     <div class="flex items-center mb-2">
@@ -43,10 +49,10 @@
                                             <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $application->preference_rank }}</span>
                                         </div>
                                         <div>
-                                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                                            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">
                                                 {{ $application->schoolProgramme->diplomaProgramme->name }}
                                             </h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            <p class="text-sm text-slate-600 dark:text-slate-400">
                                                 {{ $application->getPreferenceText() }} • {{ ucfirst($application->schoolProgramme->school) }} School
                                             </p>
                                         </div>
@@ -62,34 +68,34 @@
                         </div>
 
                         <!-- Application Details -->
-                        <div class="p-6">
+                        <div class="p-8">
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                                 <div>
-                                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Applied Date</label>
-                                    <div class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    <label class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Applied Date</label>
+                                    <div class="mt-1 text-sm text-slate-900 dark:text-slate-100">
                                         {{ $application->applied_at->format('M d, Y') }}
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Duration</label>
-                                    <div class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    <label class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Duration</label>
+                                    <div class="mt-1 text-sm text-slate-900 dark:text-slate-100">
                                         {{ $application->schoolProgramme->duration }} years
                                     </div>
                                 </div>
                                 
                                 @if($application->reviewed_at)
                                 <div>
-                                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Reviewed Date</label>
-                                    <div class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    <label class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Reviewed Date</label>
+                                    <div class="mt-1 text-sm text-slate-900 dark:text-slate-100">
                                         {{ $application->reviewed_at->format('M d, Y') }}
                                     </div>
                                 </div>
                                 @endif
                                 
                                 <div>
-                                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">School</label>
-                                    <div class="mt-1 text-sm text-gray-900 dark:text-white capitalize">
+                                    <label class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">School</label>
+                                    <div class="mt-1 text-sm text-slate-900 dark:text-slate-100 capitalize">
                                         {{ $application->schoolProgramme->school }}
                                     </div>
                                 </div>
@@ -97,7 +103,7 @@
 
                             <!-- Application Timeline -->
                             <div class="mb-6">
-                                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Application Timeline</h4>
+                                <h4 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">Application Timeline</h4>
                                 <div class="flex items-center">
                                     <!-- Applied -->
                                     <div class="flex items-center">
@@ -106,7 +112,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                         </div>
-                                        <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">Applied</span>
+                                        <span class="ml-2 text-xs text-slate-600 dark:text-slate-400">Applied</span>
                                     </div>
 
                                     <!-- Line -->
@@ -126,7 +132,7 @@
                                                 </svg>
                                             @endif
                                         </div>
-                                        <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">{{ $application->status === 'pending' ? 'Under Review' : 'Reviewed' }}</span>
+                                        <span class="ml-2 text-xs text-slate-600 dark:text-slate-400">{{ $application->status === 'pending' ? 'Under Review' : 'Reviewed' }}</span>
                                     </div>
 
                                     <!-- Line -->
@@ -147,16 +153,16 @@
                                                 <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
                                             @endif
                                         </div>
-                                        <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">Decision</span>
+                                        <span class="ml-2 text-xs text-slate-600 dark:text-slate-400">Decision</span>
                                     </div>
                                 </div>
                             </div>
 
                             @if($application->review_notes)
                                 <!-- Review Notes -->
-                                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">Review Notes</h4>
-                                    <p class="text-sm text-gray-700 dark:text-gray-300">{{ $application->review_notes }}</p>
+                                <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4">
+                                    <h4 class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Review Notes</h4>
+                                    <p class="text-sm text-slate-700 dark:text-slate-300">{{ $application->review_notes }}</p>
                                 </div>
                             @endif
                         </div>
@@ -207,15 +213,16 @@
 
         @else
             <!-- No Applications State -->
-            <div class="text-center py-12">
-                <div class="max-w-md mx-auto">
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8">
+                <div class="text-center py-8">
+                    <div class="max-w-md mx-auto">
                     <div class="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-2">No Applications Yet</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    <h3 class="text-xl font-medium text-slate-900 dark:text-slate-100 mb-2">No Applications Yet</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-6">
                         You haven't submitted any programme applications yet. Get started by exploring our recommendations.
                     </p>
                     <a href="{{ route('user.recommendations') }}" 
@@ -225,16 +232,17 @@
                         </svg>
                         View Recommendations
                     </a>
+                    </div>
                 </div>
             </div>
         @endif
 
         <!-- Quick Actions -->
         @if($applications->count() > 0)
-            <div class="mt-8 text-center">
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8 text-center">
                 <a href="{{ route('user.recommendations') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors mr-4">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
                     Back to Recommendations

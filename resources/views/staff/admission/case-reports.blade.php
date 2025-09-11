@@ -153,6 +153,8 @@
                                         class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                     <option value="">All Cases</option>
                                     <option value="Incorrect Data" {{ request('case_type') == 'Incorrect Data' ? 'selected' : '' }}>Incorrect Data</option>
+                                    <option value="Missing Subject" {{ request('case_type') == 'Missing Subject' ? 'selected' : '' }}>Missing Subject</option>
+                                    <option value="Incorrect Data & Missing Subject" {{ request('case_type') == 'Incorrect Data & Missing Subject' ? 'selected' : '' }}>Incorrect Data & Missing Subject</option>
                                 </select>
                             </div>
 

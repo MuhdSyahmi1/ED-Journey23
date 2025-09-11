@@ -61,49 +61,49 @@
                                 Personal Information
                             </h3>
                             
-                            <div class="space-y-4">
+                            <div class="space-y-3">
                                 <!-- Full Name -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Full Name</label>
-                                    <div class="text-lg font-medium text-slate-900 dark:text-slate-100">{{ $profile->full_name }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-40 flex-shrink-0">Full Name: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->full_name }}</span>
                                 </div>
 
                                 <!-- Email -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Email Address</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->email }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-40 flex-shrink-0">Email Address: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->email }}</span>
                                 </div>
 
                                 <!-- Identity Card -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Identity Card Number</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->identity_card ?? 'Not provided' }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-40 flex-shrink-0">Identity Card Number: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->identity_card ?? '-' }}</span>
                                 </div>
 
                                 <!-- Date of Birth -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Date of Birth</label>
-                                    <div class="text-slate-900 dark:text-slate-100">
-                                        {{ $profile->date_of_birth ? \Carbon\Carbon::parse($profile->date_of_birth)->format('d M Y') : 'Not provided' }}
-                                    </div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-40 flex-shrink-0">Date of Birth: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">
+                                        {{ $profile->date_of_birth ? \Carbon\Carbon::parse($profile->date_of_birth)->format('d M Y') : '-' }}
+                                    </span>
                                 </div>
 
                                 <!-- Gender -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Gender</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->gender ?? 'Not provided' }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-40 flex-shrink-0">Gender: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->gender ?? '-' }}</span>
                                 </div>
 
                                 <!-- Race -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Race</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->race ?? 'Not provided' }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-40 flex-shrink-0">Race: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->race ?? '-' }}</span>
                                 </div>
 
                                 <!-- Nationality -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Nationality</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->nationality ?? 'Not provided' }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-40 flex-shrink-0">Nationality: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->nationality ?? '-' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -119,21 +119,21 @@
                             
                             <div class="space-y-3">
                                 <!-- Mobile -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Mobile Phone</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->mobile_phone ?? 'Not provided' }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-32 flex-shrink-0">Mobile Phone: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->mobile_phone ?? '-' }}</span>
                                 </div>
 
                                 <!-- Home Phone -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Home Phone</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->telephone_home ?? 'Not provided' }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-32 flex-shrink-0">Home Phone: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->telephone_home ?? '-' }}</span>
                                 </div>
 
                                 <!-- Address -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Address</label>
-                                    <div class="text-slate-900 dark:text-slate-100">{{ $profile->postal_address ?? 'Not provided' }}</div>
+                                <div class="flex items-start">
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400 w-32 flex-shrink-0">Address: </span>
+                                    <span class="text-sm text-slate-900 dark:text-slate-100">{{ $profile->postal_address ?? '-' }}</span>
                                 </div>
                             </div>
                         </div>

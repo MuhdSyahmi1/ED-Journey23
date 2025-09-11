@@ -64,7 +64,7 @@ class CaseReportController extends Controller
         $request->validate([
             'subject' => 'required|string|max:255',
             'subject_type' => 'required|in:Hntec,O-Level,A-Level',
-            'case_type' => 'required|in:Incorrect Data',
+            'case_type' => 'required|in:Incorrect Data,Missing Subject,Incorrect Data & Missing Subject',
             'description' => 'required|string|max:1000',
         ]);
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('subject');
             $table->enum('subject_type', ['Hntec', 'O-Level', 'A-Level']);
-            $table->enum('case_type', ['Incorrect Data']);
+            $table->enum('case_type', ['Incorrect Data', 'Missing Subject', 'Incorrect Data & Missing Subject']);
             $table->text('description');
             $table->enum('status', ['pending', 'in progress', 'solved'])->default('pending');
             $table->timestamps();

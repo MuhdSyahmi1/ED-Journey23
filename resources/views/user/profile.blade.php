@@ -46,7 +46,58 @@
                     <!-- IC File Upload Section -->
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8">
                         <div class="mb-6">
-                            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">Upload IC File (JPG, PNG, PDF only)</h3>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Upload IC File (JPG, PNG, PDF only)</h3>
+                                
+                                <!-- Scan IC Button -->
+                                <button type="button" 
+                                        id="scan-ic-btn"
+                                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    📄 Scan IC to Auto-Fill
+                                </button>
+                            </div>
+
+                            <!-- IC Scan Upload (Hidden) -->
+                            <input type="file" 
+                                   id="ic-scan-upload" 
+                                   accept=".jpg,.jpeg,.png,.pdf"
+                                   class="hidden">
+
+                            <!-- IC Scan Loading -->
+                            <div id="ic-scan-loading" class="hidden mb-4">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-4">
+                                    <div class="flex items-center">
+                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span class="text-blue-800 dark:text-blue-200 font-medium">Processing IC... Please wait</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- IC Scan Results -->
+                            <div id="ic-scan-results" class="hidden mb-4">
+                                <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-xl p-4">
+                                    <div class="flex items-start">
+                                        <svg class="w-6 h-6 text-green-600 dark:text-green-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <div class="flex-1">
+                                            <h4 class="text-sm font-medium text-green-800 dark:text-green-300">IC Scanned Successfully!</h4>
+                                            <p class="mt-1 text-sm text-green-700 dark:text-green-400">
+                                                <span id="fields-extracted">0</span> fields extracted. Form has been auto-filled below - please review and modify if needed.
+                                            </p>
+                                            <p class="mt-1 text-xs text-green-600 dark:text-green-500">
+                                                Confidence: <span id="extraction-confidence">0%</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4 mb-4">
                                 <p class="text-yellow-800 dark:text-yellow-200 text-sm">
                                     <strong>Important:</strong> Please upload a high-quality image or PDF of your IC (front and back) in a single file only.
@@ -142,8 +193,8 @@
                     <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8">
                         <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-6">Personal Information</h3>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Name -->
+                        <!-- Name Field - Full Width -->
+                        <div class="mb-6">
                             <div class="space-y-2">
                                 <label for="name" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
                                     Name <span class="text-red-500">*</span>
@@ -162,8 +213,10 @@
                                     <p class="text-red-500 dark:text-red-400 text-sm">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
 
-                            <!-- Identity Card -->
+                        <!-- Identity Card Field - Full Width -->
+                        <div class="mb-6">
                             <div class="space-y-2">
                                 <label for="identity_card" class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
                                     Identity Card <span class="text-red-500">*</span> <span class="text-slate-500">(Format: XX-XXXXXX)</span>
@@ -185,6 +238,10 @@
                                     <p class="text-red-500 dark:text-red-400 text-sm">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
+
+                        <!-- Other Fields - 2 Column Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                             <!-- ID Color -->
                             <div class="space-y-2">
@@ -467,7 +524,8 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize on both page load and Livewire navigation
+        function initializeProfilePage() {
             const identityCardInput = document.getElementById('identity_card');
             const icFileInput = document.getElementById('ic_file');
             const replaceIcBtn = document.getElementById('replace-ic-btn');
@@ -477,6 +535,14 @@
             const previewImage = document.getElementById('preview-image');
             const previewPdf = document.getElementById('preview-pdf');
             const previewFilename = document.getElementById('preview-filename');
+            
+            // IC OCR Elements
+            const scanIcBtn = document.getElementById('scan-ic-btn');
+            const icScanUpload = document.getElementById('ic-scan-upload');
+            const icScanLoading = document.getElementById('ic-scan-loading');
+            const icScanResults = document.getElementById('ic-scan-results');
+            const fieldsExtracted = document.getElementById('fields-extracted');
+            const extractionConfidence = document.getElementById('extraction-confidence');
             
             // Identity card formatting
             identityCardInput.addEventListener('input', function(e) {
@@ -564,6 +630,200 @@
                     }
                 });
             }
-        });
+
+            // IC OCR Functionality
+            if (scanIcBtn) {
+                scanIcBtn.addEventListener('click', function() {
+                    icScanUpload.click();
+                });
+            }
+
+            if (icScanUpload) {
+                icScanUpload.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    // Validate file type
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Please select a JPG, PNG, or PDF file.');
+                        return;
+                    }
+
+                    // Validate file size (10MB limit)
+                    if (file.size > 10 * 1024 * 1024) {
+                        alert('File size must be less than 10MB.');
+                        return;
+                    }
+
+                    // Show loading state
+                    icScanLoading.classList.remove('hidden');
+                    icScanResults.classList.add('hidden');
+                    scanIcBtn.disabled = true;
+
+                    // Prepare form data
+                    const formData = new FormData();
+                    formData.append('ic_file', file);
+
+                    // Get CSRF token
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                                     document.querySelector('input[name="_token"]')?.value;
+
+                    if (csrfToken) {
+                        formData.append('_token', csrfToken);
+                    }
+
+                    // Send file to backend for OCR processing
+                    fetch('{{ route("user.profile.scan-ic") }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading state
+                        icScanLoading.classList.add('hidden');
+                        scanIcBtn.disabled = false;
+
+                        if (data.success) {
+                            // Show success message
+                            icScanResults.classList.remove('hidden');
+                            fieldsExtracted.textContent = data.fields_extracted || 0;
+                            extractionConfidence.textContent = Math.round((data.confidence || 0) * 100) + '%';
+
+                            // Auto-fill form fields
+                            autoFillFormFields(data.data);
+
+                            // Highlight filled fields
+                            highlightAutoFilledFields(data.data);
+
+                        } else {
+                            // Show error message
+                            showErrorMessage(data.message || 'Failed to process IC. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        icScanLoading.classList.add('hidden');
+                        scanIcBtn.disabled = false;
+                        showErrorMessage('An error occurred while processing your IC. Please try again.');
+                    });
+
+                    // Reset file input
+                    icScanUpload.value = '';
+                });
+            }
+
+            function autoFillFormFields(extractedData) {
+                // Map extracted data to form fields
+                const fieldMapping = {
+                    'name': 'name',
+                    'identity_card': 'identity_card',
+                    'date_of_birth': 'date_of_birth',
+                    'gender': 'gender',
+                    'place_of_birth': 'place_of_birth',
+                    'nationality': 'nationality',
+                    'postal_address': 'postal_address'
+                };
+
+                for (const [extractedField, formField] of Object.entries(fieldMapping)) {
+                    const value = extractedData[extractedField];
+                    const element = document.getElementById(formField);
+
+                    if (value && element) {
+                        element.value = value;
+                        
+                        // Trigger change event for any listeners
+                        element.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                }
+            }
+
+            function highlightAutoFilledFields(extractedData) {
+                const fieldMapping = {
+                    'name': 'name',
+                    'identity_card': 'identity_card', 
+                    'date_of_birth': 'date_of_birth',
+                    'gender': 'gender',
+                    'place_of_birth': 'place_of_birth',
+                    'nationality': 'nationality',
+                    'postal_address': 'postal_address'
+                };
+
+                // Remove existing highlights first
+                document.querySelectorAll('.ocr-filled').forEach(el => {
+                    el.classList.remove('ocr-filled');
+                });
+
+                // Add highlight to filled fields
+                for (const [extractedField, formField] of Object.entries(fieldMapping)) {
+                    if (extractedData[extractedField]) {
+                        const element = document.getElementById(formField);
+                        if (element) {
+                            element.classList.add('ocr-filled');
+                            
+                            // Remove highlight after 3 seconds
+                            setTimeout(() => {
+                                element.classList.remove('ocr-filled');
+                            }, 3000);
+                        }
+                    }
+                }
+            }
+
+            function showErrorMessage(message) {
+                // Create error message element
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl p-4';
+                errorDiv.innerHTML = `
+                    <div class="flex items-start">
+                        <svg class="w-6 h-6 text-red-600 dark:text-red-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-medium text-red-800 dark:text-red-300">IC Scanning Failed</h4>
+                            <p class="mt-1 text-sm text-red-700 dark:text-red-400">${message}</p>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-red-600 hover:text-red-800">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                // Insert error message after the scan button
+                scanIcBtn.parentElement.parentElement.insertBefore(errorDiv, scanIcBtn.parentElement.nextSibling);
+
+                // Auto remove after 8 seconds
+                setTimeout(() => {
+                    if (errorDiv.parentElement) {
+                        errorDiv.remove();
+                    }
+                }, 8000);
+            }
+        }
+
+        // Initialize on regular page load
+        document.addEventListener('DOMContentLoaded', initializeProfilePage);
+        
+        // Initialize on Livewire navigation (for wire:navigate)
+        document.addEventListener('livewire:navigated', initializeProfilePage);
     </script>
+
+    <style>
+        .ocr-filled {
+            background-color: rgba(34, 197, 94, 0.1) !important;
+            border-color: rgb(34, 197, 94) !important;
+            transition: all 0.3s ease;
+        }
+        
+        .dark .ocr-filled {
+            background-color: rgba(34, 197, 94, 0.2) !important;
+            border-color: rgb(74, 222, 128) !important;
+        }
+    </style>
 </x-layouts.app>

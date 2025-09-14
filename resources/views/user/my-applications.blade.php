@@ -13,28 +13,7 @@
             </div>
 
         @if($applications->count() > 0)
-            <!-- Application Statistics -->
-            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8 mb-8">
-                <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">Application Statistics</h2>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200/60 dark:border-blue-700/60 p-6 text-center">
-                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $applications->count() }}</div>
-                    <div class="text-sm text-slate-600 dark:text-slate-400">Total Applications</div>
-                    </div>
-                    <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200/60 dark:border-yellow-700/60 p-6 text-center">
-                        <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $applications->where('status', 'pending')->count() }}</div>
-                        <div class="text-sm text-slate-600 dark:text-slate-400">Pending Review</div>
-                    </div>
-                    <div class="bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200/60 dark:border-green-700/60 p-6 text-center">
-                        <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $applications->where('status', 'accepted')->count() }}</div>
-                        <div class="text-sm text-slate-600 dark:text-slate-400">Accepted</div>
-                    </div>
-                    <div class="bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200/60 dark:border-red-700/60 p-6 text-center">
-                        <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $applications->where('status', 'rejected')->count() }}</div>
-                        <div class="text-sm text-slate-600 dark:text-slate-400">Rejected</div>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Applications List -->
             <div class="space-y-6">
@@ -237,18 +216,7 @@
             </div>
         @endif
 
-        <!-- Quick Actions -->
-        @if($applications->count() > 0)
-            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/60 p-8 text-center">
-                <a href="{{ route('user.recommendations') }}" 
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    Back to Recommendations
-                </a>
-            </div>
-        @endif
+        
 
     </div>
 </div>

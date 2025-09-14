@@ -1,24 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)",
-      "Bash(php:*)",
-      "mcp__laravel-boost__application-info",
-      "mcp__laravel-boost__database-connections",
-      "mcp__laravel-boost__database-schema",
-      "mcp__laravel-boost__tinker",
-      "mcp__laravel-boost__last-error",
-      "mcp__laravel-boost__read-log-entries",
-      "mcp__laravel-boost__database-query",
-      "mcp__laravel-boost__list-routes",
-      "mcp__laravel-boost__get-absolute-url",
-      "mcp__laravel-boost__browser-logs",
-      "Bash(find:*)",
-      "Bash(grep:*)",
-      "Bash(readlink:*)",
-      "Bash(composer:*)",
-      "Bash(vendor/bin/pint:*)"
-    ]
+      "Bash(dir:*)"
+    ],
+    "deny": [],
+    "ask": []
   },
   "enabledMcpjsonServers": [
     "laravel-boost"

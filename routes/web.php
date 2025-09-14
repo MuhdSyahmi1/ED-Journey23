@@ -608,6 +608,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Grades routes (for users)
     Route::post('/user/grades/upload', [UserGradesController::class, 'upload'])->name('user.grades.upload');
+
+    // Identity Card OCR routes (for users)
+    Route::post('/user/profile/scan-ic', [App\Http\Controllers\IdentityCardController::class, 'upload'])->name('user.profile.scan-ic');
+    Route::get('/user/profile/ic-history', [App\Http\Controllers\IdentityCardController::class, 'getExtractionHistory'])->name('user.profile.ic-history');
 });
 
 // Settings routes

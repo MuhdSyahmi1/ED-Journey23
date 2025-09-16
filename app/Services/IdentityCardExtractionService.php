@@ -7,47 +7,15 @@ use App\Models\UserProfile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Process;
-use Carbon\Carbon;
 
 class IdentityCardExtractionService
 {
+    // Only keeping the essential field mappings for name and IC
     private array $fieldMapping = [
         // Malay terms
         'NAMA' => 'name',
-        'TARIKH LAHIR' => 'date_of_birth',
-        'JANTINA' => 'gender',
-        'NEGERI TEMPAT LAHIR' => 'place_of_birth',
-        'ALAMAT' => 'postal_address',
-        'WARGANEGARA' => 'nationality',
-        'AGAMA' => 'religion',
-        'BANGSA' => 'race',
-        
         // English terms
         'NAME' => 'name',
-        'DATE OF BIRTH' => 'date_of_birth',
-        'SEX' => 'gender',
-        'GENDER' => 'gender',
-        'ADDRESS' => 'postal_address',
-        'NATIONALITY' => 'nationality',
-        'RELIGION' => 'religion',
-        'RACE' => 'race',
-        'PLACE OF BIRTH' => 'place_of_birth'
-    ];
-
-    private array $genderMapping = [
-        'LELAKI' => 'male',
-        'L' => 'male',
-        'MALE' => 'male',
-        'M' => 'male',
-        'PEREMPUAN' => 'female',
-        'P' => 'female',
-        'FEMALE' => 'female',
-        'F' => 'female'
-    ];
-
-    private array $bruneianPlaces = [
-        'BRUNEI-MUARA', 'TUTONG', 'BELAIT', 'TEMBURONG',
-        'BANDAR SERI BEGAWAN', 'SERIA', 'KUALA BELAIT'
     ];
 
     public function processICUpload(UploadedFile $file, int $userId): array
@@ -94,33 +62,42 @@ class IdentityCardExtractionService
 
         // 7. Create or update user profile with extracted data
         try {
+            // Only update name and identity_card fields from OCR, keep existing data for other fields
             $profileData = [
-                'name' => $extractedData['name'] ?? '',
-                'identity_card' => $extractedData['identity_card'] ?? '',
-                'date_of_birth' => $extractedData['date_of_birth'] ?? null,
-                'gender' => $extractedData['gender'] ?? 'male', // Default to valid enum value
-                'place_of_birth' => $extractedData['place_of_birth'] ?? '',
-                'nationality' => $extractedData['nationality'] ?? '',
-                'postal_address' => $extractedData['postal_address'] ?? '',
-                'religion' => $extractedData['religion'] ?? 'other', // Default to valid enum value
-                'race' => $extractedData['race'] ?? 'other',
                 'ic_file_path' => $path, // Save the IC file path
                 'ic_file_name' => $file->getClientOriginalName(), // Save original filename
             ];
 
-            // Add required default values for fields that cannot be null
-            $profileData = array_merge([
-                // Required fields from user_profiles table  
-                'id_color' => 'yellow', // Default IC color
-                'mobile_phone' => '0000000', // Placeholder - user must fill manually
-                'email_address' => auth()->user()->email ?? 'user@example.com', // Use user's email or placeholder
-                'telephone_home' => '', // Nullable field
-            ], $profileData);
+            // Only add OCR extracted data if available
+            if (!empty($extractedData['name'])) {
+                $profileData['name'] = $extractedData['name'];
+            }
+            if (!empty($extractedData['identity_card'])) {
+                $profileData['identity_card'] = $extractedData['identity_card'];
+            }
 
-            UserProfile::updateOrCreate(
-                ['user_id' => $userId],
-                $profileData
-            );
+            // Get existing profile to preserve other fields
+            $existingProfile = UserProfile::where('user_id', $userId)->first();
+
+            if ($existingProfile) {
+                // Update existing profile, only overwriting name and IC if extracted
+                $existingProfile->update($profileData);
+            } else {
+                // Create new profile with required default values
+                $profileData = array_merge([
+                    'user_id' => $userId,
+                    'name' => $extractedData['name'] ?? '',
+                    'identity_card' => $extractedData['identity_card'] ?? '',
+                    'id_color' => 'yellow', // Default IC color
+                    'mobile_phone' => '0000000', // Placeholder - user must fill manually
+                    'email_address' => auth()->user()->email ?? 'user@example.com', // Use user's email or placeholder
+                    'gender' => 'male', // Default enum value
+                    'religion' => 'other', // Default enum value
+                    'race' => 'other', // Default enum value
+                ], $profileData);
+
+                UserProfile::create($profileData);
+            }
         } catch (\Exception $e) {
             \Log::warning('Profile creation failed, but OCR succeeded: ' . $e->getMessage());
         }
@@ -180,33 +157,15 @@ class IdentityCardExtractionService
     private function parseICFields(string $ocrText): array
     {
         $data = [];
-        
+
         // Clean up the OCR text
         $cleanText = $this->preprocessText($ocrText);
 
         // Extract Name - Multiple patterns
         $data['name'] = $this->extractName($cleanText);
-        
+
         // Extract IC Number - Multiple formats
         $data['identity_card'] = $this->extractICNumber($cleanText);
-        
-        // Extract Date of Birth
-        $data['date_of_birth'] = $this->extractDateOfBirth($cleanText);
-        
-        // Extract Gender
-        $data['gender'] = $this->extractGender($cleanText);
-        
-        // Extract Place of Birth/Nationality
-        $placeAndNationality = $this->extractPlaceAndNationality($cleanText);
-        $data['place_of_birth'] = $placeAndNationality['place'] ?? '';
-        $data['nationality'] = $placeAndNationality['nationality'] ?? '';
-        
-        // Extract Address
-        $data['postal_address'] = $this->extractAddress($cleanText);
-        
-        // Extract additional fields if available
-        $data['religion'] = $this->extractReligion($cleanText);
-        $data['race'] = $this->extractRace($cleanText);
 
         // Clean up empty values
         return array_filter($data, fn($value) => !empty(trim($value)));
@@ -349,181 +308,6 @@ class IdentityCardExtractionService
         return '';
     }
 
-    private function extractDateOfBirth(string $text): string
-    {
-        $patterns = [
-            // Look for DD-MM-YYYY format (Brunei standard)
-            '/\b(\d{1,2}-\d{1,2}-\d{4})\b/',
-            // Look for DD/MM/YYYY format
-            '/\b(\d{1,2}\/\d{1,2}\/\d{4})\b/',
-            // Date field with label
-            '/(?:TARIKH\s+LAHIR|DATE\s+OF\s+BIRTH)\s*[:\-]?\s*(\d{1,2}[-\/\s]\d{1,2}[-\/\s]\d{4})/i',
-            '/(?:TARIKH\s+LAHIR|DATE\s+OF\s+BIRTH)\s*[:\-]?\s*(\d{1,2}\s+\w+\s+\d{4})/i',
-            // Brunei format with Malay month abbreviations
-            '/(\d{1,2}\s+(?:JAN|FEB|MAC|APR|MEI|JUN|JUL|OGO|SEP|OKT|NOV|DIS)\s+\d{4})/i',
-            // English months
-            '/(\d{1,2}\s+(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\w*\s+\d{4})/i',
-            // Machine readable zone date format (fallback): 9906301M2608318BRN (YYMMDDX...)
-            '/(\d{6})[MF]\d+/i'
-        ];
-
-        // Check for the known machine readable format first
-        if (strpos($text, '9906301M') !== false) {
-            return '1999-06-30'; // Return the correct date in YYYY-MM-DD format
-        }
-        
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $text, $matches)) {
-                $date = $this->convertDateFormat($matches[1]);
-                if (!empty($date)) {
-                    return $date;
-                }
-            }
-        }
-
-        return '';
-    }
-
-    private function extractGender(string $text): string
-    {
-        $patterns = [
-            '/(?:JANTINA|SEX|GENDER)\s*[:\-]?\s*(LELAKI|PEREMPUAN|MALE|FEMALE|L|P|M|F)/i',
-            // Sometimes gender appears standalone
-            '/\b(LELAKI|PEREMPUAN|MALE|FEMALE)\b/i'
-        ];
-
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $text, $matches)) {
-                $gender = strtoupper(trim($matches[1]));
-                return $this->genderMapping[$gender] ?? '';
-            }
-        }
-
-        return '';
-    }
-
-    private function extractPlaceAndNationality(string $text): array
-    {
-        $result = ['place' => '', 'nationality' => ''];
-        
-        // Look for "BRUNEI DARUSSALAM" as place of birth
-        if (preg_match('/BRUNEI\s+DARUSSALAM/i', $text)) {
-            $result['place'] = 'Brunei Darussalam';
-            $result['nationality'] = 'Bruneian';
-        }
-        
-        // Look for specific patterns with labels
-        $patterns = [
-            '/(?:NEGERI\s+TEMPAT\s+LAHIR|PLACE\s+OF\s+BIRTH|TEMPAT\s+LAHIR)\s*[:\-]?\s*([A-Z\s]+?)(?=\n|ALAMAT|ADDRESS|WARGANEGARA|$)/i',
-            '/(?:WARGANEGARA|NATIONALITY)\s*[:\-]?\s*([A-Z\s]+?)(?=\n|$)/i',
-            // Look for standalone "BRUNEI DARUSSALAM"
-            '/\b(BRUNEI\s+DARUSSALAM)\b/i'
-        ];
-        
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $text, $matches)) {
-                $value = trim($matches[1]);
-                
-                if (stripos($pattern, 'TEMPAT|PLACE|LAHIR') !== false || stripos($value, 'BRUNEI') !== false) {
-                    if (!empty($value)) {
-                        $result['place'] = $value;
-                        if (stripos($value, 'BRUNEI') !== false) {
-                            $result['nationality'] = 'Bruneian';
-                        }
-                    }
-                } elseif (stripos($pattern, 'WARGANEGARA|NATIONALITY') !== false) {
-                    $result['nationality'] = $value;
-                }
-            }
-        }
-        
-        // Look for Brunei-specific places as fallback
-        foreach ($this->bruneianPlaces as $place) {
-            if (stripos($text, $place) !== false) {
-                if (empty($result['place'])) {
-                    $result['place'] = $place;
-                }
-                $result['nationality'] = 'Bruneian';
-                break;
-            }
-        }
-
-        return $result;
-    }
-
-    private function extractAddress(string $text): string
-    {
-        // Check for known OCR patterns and map to correct address
-        if (strpos($text, 'PANCHORMENGKUBAY') !== false && 
-            strpos($text, 'SANTANDUNG SELASI') !== false && 
-            strpos($text, 'PERUMAHAN KS') !== false) {
-            return 'NO 38 SPG 203 JLN TANJUNG SELASIH PERUMAHAN KG PANCHOR MENGKUBAU';
-        }
-        
-        $patterns = [
-            // Look for the OCR corrupted version and reconstruct
-            '/((?:NG\'s|NO\s+\d+).*?(?:sec|SPG)\s+\d+.*?(?:SANTANDUNG\s+SELASI|TANJUNG\s+SELASIH).*?PERUMAHAN.*?(?:PANCHORMENGKUBAY|PANCHOR\s+MENGKUBAU))/i',
-            // Look for the specific pattern we're getting: NG's sec 203 PERUMAHAN KG...
-            '/(N[GO]\'?s?\s+\w+\s+\d+.*?(?:PERUMAHAN|KG).*?[A-Z\s]+)/i',
-            // Look for ALAMAT followed by multi-line address
-            '/(?:ALAMAT|ADDRESS)\s*[:\-]?\s*(.+?)(?=\n\n|AGAMA|RELIGION|$)/is',
-            // Multi-line address pattern (more flexible)
-            '/(?:ALAMAT|ADDRESS)\s*[:\-]?\s*(.{10,300}?)(?=\n[A-Z]{5,}|$)/is',
-            // Look for address patterns common in Brunei (NO, SPG, JLN, KG)
-            '/(NO\s+\d+.*?(?:SPG|JLN|KG).*?[A-Z\s]+)/i',
-            // Pattern for full address block
-            '/\b(NO\s+\d+[^.]*?(?:PERUMAHAN|KG|KAMPONG)[^.]*)/i',
-            // Multi-line address starting with numbers
-            '/(\d+.*?(?:SPG|JLN|KG|PERUMAHAN).*?[A-Z\s]{5,})/is'
-        ];
-
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $text, $matches)) {
-                $address = trim($matches[1]);
-                if (strlen($address) >= 10) {
-                    return $this->cleanAddress($address);
-                }
-            }
-        }
-
-        return '';
-    }
-
-    private function extractReligion(string $text): string
-    {
-        $patterns = [
-            '/(?:AGAMA|RELIGION)\s*[:\-]?\s*(ISLAM|CHRISTIAN|BUDDHA|HINDU|[A-Z]+)/i'
-        ];
-
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $text, $matches)) {
-                return ucfirst(strtolower(trim($matches[1])));
-            }
-        }
-
-        return '';
-    }
-
-    private function extractRace(string $text): string
-    {
-        $patterns = [
-            '/(?:BANGSA|RACE)\s*[:\-]?\s*(MELAYU|CINA|INDIA|MALAY|CHINESE|INDIAN|[A-Z]+)/i'
-        ];
-
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $text, $matches)) {
-                $race = strtolower(trim($matches[1]));
-                $raceMapping = [
-                    'melayu' => 'malay',
-                    'cina' => 'chinese',
-                    'india' => 'indian'
-                ];
-                return $raceMapping[$race] ?? $race;
-            }
-        }
-
-        return '';
-    }
 
     private function cleanName(string $name): string
     {
@@ -549,107 +333,35 @@ class IdentityCardExtractionService
         return implode(' ', $capitalizedWords);
     }
 
-    private function convertDateFormat(string $dateStr): string
-    {
-        try {
-            // Handle machine readable format (YYMMDD)
-            if (preg_match('/^\d{6}$/', $dateStr)) {
-                $year = substr($dateStr, 0, 2);
-                $month = substr($dateStr, 2, 2);
-                $day = substr($dateStr, 4, 2);
-                
-                // Convert 2-digit year to 4-digit (99 = 1999, 00 = 2000)
-                $fullYear = ($year >= 50) ? '19' . $year : '20' . $year;
-                
-                try {
-                    $date = Carbon::createFromFormat('Y-m-d', $fullYear . '-' . $month . '-' . $day);
-                    if ($date && $date->year >= 1900 && $date->year <= date('Y')) {
-                        return $date->format('Y-m-d');
-                    }
-                } catch (\Exception $e) {
-                    // Continue to other formats
-                }
-            }
-            
-            // Remove any extra characters and normalize separators
-            $dateStr = preg_replace('/[^\w\s\/\-]/', '', $dateStr);
-            $dateStr = trim($dateStr);
-            
-            // Convert Malay month abbreviations to English
-            $malayMonths = [
-                'JAN' => 'Jan', 'FEB' => 'Feb', 'MAC' => 'Mar', 'APR' => 'Apr',
-                'MEI' => 'May', 'JUN' => 'Jun', 'JUL' => 'Jul', 'OGO' => 'Aug',
-                'SEP' => 'Sep', 'OKT' => 'Oct', 'NOV' => 'Nov', 'DIS' => 'Dec'
-            ];
-            
-            foreach ($malayMonths as $malay => $english) {
-                $dateStr = str_ireplace($malay, $english, $dateStr);
-            }
-            
-            // Try different date formats common in Brunei ICs
-            $formats = ['d-m-Y', 'd/m/Y', 'd m Y', 'j F Y', 'j M Y', 'j M Y'];
-            
-            foreach ($formats as $format) {
-                try {
-                    $date = Carbon::createFromFormat($format, $dateStr);
-                    if ($date && $date->year >= 1900 && $date->year <= date('Y')) {
-                        return $date->format('Y-m-d');
-                    }
-                } catch (\Exception $e) {
-                    continue;
-                }
-            }
-            
-            return '';
-        } catch (\Exception $e) {
-            return '';
-        }
-    }
-
-    private function cleanAddress(string $address): string
-    {
-        // Clean up address formatting
-        $address = preg_replace('/\s+/', ' ', $address);
-        $address = trim($address);
-        
-        // Remove any trailing periods or commas
-        $address = rtrim($address, '.,');
-        
-        // Remove line breaks and normalize
-        $address = str_replace(["\n", "\r"], ' ', $address);
-        $address = preg_replace('/\s+/', ' ', $address);
-        
-        return $address;
-    }
 
     public function getConfidenceScore(array $extractedData, string $ocrText): float
     {
         $confidence = 0;
         $maxConfidence = 1.0;
-        
+
         // Check if this looks like a Brunei IC
         if (stripos($ocrText, 'BRUNEI') !== false || stripos($ocrText, 'DARUSSALAM') !== false) {
-            $confidence += 0.15;
+            $confidence += 0.2;
         }
-        
-        // Check for key Malay/English terms
-        $keyTerms = ['NAMA', 'NAME', 'TARIKH LAHIR', 'DATE OF BIRTH', 'ALAMAT', 'ADDRESS'];
+
+        // Check for key Malay/English name and IC terms
+        $keyTerms = ['NAMA', 'NAME'];
         $foundTerms = 0;
         foreach ($keyTerms as $term) {
             if (stripos($ocrText, $term) !== false) {
                 $foundTerms++;
             }
         }
-        $confidence += ($foundTerms / count($keyTerms)) * 0.25;
-        
-        // Validate extracted data quality
-        $criticalFields = ['name', 'identity_card', 'date_of_birth'];
+        $confidence += ($foundTerms / count($keyTerms)) * 0.3;
+
+        // Validate extracted data quality - only name and IC number
+        $criticalFields = ['name', 'identity_card'];
         foreach ($criticalFields as $field) {
             if (!empty($extractedData[$field])) {
                 switch ($field) {
                     case 'name':
                         if (strlen($extractedData[$field]) >= 3 && preg_match('/^[A-Z\s]+$/i', $extractedData[$field])) {
-                            $confidence += 0.2;
+                            $confidence += 0.25;
                         }
                         break;
                     case 'identity_card':
@@ -657,15 +369,10 @@ class IdentityCardExtractionService
                             $confidence += 0.25;
                         }
                         break;
-                    case 'date_of_birth':
-                        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $extractedData[$field])) {
-                            $confidence += 0.15;
-                        }
-                        break;
                 }
             }
         }
-        
+
         return min($confidence, $maxConfidence);
     }
 }

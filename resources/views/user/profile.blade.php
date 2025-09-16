@@ -718,15 +718,10 @@
             }
 
             function autoFillFormFields(extractedData) {
-                // Map extracted data to form fields
+                // Map extracted data to form fields - only NAME and IC NUMBER
                 const fieldMapping = {
                     'name': 'name',
-                    'identity_card': 'identity_card',
-                    'date_of_birth': 'date_of_birth',
-                    'gender': 'gender',
-                    'place_of_birth': 'place_of_birth',
-                    'nationality': 'nationality',
-                    'postal_address': 'postal_address'
+                    'identity_card': 'identity_card'
                 };
 
                 for (const [extractedField, formField] of Object.entries(fieldMapping)) {
@@ -735,7 +730,7 @@
 
                     if (value && element) {
                         element.value = value;
-                        
+
                         // Trigger change event for any listeners
                         element.dispatchEvent(new Event('change', { bubbles: true }));
                     }
@@ -745,12 +740,7 @@
             function highlightAutoFilledFields(extractedData) {
                 const fieldMapping = {
                     'name': 'name',
-                    'identity_card': 'identity_card', 
-                    'date_of_birth': 'date_of_birth',
-                    'gender': 'gender',
-                    'place_of_birth': 'place_of_birth',
-                    'nationality': 'nationality',
-                    'postal_address': 'postal_address'
+                    'identity_card': 'identity_card'
                 };
 
                 // Remove existing highlights first
@@ -764,7 +754,7 @@
                         const element = document.getElementById(formField);
                         if (element) {
                             element.classList.add('ocr-filled');
-                            
+
                             // Remove highlight after 3 seconds
                             setTimeout(() => {
                                 element.classList.remove('ocr-filled');

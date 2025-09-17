@@ -77,4 +77,12 @@ class UserProfile extends Model
             default => 'gray'
         };
     }
+
+    /**
+     * Get count of pending user profiles for admission staff notifications.
+     */
+    public static function getPendingCount(): int
+    {
+        return self::where('verification_status', 'pending')->count();
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 use App\Http\Controllers\UserProfileController;
-use App\Http\Controllers\UserQuestionnaireController;
+use App\Http\Controllers\AcademicAdvisorController;
 use App\Http\Controllers\UserFeedbackController;
 use App\Http\Controllers\AdminController; // Add this import
 use App\Http\Controllers\StaffController;
@@ -483,13 +483,8 @@ Route::middleware(['auth'])->group(function () {
         return view('user.profile');
     })->name('user.profile');
 
-    // NEW: Questionnaire Route
-    Route::get('/user/questionnaire', function () {
-        if (auth()->user()->role !== 'user') {
-            abort(403, 'Unauthorized');
-        }
-        return view('user.questionnaire');
-    })->name('user.questionnaire');
+    // NEW: Academic Advisor Route
+    Route::get('/user/academic-advisor', [AcademicAdvisorController::class, 'index'])->name('user.academic-advisor');
 
     // NEW: Upload Result Route
     Route::get('/user/upload-result', [UserGradesController::class, 'index'])->name('user.upload-result');
@@ -596,12 +591,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile/download-ic', [UserProfileController::class, 'downloadIC'])->name('user.profile.download-ic');
     Route::get('/user/profile/view-ic', [UserProfileController::class, 'viewIC'])->name('user.profile.view-ic');
 
-     // Questionnaire routes
-    Route::get('/user/questionnaire', [UserQuestionnaireController::class, 'index'])->name('user.questionnaire');
-    Route::get('/user/questionnaire/retake', [UserQuestionnaireController::class, 'retake'])->name('user.questionnaire.retake');
-    Route::post('/user/questionnaire', [UserQuestionnaireController::class, 'store'])->name('user.questionnaire.store');
-    Route::get('/user/questionnaire/results', [UserQuestionnaireController::class, 'results'])->name('user.questionnaire.results');
-    Route::get('/user/questionnaire/progress', [UserQuestionnaireController::class, 'getProgress'])->name('user.questionnaire.progress');
+     // Academic Advisor routes
+    Route::get('/user/academic-advisor', [AcademicAdvisorController::class, 'index'])->name('user.academic-advisor');
+    Route::post('/user/academic-advisor/send', [AcademicAdvisorController::class, 'sendMessage'])->name('user.academic-advisor.send');
+    Route::get('/user/academic-advisor/messages', [AcademicAdvisorController::class, 'getMessages'])->name('user.academic-advisor.messages');
+    Route::post('/user/academic-advisor/complete', [AcademicAdvisorController::class, 'completeSession'])->name('user.academic-advisor.complete');
+    Route::get('/user/academic-advisor/results/{sessionId}', [AcademicAdvisorController::class, 'results'])->name('user.academic-advisor.results');
+    Route::get('/user/academic-advisor/new', [AcademicAdvisorController::class, 'newSession'])->name('user.academic-advisor.new');
+    Route::get('/user/academic-advisor/progress', [AcademicAdvisorController::class, 'getProgress'])->name('user.academic-advisor.progress');
 
     // Case Report routes (for users)
     Route::post('/user/case-report', [CaseReportController::class, 'store'])->name('user.case-report.store');

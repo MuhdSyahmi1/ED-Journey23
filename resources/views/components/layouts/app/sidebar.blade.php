@@ -6,7 +6,7 @@
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+        <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 w-72">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
@@ -70,32 +70,72 @@
                     @if(auth()->user()->isAdmissionManager())
                         <flux:navlist.group :heading="__('Admission Management')" class="grid">
                             <flux:navlist.item icon="user-circle" :href="route('staff.admission.user-profile')" :current="request()->routeIs('staff.admission.user-profile*')" wire:navigate>
-                                {{ __('User Profile') }}
+                                <div class="flex items-center w-full">
+                                    <span class="flex-1 truncate">{{ __('User Profile') }}</span>
+                                    @php
+                                        $pendingProfilesCount = \App\Models\UserProfile::getPendingCount();
+                                    @endphp
+                                    @if($pendingProfilesCount > 0)
+                                        <span class="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-red-500 rounded-full ml-1 flex-shrink-0">
+                                            {{ $pendingProfilesCount }}
+                                        </span>
+                                    @endif
+                                </div>
                             </flux:navlist.item>
                             <flux:navlist.item icon="document-text" :href="route('staff.case-reports')" :current="request()->routeIs('staff.case-reports')" wire:navigate>
-                                <div class="flex items-center justify-between w-full">
-                                    <span>{{ __('Case Report') }}</span>
+                                <div class="flex items-center w-full">
+                                    <span class="flex-1 truncate">{{ __('Case Report') }}</span>
                                     @php
                                         $pendingCount = \App\Models\CaseReport::getPendingCount();
                                     @endphp
                                     @if($pendingCount > 0)
-                                        <span class="inline-flex items-center justify-center min-w-5 h-5 px-1.5 text-xs font-medium text-white bg-red-500 rounded-full ml-2">
+                                        <span class="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-red-500 rounded-full ml-1 flex-shrink-0">
                                             {{ $pendingCount }}
                                         </span>
                                     @endif
                                 </div>
                             </flux:navlist.item>
                             <flux:navlist.item icon="document-text" :href="route('staff.admission.applications')" :current="request()->routeIs('staff.admission.applications*')" wire:navigate>
-                                {{ __('Review Student Applications') }}
+                                <div class="flex items-center w-full">
+                                    <span class="flex-1 truncate">{{ __('Review Student Applications') }}</span>
+                                    @php
+                                        $pendingApplicationsCount = \App\Models\StudentApplication::getPendingCount();
+                                    @endphp
+                                    @if($pendingApplicationsCount > 0)
+                                        <span class="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-red-500 rounded-full ml-1 flex-shrink-0">
+                                            {{ $pendingApplicationsCount }}
+                                        </span>
+                                    @endif
+                                </div>
                             </flux:navlist.item>
                             <flux:navlist.item icon="scale" :href="route('staff.admission.quotas')" :current="request()->routeIs('staff.admission.quotas')" wire:navigate>
                                 {{ __('Manage Quotas') }}
                             </flux:navlist.item>
                             <flux:navlist.item icon="exclamation-triangle" :href="route('staff.admission.appeals')" :current="request()->routeIs('staff.admission.appeals*')" wire:navigate>
-                                {{ __('Student Appeals') }}
+                                <div class="flex items-center w-full">
+                                    <span class="flex-1 truncate">{{ __('Student Appeals') }}</span>
+                                    @php
+                                        $pendingAppealsCount = \App\Models\StudentAppeal::getPendingCount();
+                                    @endphp
+                                    @if($pendingAppealsCount > 0)
+                                        <span class="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-red-500 rounded-full ml-1 flex-shrink-0">
+                                            {{ $pendingAppealsCount }}
+                                        </span>
+                                    @endif
+                                </div>
                             </flux:navlist.item>
                             <flux:navlist.item icon="chart-bar" :href="route('staff.admission.report-data')" :current="request()->routeIs('staff.admission.report-data*')" wire:navigate>
-                                {{ __('Report Data') }}
+                                <div class="flex items-center w-full">
+                                    <span class="flex-1 truncate">{{ __('Report Data') }}</span>
+                                    @php
+                                        $pendingReportsCount = \App\Models\CaseReport::getPendingCount();
+                                    @endphp
+                                    @if($pendingReportsCount > 0)
+                                        <span class="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-red-500 rounded-full ml-1 flex-shrink-0">
+                                            {{ $pendingReportsCount }}
+                                        </span>
+                                    @endif
+                                </div>
                             </flux:navlist.item>
                             <flux:navlist.item icon="bell" href="#" wire:navigate>
                                 {{ __('Notifications') }}

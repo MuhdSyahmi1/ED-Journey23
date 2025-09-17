@@ -71,4 +71,12 @@ class StudentApplication extends Model
             default => 'gray'
         };
     }
+
+    /**
+     * Get count of pending student applications for admission staff notifications.
+     */
+    public static function getPendingCount(): int
+    {
+        return self::where('status', 'pending')->count();
+    }
 }

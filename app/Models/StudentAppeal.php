@@ -117,4 +117,12 @@ class StudentAppeal extends Model
     {
         return $query->whereIn('status', ['approved', 'rejected']);
     }
+
+    /**
+     * Get count of pending student appeals for admission staff notifications.
+     */
+    public static function getPendingCount(): int
+    {
+        return self::where('status', 'pending')->count();
+    }
 }

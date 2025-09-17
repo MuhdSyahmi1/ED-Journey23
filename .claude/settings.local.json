@@ -4,8 +4,16 @@
       "Bash(dir:*)",
       "Bash(vendor/bin/pint:*)",
       "Bash(php vendor/bin/pint:*)",
+      "Read(//c/Users/Acer Nitro 5/AppData/Local/Programs/Ollama/**)",
+      "Bash(\"C:/Users/Acer Nitro 5/AppData/Local/Programs/Ollama/ollama.exe\" --version)",
+      "Bash(\"C:/Users/Acer Nitro 5/AppData/Local/Programs/Ollama/ollama.exe\" pull moondream2)",
+      "Bash(\"C:/Users/Acer Nitro 5/AppData/Local/Programs/Ollama/ollama.exe\" list)",
+      "Bash(\"C:/Users/Acer Nitro 5/AppData/Local/Programs/Ollama/ollama.exe\" pull llama3.2:3b)",
+      "Bash(\"C:/Users/Acer Nitro 5/AppData/Local/Programs/Ollama/ollama.exe\" serve)",
+      "Bash(curl:*)",
       "mcp__laravel-boost__tinker",
-      "mcp__laravel-boost__application-info"
+      "mcp__laravel-boost__application-info",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

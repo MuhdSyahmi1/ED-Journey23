@@ -195,12 +195,13 @@
         </div>
 
                         <div class="relative">
-                            <flux:navlist.item icon="document-text" :href="route('user.questionnaire')" :current="request()->routeIs('user.questionnaire*')" wire:navigate>
-                                {{ __('Complete Questionnaire') }}
+                            <flux:navlist.item icon="chat-bubble-left-ellipsis" :href="route('user.academic-advisor')" :current="request()->routeIs('user.academic-advisor*')" wire:navigate>
+                                {{ __('Academic Advisor') }}
                             </flux:navlist.item>
                                 @php
-                                $hasCompleted = \DB::table('user_questionnaire_responses')
+                                $hasCompleted = \DB::table('chat_sessions')
                                 ->where('user_id', auth()->id())
+                                ->where('completed', true)
                                 ->exists();
                                 $progress = $hasCompleted ? 100 : 0;
                                 $badgeColor = $hasCompleted ? 'green' : 'red';

@@ -31,4 +31,12 @@ class CaseReport extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get count of pending case reports for admission staff notifications.
+     */
+    public static function getPendingCount(): int
+    {
+        return self::where('status', 'pending')->count();
+    }
 }

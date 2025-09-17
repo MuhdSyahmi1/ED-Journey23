@@ -73,7 +73,17 @@
                                 {{ __('User Profile') }}
                             </flux:navlist.item>
                             <flux:navlist.item icon="document-text" :href="route('staff.case-reports')" :current="request()->routeIs('staff.case-reports')" wire:navigate>
-                                {{ __('Case Report') }}
+                                <div class="flex items-center justify-between w-full">
+                                    <span>{{ __('Case Report') }}</span>
+                                    @php
+                                        $pendingCount = \App\Models\CaseReport::getPendingCount();
+                                    @endphp
+                                    @if($pendingCount > 0)
+                                        <span class="inline-flex items-center justify-center min-w-5 h-5 px-1.5 text-xs font-medium text-white bg-red-500 rounded-full ml-2">
+                                            {{ $pendingCount }}
+                                        </span>
+                                    @endif
+                                </div>
                             </flux:navlist.item>
                             <flux:navlist.item icon="document-text" :href="route('staff.admission.applications')" :current="request()->routeIs('staff.admission.applications*')" wire:navigate>
                                 {{ __('Review Student Applications') }}

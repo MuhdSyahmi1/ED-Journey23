@@ -5,7 +5,8 @@
       "Bash(vendor/bin/pint:*)",
       "Bash(php vendor/bin/pint:*)",
       "mcp__laravel-boost__tinker",
-      "mcp__laravel-boost__application-info"
+      "mcp__laravel-boost__application-info",
+      "mcp__laravel-boost__database-schema"
     ],
     "deny": [],
     "ask": []

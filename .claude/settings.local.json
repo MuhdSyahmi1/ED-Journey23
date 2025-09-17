@@ -13,6 +13,7 @@
       "Bash(curl:*)",
       "mcp__laravel-boost__tinker",
       "mcp__laravel-boost__application-info",
+      "mcp__laravel-boost__database-schema"
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git pull:*)",
